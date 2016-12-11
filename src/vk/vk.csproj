@@ -7,9 +7,28 @@
     <AssemblyName>vk</AssemblyName>
     <RootNamespace>$(AssemblyName)</RootNamespace>
     <NuGetTargetMoniker>.NETCoreApp,Version=v1.1</NuGetTargetMoniker>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <ProjectGuid>{D8573039-9FE1-4554-A659-4E77CFBA83C1}</ProjectGuid>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="VulkanNative.cs" />
+    <Compile Include="..\..\bin\Windows_NT.x64.Debug\vk.generator\Commands.gen.cs">
+      <Link>Commands.gen.cs</Link>
+    </Compile>
+    <Compile Include="..\..\bin\Windows_NT.x64.Debug\vk.generator\Enums.gen.cs">
+      <Link>Enums.gen.cs</Link>
+    </Compile>
+    <Compile Include="..\..\bin\Windows_NT.x64.Debug\vk.generator\Handles.gen.cs">
+      <Link>Handles.gen.cs</Link>
+    </Compile>
+    <Compile Include="..\..\bin\Windows_NT.x64.Debug\vk.generator\Structures.gen.cs">
+      <Link>Structures.gen.cs</Link>
+    </Compile>
+    <Compile Include="..\..\bin\Windows_NT.x64.Debug\vk.generator\Unions.gen.cs">
+      <Link>Unions.gen.cs</Link>
+    </Compile>
+    <Compile Include="Delegates.cs" />
+    <Compile Include="ExternalTypes.cs" />
+    <Compile Include="FunctionPointer.cs" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' " />

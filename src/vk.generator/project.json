@@ -1,7 +1,7 @@
 ﻿{
   "dependencies": {
-    "System.Console": "4.3.0",
-	"System.Runtime.InteropServices": "4.3.0",
+    "Microsoft.NETCore.App": "1.1.0",
+	"System.Xml.XmlDocument": "4.3.0",
     "Microsoft.NETCore.DotNetHostPolicy": "1.1.0",
     "Microsoft.NETCore.Runtime.CoreCLR": "1.1.0",
   },
