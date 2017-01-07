@@ -1,9 +1,10 @@
 ﻿{
   "dependencies": {
     "Microsoft.NETCore.App": "1.1.0",
-	"System.Xml.XmlDocument": "4.3.0",
     "Microsoft.NETCore.DotNetHostPolicy": "1.1.0",
     "Microsoft.NETCore.Runtime.CoreCLR": "1.1.0",
+    "System.CommandLine": "0.1.0-e160908-1",
+    "System.Xml.XmlDocument": "4.3.0",
   },
   "runtimes": {
     "win10-x64": { },

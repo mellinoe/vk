@@ -64,13 +64,36 @@ namespace Vk.Generator
                 using (cw.PushBlock("namespace Vulkan"))
                 using (cw.PushBlock("public static unsafe partial class VulkanNative"))
                 {
-                    cw.WriteLine($"private const string VulkanLib = \"vulkan-1.dll\";");
-                    cw.WriteLine();
-
                     SpaceSeparatedList(cw, spec.Commands, command =>
                     {
                         CommandHelpers.WriteCommand(cw, tnm, command);
                     });
+
+                    cw.WriteLine();
+
+                    using (cw.PushBlock("private static void LoadFunctionPointers()"))
+                    {
+                        foreach (CommandDefinition command in spec.Commands)
+                        {
+                            if (Configuration.GenerateCalliStubs)
+                            {
+                                cw.WriteLine($"{command.Name}_ptr = s_nativeLib.LoadFunctionPointer(\"{command.Name}\");");
+                            }
+                            else
+                            {
+                                cw.WriteLine($"IntPtr {command.Name}_nativePtr = s_nativeLib.LoadFunctionPointer(\"{command.Name}\");");
+                                using (cw.PushBlock($"if ({command.Name}_nativePtr != IntPtr.Zero)"))
+                                {
+                                    cw.WriteLine($"{command.Name}_ptr = Marshal.GetDelegateForFunctionPointer<{command.Name}_delegate>({command.Name}_nativePtr);");
+                                }
+                                using (cw.PushBlock("else"))
+                                {
+                                    string invocation = string.Join(", ", command.Parameters.Select(pd => Util.NormalizeName(pd.Name)));
+                                    cw.WriteLine($"{command.Name}_ptr = ({invocation}) => {{ throw CreateMissingFunctionException(); }};");
+                                }
+                            }
+                        }
+                    }
                 }
             }
 

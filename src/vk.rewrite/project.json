@@ -1,11 +1,11 @@
 ﻿{
   "dependencies": {
-    "System.Console": "4.3.0",
-	"System.Runtime.InteropServices": "4.3.0",
-	"System.Runtime.InteropServices.RuntimeInformation": "4.3.0",
+    "Microsoft.NETCore.App": "1.1.0",
     "Microsoft.NETCore.DotNetHostPolicy": "1.1.0",
     "Microsoft.NETCore.Runtime.CoreCLR": "1.1.0",
-	"OpenTK.NETCore": "1.1.2364.6424"
+    "Mono.Cecil": "0.10.0-beta1-v2",
+    "System.CommandLine": "0.1.0-e160908-1",
+    "System.Xml.XmlDocument": "4.3.0",
   },
   "runtimes": {
     "win10-x64": { },
