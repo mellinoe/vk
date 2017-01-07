@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Runtime.InteropServices;
+using System.Runtime.Loader;
 
 namespace Vulkan
 {
@@ -27,7 +29,7 @@ namespace Vulkan
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
-                return "libvulkan.so";
+                return "libvulkan.so.1";
             }
             else
             {
@@ -51,7 +53,11 @@ namespace Vulkan
         public NativeLibrary(string libraryName)
         {
             _libraryName = libraryName;
-            _libraryHandle = LoadLibrary(libraryName);
+            _libraryHandle = LoadLibrary(_libraryName);
+            if (_libraryHandle == IntPtr.Zero)
+            {
+                throw new InvalidOperationException("Could not load " + libraryName);
+            }
         }
 
         protected abstract IntPtr LoadLibrary(string libraryName);
@@ -121,7 +127,15 @@ namespace Vulkan
 
             protected override IntPtr LoadLibrary(string libraryName)
             {
-                return Libdl.dlopen(libraryName, Libdl.RTLD_NOW);
+                Libdl.dlerror();
+                IntPtr handle = Libdl.dlopen(libraryName, Libdl.RTLD_NOW);
+                if (handle == IntPtr.Zero && !Path.IsPathRooted(libraryName))
+                {
+                    string localPath = Path.Combine(AppContext.BaseDirectory, libraryName);
+                    handle = Libdl.dlopen(localPath, Libdl.RTLD_NOW);
+                }
+
+                return handle;
             }
 
             protected override void FreeLibrary(IntPtr libraryHandle)

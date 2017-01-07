@@ -14,6 +14,9 @@ namespace Vulkan
         [DllImport("libdl.so")]
         public static extern int dlclose(IntPtr handle);
 
+        [DllImport("libdl.so")]
+        public static extern string dlerror();
+
         public const int RTLD_NOW = 0x002;
     }
 }

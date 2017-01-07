@@ -1,8 +1,11 @@
 ﻿{
   "dependencies": {
+    "System.AppContext": "4.3.0",
     "System.Diagnostics.Debug": "4.3.0",
+    "System.Runtime.Extensions": "4.3.0",
     "System.Runtime.InteropServices": "4.3.0",
     "System.Runtime.InteropServices.RuntimeInformation": "4.3.0",
+    "System.Runtime.Loader": "4.3.0",
   },
   "frameworks": {
     "netcoreapp1.1": { }
