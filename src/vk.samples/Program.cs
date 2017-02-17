@@ -27,7 +27,7 @@ namespace Vk.Samples
             VkInstanceCreateInfo createInfo;
             createInfo.sType = VkStructureType.InstanceCreateInfo;
             createInfo.ppEnabledLayerNames = &enabledLayersPtr;
-            createInfo.enabledLayerCount = 1;
+            createInfo.enabledLayerCount = 0;
             createInfo.ppEnabledExtensionNames = enabledExtensions;
             createInfo.enabledExtensionCount = 3;
             VkApplicationInfo applicationInfo;

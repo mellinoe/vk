@@ -10,7 +10,7 @@ namespace Vk.Generator
     {
         private static TypeReference s_calliRewriteRef;
 
-        public static void Main(string[] args)
+        public static int Main(string[] args)
         {
             string vkDllPath = null;
             string outputPath = null;
@@ -25,6 +25,7 @@ namespace Vk.Generator
             {
                 Console.WriteLine("Error: a path for --vkdll is required.");
                 Console.WriteLine(s.GetHelpText());
+                return -1;
             }
             if (outputPath == null)
             {
@@ -32,6 +33,7 @@ namespace Vk.Generator
             }
 
             Rewrite(vkDllPath, outputPath);
+            return 0;
         }
 
         private static void Rewrite(string vkDllPath, string outputPath)

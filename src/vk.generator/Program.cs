@@ -27,7 +27,7 @@ namespace Vk.Generator
                 Directory.CreateDirectory(outputPath);
             }
 
-            using (var fs = File.OpenRead("vk.xml"))
+            using (var fs = File.OpenRead(Path.Combine(AppContext.BaseDirectory, "vk.xml")))
             {
                 VulkanSpecification vs = VulkanSpecification.LoadFromXmlStream(fs);
                 TypeNameMappings tnm = new TypeNameMappings();
