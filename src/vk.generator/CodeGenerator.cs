@@ -10,10 +10,14 @@ namespace Vk.Generator
     {
         public static void GenerateCodeFiles(VulkanSpecification spec, TypeNameMappings tnm, string path)
         {
-            GenerateStructures(spec, tnm, path);
+            if (!Directory.Exists(path))
+            {
+
+            }
+            GenerateAllTypes(spec, tnm, path);
         }
 
-        private static void GenerateStructures(VulkanSpecification spec, TypeNameMappings tnm, string path)
+        private static void GenerateAllTypes(VulkanSpecification spec, TypeNameMappings tnm, string path)
         {
             using (StreamWriter sw = File.CreateText(Path.Combine(path, "Structures.gen.cs")))
             {
@@ -21,15 +25,18 @@ namespace Vk.Generator
                 cw.WriteHeader();
                 cw.WriteLine();
 
-                cw.Using("System");
-                cw.WriteLine();
-
-                using (cw.PushBlock("namespace Vulkan"))
+                using (cw.PushIfDef(GetActiveCalliCondition()))
                 {
-                    SpaceSeparatedList(cw, spec.Structures, structure =>
+                    cw.Using("System");
+                    cw.WriteLine();
+
+                    using (cw.PushBlock("namespace Vulkan"))
                     {
-                        StructureHelpers.WriteStructure(cw, structure, tnm);
-                    });
+                        SpaceSeparatedList(cw, spec.Structures, structure =>
+                        {
+                            StructureHelpers.WriteStructure(cw, structure, tnm);
+                        });
+                    }
                 }
             }
 
@@ -39,15 +46,18 @@ namespace Vk.Generator
                 cw.WriteHeader();
                 cw.WriteLine();
 
-                cw.Using("System");
-                cw.WriteLine();
-
-                using (cw.PushBlock("namespace Vulkan"))
+                using (cw.PushIfDef(GetActiveCalliCondition()))
                 {
-                    SpaceSeparatedList(cw, spec.Enums, enumDef =>
+                    cw.Using("System");
+                    cw.WriteLine();
+
+                    using (cw.PushBlock("namespace Vulkan"))
                     {
-                        EnumHelpers.WriteEnum(cw, enumDef);
-                    });
+                        SpaceSeparatedList(cw, spec.Enums, enumDef =>
+                        {
+                            EnumHelpers.WriteEnum(cw, enumDef);
+                        });
+                    }
                 }
             }
 
@@ -57,39 +67,42 @@ namespace Vk.Generator
                 cw.WriteHeader();
                 cw.WriteLine();
 
-                cw.Using("System");
-                cw.Using("System.Runtime.InteropServices");
-                cw.WriteLine();
-
-                using (cw.PushBlock("namespace Vulkan"))
-                using (cw.PushBlock("public static unsafe partial class VulkanNative"))
+                using (cw.PushIfDef(GetActiveCalliCondition()))
                 {
-                    SpaceSeparatedList(cw, spec.Commands, command =>
-                    {
-                        CommandHelpers.WriteCommand(cw, tnm, command);
-                    });
-
+                    cw.Using("System");
+                    cw.Using("System.Runtime.InteropServices");
                     cw.WriteLine();
 
-                    using (cw.PushBlock("private static void LoadFunctionPointers()"))
+                    using (cw.PushBlock("namespace Vulkan"))
+                    using (cw.PushBlock("public static unsafe partial class VulkanNative"))
                     {
-                        foreach (CommandDefinition command in spec.Commands)
+                        SpaceSeparatedList(cw, spec.Commands, command =>
                         {
-                            if (Configuration.GenerateCalliStubs)
+                            CommandHelpers.WriteCommand(cw, tnm, command);
+                        });
+
+                        cw.WriteLine();
+
+                        using (cw.PushBlock("private static void LoadFunctionPointers()"))
+                        {
+                            foreach (CommandDefinition command in spec.Commands)
                             {
-                                cw.WriteLine($"{command.Name}_ptr = s_nativeLib.LoadFunctionPointer(\"{command.Name}\");");
-                            }
-                            else
-                            {
-                                cw.WriteLine($"IntPtr {command.Name}_nativePtr = s_nativeLib.LoadFunctionPointer(\"{command.Name}\");");
-                                using (cw.PushBlock($"if ({command.Name}_nativePtr != IntPtr.Zero)"))
+                                if (Configuration.GenerateCalliStubs)
                                 {
-                                    cw.WriteLine($"{command.Name}_ptr = Marshal.GetDelegateForFunctionPointer<{command.Name}_delegate>({command.Name}_nativePtr);");
+                                    cw.WriteLine($"{command.Name}_ptr = s_nativeLib.LoadFunctionPointer(\"{command.Name}\");");
                                 }
-                                using (cw.PushBlock("else"))
+                                else
                                 {
-                                    string invocation = string.Join(", ", command.Parameters.Select(pd => Util.NormalizeName(pd.Name)));
-                                    cw.WriteLine($"{command.Name}_ptr = ({invocation}) => {{ throw CreateMissingFunctionException(); }};");
+                                    cw.WriteLine($"IntPtr {command.Name}_nativePtr = s_nativeLib.LoadFunctionPointer(\"{command.Name}\");");
+                                    using (cw.PushBlock($"if ({command.Name}_nativePtr != IntPtr.Zero)"))
+                                    {
+                                        cw.WriteLine($"{command.Name}_ptr = Marshal.GetDelegateForFunctionPointer<{command.Name}_delegate>({command.Name}_nativePtr);");
+                                    }
+                                    using (cw.PushBlock("else"))
+                                    {
+                                        string invocation = string.Join(", ", command.Parameters.Select(pd => Util.NormalizeName(pd.Name)));
+                                        cw.WriteLine($"{command.Name}_ptr = ({invocation}) => {{ throw CreateMissingFunctionException(); }};");
+                                    }
                                 }
                             }
                         }
@@ -103,15 +116,18 @@ namespace Vk.Generator
                 cw.WriteHeader();
                 cw.WriteLine();
 
-                cw.Using("System");
-                cw.WriteLine();
-
-                using (cw.PushBlock("namespace Vulkan"))
+                using (cw.PushIfDef(GetActiveCalliCondition()))
                 {
-                    SpaceSeparatedList(cw, spec.Handles, handle =>
+                    cw.Using("System");
+                    cw.WriteLine();
+
+                    using (cw.PushBlock("namespace Vulkan"))
                     {
-                        HandleHelpers.WriteHandle(cw, handle);
-                    });
+                        SpaceSeparatedList(cw, spec.Handles, handle =>
+                        {
+                            HandleHelpers.WriteHandle(cw, handle);
+                        });
+                    }
                 }
             }
 
@@ -121,17 +137,25 @@ namespace Vk.Generator
                 cw.WriteHeader();
                 cw.WriteLine();
 
-                cw.Using("System.Runtime.InteropServices");
-                cw.WriteLine();
-
-                using (cw.PushBlock("namespace Vulkan"))
+                using (cw.PushIfDef(GetActiveCalliCondition()))
                 {
-                    SpaceSeparatedList(cw, spec.Unions, union =>
+                    cw.Using("System.Runtime.InteropServices");
+                    cw.WriteLine();
+
+                    using (cw.PushBlock("namespace Vulkan"))
                     {
-                        UnionHelpers.WriteUnion(cw, tnm, union);
-                    });
+                        SpaceSeparatedList(cw, spec.Unions, union =>
+                        {
+                            UnionHelpers.WriteUnion(cw, tnm, union);
+                        });
+                    }
                 }
             }
+        }
+
+        private static string GetActiveCalliCondition()
+        {
+            return Configuration.GenerateCalliStubs ? "CALLI_STUBS" : "!CALLI_STUBS";
         }
 
         private static void SpaceSeparatedList<T>(CsCodeWriter cw, IList<T> list, Action<T> action)
@@ -178,6 +202,11 @@ namespace Vk.Generator
         public CodeBlock PushBlock(string ns)
         {
             return new CodeBlock(this, ns);
+        }
+
+        public IfDefSection PushIfDef(string condition)
+        {
+            return new IfDefSection(this, condition);
         }
 
         public void PopBlock()
@@ -230,6 +259,24 @@ namespace Vk.Generator
             public void Dispose()
             {
                 _cw.PopBlock();
+            }
+        }
+
+        public class IfDefSection : IDisposable
+        {
+            private readonly CsCodeWriter _cw;
+            private readonly string _condition;
+
+            public IfDefSection(CsCodeWriter cw, string condition)
+            {
+                _cw = cw;
+                _condition = condition;
+                _cw.WriteLine($"#if {condition}");
+            }
+
+            public void Dispose()
+            {
+                _cw.WriteLine($"#endif // {_condition}");
             }
         }
     }

@@ -54,7 +54,7 @@ namespace Vk.Generator
         {
             foreach (var method in type.Methods)
             {
-                //ProcessMethod(method);
+                ProcessMethod(method);
             }
         }
 

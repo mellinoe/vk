@@ -1,15 +1,32 @@
 using System;
 using System.IO;
-using System.Xml;
-using System.Xml.Linq;
-using System.Linq;
+using System.CommandLine;
 
 namespace Vk.Generator
 {
     public class Program
     {
-        public static void Main()
+        public static int Main(string[] args)
         {
+            string outputPath = AppContext.BaseDirectory;
+
+            ArgumentSyntax.Parse(args, s =>
+            {
+                s.DefineOption("o|out", ref outputPath, "The folder into which code is generated. Defaults to the application directory.");
+            });
+
+            Configuration.CodeOutputPath = outputPath;
+
+            if (File.Exists(outputPath))
+            {
+                Console.Error.WriteLine("The given path is a file, not a folder.");
+                return 1;
+            }
+            else if (!Directory.Exists(outputPath))
+            {
+                Directory.CreateDirectory(outputPath);
+            }
+
             using (var fs = File.OpenRead("vk.xml"))
             {
                 VulkanSpecification vs = VulkanSpecification.LoadFromXmlStream(fs);
@@ -22,8 +39,15 @@ namespace Vk.Generator
                 {
                     tnm.AddMapping(baseType.Key, baseType.Value);
                 }
-                CodeGenerator.GenerateCodeFiles(vs, tnm, AppContext.BaseDirectory);
+
+                CodeGenerator.GenerateCodeFiles(vs, tnm, Configuration.CodeOutputPath);
+
+                Configuration.GenerateCalliStubs = true;
+                Configuration.CodeOutputPath = Configuration.CodeOutputPath + ".calli";
+                CodeGenerator.GenerateCodeFiles(vs, tnm, Configuration.CodeOutputPath);
             }
+
+            return 0;
         }
     }
 }

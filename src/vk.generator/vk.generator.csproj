@@ -16,7 +16,6 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="CalliRewriteAttribute.cs" />
     <Compile Include="CodeGenerator.cs" />
     <Compile Include="CommandDefinition.cs" />
     <Compile Include="CommandHelpers.cs" />

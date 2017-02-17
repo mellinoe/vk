@@ -9,23 +9,21 @@
     <NuGetTargetMoniker>.NETCoreApp,Version=v1.1</NuGetTargetMoniker>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <ProjectGuid>{D8573039-9FE1-4554-A659-4E77CFBA83C1}</ProjectGuid>
+    <GeneratedCodeFolder>$(MSBuildThisFileDirectory)Generated</GeneratedCodeFolder>
+    <GeneratedCalliCodeFolder>$(MSBuildThisFileDirectory)Generated.calli</GeneratedCalliCodeFolder>
+    <DefineConstants Condition="'$(GenerateCalliStubs)' == 'true'">$(DefineConstants);CALLI_STUBS</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="..\..\bin\Windows_NT.x64.Debug\vk.generator\Commands.gen.cs">
-      <Link>Commands.gen.cs</Link>
-    </Compile>
-    <Compile Include="..\..\bin\Windows_NT.x64.Debug\vk.generator\Enums.gen.cs">
-      <Link>Enums.gen.cs</Link>
-    </Compile>
-    <Compile Include="..\..\bin\Windows_NT.x64.Debug\vk.generator\Handles.gen.cs">
-      <Link>Handles.gen.cs</Link>
-    </Compile>
-    <Compile Include="..\..\bin\Windows_NT.x64.Debug\vk.generator\Structures.gen.cs">
-      <Link>Structures.gen.cs</Link>
-    </Compile>
-    <Compile Include="..\..\bin\Windows_NT.x64.Debug\vk.generator\Unions.gen.cs">
-      <Link>Unions.gen.cs</Link>
-    </Compile>
+    <Compile Include="$(GeneratedCodeFolder)\Commands.gen.cs" />
+    <Compile Include="$(GeneratedCodeFolder)\Enums.gen.cs" />
+    <Compile Include="$(GeneratedCodeFolder)\Handles.gen.cs" />
+    <Compile Include="$(GeneratedCodeFolder)\Structures.gen.cs" />
+    <Compile Include="$(GeneratedCodeFolder)\Unions.gen.cs" />
+    <Compile Include="$(GeneratedCalliCodeFolder)\Commands.gen.cs" />
+    <Compile Include="$(GeneratedCalliCodeFolder)\Enums.gen.cs" />
+    <Compile Include="$(GeneratedCalliCodeFolder)\Handles.gen.cs" />
+    <Compile Include="$(GeneratedCalliCodeFolder)\Structures.gen.cs" />
+    <Compile Include="$(GeneratedCalliCodeFolder)\Unions.gen.cs" />
     <Compile Include="CalliRewriteAttribute.cs" />
     <Compile Include="Commands.cs" />
     <Compile Include="Delegates.cs" />
