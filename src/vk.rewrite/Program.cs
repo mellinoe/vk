@@ -3,8 +3,9 @@ using Mono.Cecil.Cil;
 using System;
 using System.Linq;
 using Mono.Collections.Generic;
+using System.IO;
 
-namespace Vk.Generator
+namespace Vk.Rewrite
 {
     public class Program
     {
@@ -14,7 +15,7 @@ namespace Vk.Generator
         {
             string vkDllPath = null;
             string outputPath = null;
-
+            bool copiedToTemp = false;
             var s = System.CommandLine.ArgumentSyntax.Parse(args, syntax =>
             {
                 syntax.DefineOption("vkdll", ref vkDllPath, "The location of vk.dll to rewrite.");
@@ -30,21 +31,36 @@ namespace Vk.Generator
             if (outputPath == null)
             {
                 outputPath = vkDllPath;
+                string copyPath = Path.GetTempFileName();
+                File.Copy(vkDllPath, copyPath, overwrite: true);
+                vkDllPath = copyPath;
+                copiedToTemp = true;
             }
-
-            Rewrite(vkDllPath, outputPath);
+            try
+            {
+                Rewrite(vkDllPath, outputPath);
+            }
+            finally
+            {
+                if (copiedToTemp)
+                {
+                    File.Delete(vkDllPath);
+                }
+            }
             return 0;
         }
 
         private static void Rewrite(string vkDllPath, string outputPath)
         {
-            AssemblyDefinition vkDll = AssemblyDefinition.ReadAssembly(vkDllPath);
-            LoadRefs(vkDll);
-            foreach (var type in vkDll.Modules[0].Types)
+            using (AssemblyDefinition vkDll = AssemblyDefinition.ReadAssembly(vkDllPath))
             {
-                ProcessType(type);
+                LoadRefs(vkDll);
+                foreach (var type in vkDll.Modules[0].Types)
+                {
+                    ProcessType(type);
+                }
+                vkDll.Write(outputPath);
             }
-            vkDll.Write(outputPath);
         }
 
         private static void LoadRefs(AssemblyDefinition vkDll)
@@ -103,7 +119,7 @@ namespace Vk.Generator
             {
                 method.Body.InitLocals = true;
             }
-            
+
         }
 
         private static void EmitLoadArgument(ILProcessor il, int i, Collection<ParameterDefinition> parameters)

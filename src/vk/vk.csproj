@@ -32,6 +32,12 @@
     <Compile Include="FunctionPointer.cs" />
     <Compile Include="Kernel32.cs" />
     <Compile Include="Libdl.cs" />
+    <ProjectReference Include="..\vk.generator\vk.generator.csproj">
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\vk.rewrite\vk.rewrite.csproj">
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
     <PackageReference Include="System.AppContext" Version="4.3.0" />
     <PackageReference Include="System.Diagnostics.Debug" Version="4.3.0" />
     <PackageReference Include="System.Runtime.Extensions" Version="4.3.0" />
@@ -39,4 +45,19 @@
     <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.3.0" />
     <PackageReference Include="System.Runtime.Loader" Version="4.3.0" />
   </ItemGroup>
+  <Target Name="AutoGenerateBindings" BeforeTargets="CoreCompile">
+    <PropertyGroup>
+      <VkGeneratorExecutable>$(BinDir)/$(Configuration)/vk.generator/netcoreapp1.1/vk.generator.dll</VkGeneratorExecutable>
+    </PropertyGroup>
+    <Message Text="Generating bindings." />
+    <Exec Command="dotnet $(VkGeneratorExecutable) --out $(MSBuildThisFileDirectory)Generated" />
+  </Target>
+  <PropertyGroup>
+    <!--<TargetsTriggeredByCompilation>$(TargetsTriggeredByCompilation);RewriteCalliStubs</TargetsTriggeredByCompilation>-->
+    <VkRewriteExecutable>$(BinDir)/$(Configuration)/vk.rewrite/netcoreapp1.1/vk.rewrite.dll</VkRewriteExecutable>
+  </PropertyGroup>
+  <Target Name="RewriteCalliStubs" AfterTargets="Build">
+    <Message Text="Rewriting calli stubs." />
+    <Exec Command="dotnet $(VkRewriteExecutable) --vkdll $(TargetPath)" />
+  </Target>
 </Project>

@@ -44,6 +44,10 @@ namespace Vk.Generator
 
                 Configuration.GenerateCalliStubs = true;
                 Configuration.CodeOutputPath = Configuration.CodeOutputPath + ".calli";
+                if (!Directory.Exists(Configuration.CodeOutputPath))
+                {
+                    Directory.CreateDirectory(Configuration.CodeOutputPath);
+                }
                 CodeGenerator.GenerateCodeFiles(vs, tnm, Configuration.CodeOutputPath);
             }
 
