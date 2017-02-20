@@ -1,8 +1,17 @@
-﻿namespace Vk.Generator
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Vk.Generator
 {
     public static class StructureHelpers
     {
-        public static void WriteStructure(CsCodeWriter cw, StructureDefinition structure, TypeNameMappings tnm)
+        private static readonly HashSet<string> s_fixedCapableTypes = new HashSet<string>()
+        {
+            "byte", "short", "int", "long", "char", "sbyte", "ushort", "uint", "ulong", "float", "double"
+        };
+
+        public static void WriteStructure(CsCodeWriter cw, StructureDefinition structure, TypeNameMappings tnm, ConstantDefinition[] constants)
         {
             using (cw.PushBlock("public unsafe partial struct " + structure.Name))
             {
@@ -14,6 +23,10 @@
                         {
                             WriteMember(cw, tnm, member, "_" + i);
                         }
+                    }
+                    else if (member.ElementCountSymbolic != null)
+                    {
+                        WriteMemberSymbolicCount(cw, tnm, member, constants);
                     }
                     else
                     {
@@ -31,6 +44,38 @@
             }
 
             cw.WriteLine($"public {member.Type.MapTypeSpec(tnm)} {Util.NormalizeName(member.Name)}{nameSuffix};");
+        }
+
+        private static void WriteMemberSymbolicCount(CsCodeWriter cw, TypeNameMappings tnm, MemberSpec member, ConstantDefinition[] constants)
+        {
+            if (!CanUseFixed(member.Type.MapTypeSpec(tnm)))
+            {
+                int count = GetSymbolValue(member.ElementCountSymbolic, constants);
+                for (int i = 0; i < count; i++)
+                {
+                    WriteMember(cw, tnm, member, "_" + i);
+                }
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(member.Comment))
+                {
+                    cw.WriteLine($"///<summary>{member.Comment}</summary>");
+                }
+
+                string mappedSymbolicName = EnumHelpers.GetPrettyEnumName(member.ElementCountSymbolic, "VK_");
+                cw.WriteLine($"public fixed {member.Type.MapTypeSpec(tnm)} {Util.NormalizeName(member.Name)}[(int)VulkanNative.{mappedSymbolicName}];");
+            }
+        }
+
+        private static int GetSymbolValue(string symbolName, ConstantDefinition[] constants)
+        {
+            return int.Parse(constants.Single(cd => cd.Name == symbolName).Value);
+        }
+
+        private static bool CanUseFixed(TypeSpec type)
+        {
+            return s_fixedCapableTypes.Contains(type.Name);
         }
     }
 }

@@ -13,28 +13,8 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
-    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="CodeGenerator.cs" />
-    <Compile Include="CommandDefinition.cs" />
-    <Compile Include="CommandHelpers.cs" />
-    <Compile Include="Configuration.cs" />
-    <Compile Include="EnumDefinition.cs" />
-    <Compile Include="EnumHelpers.cs" />
-    <Compile Include="HandleDefinition.cs" />
-    <Compile Include="HandleHelpers.cs" />
-    <Compile Include="ParameterDefinition.cs" />
-    <Compile Include="Program.cs" />
-    <Compile Include="Require.cs" />
-    <Compile Include="StructureDefinition.cs" />
-    <Compile Include="StructureHelpers.cs" />
-    <Compile Include="TypeNameMappings.cs" />
-    <Compile Include="TypeSpec.cs" />
-    <Compile Include="UnionHelpers.cs" />
-    <Compile Include="Util.cs" />
-    <Compile Include="VulkanSpecification.cs" />
-    <Compile Include="XElementExtensions.cs" />
     <Content Include="vk.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>

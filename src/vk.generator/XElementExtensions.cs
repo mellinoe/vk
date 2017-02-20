@@ -23,6 +23,11 @@ namespace Vk.Generator
             return xe.Element("type").Value;
         }
 
+        public static string GetTypeAttributeOrNull(this XElement xe)
+        {
+            return xe.Attribute("type")?.Value;
+        }
+
         public static bool GetOptionalAttributeOrFalse(this XElement xe)
         {
             var attr = xe.Attribute("optional");

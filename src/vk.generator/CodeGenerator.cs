@@ -34,7 +34,7 @@ namespace Vk.Generator
                     {
                         SpaceSeparatedList(cw, spec.Structures, structure =>
                         {
-                            StructureHelpers.WriteStructure(cw, structure, tnm);
+                            StructureHelpers.WriteStructure(cw, structure, tnm, spec.Constants);
                         });
                     }
                 }
@@ -76,6 +76,13 @@ namespace Vk.Generator
                     using (cw.PushBlock("namespace Vulkan"))
                     using (cw.PushBlock("public static unsafe partial class VulkanNative"))
                     {
+                        SpaceSeparatedList(cw, spec.Constants, constant =>
+                        {
+                            ConstantHelpers.WriteConstant(cw, tnm, constant);
+                        });
+
+                        cw.WriteLine();
+
                         SpaceSeparatedList(cw, spec.Commands, command =>
                         {
                             CommandHelpers.WriteCommand(cw, tnm, command);

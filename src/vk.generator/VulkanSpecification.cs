@@ -8,6 +8,7 @@ namespace Vk.Generator
     public class VulkanSpecification
     {
         public CommandDefinition[] Commands { get; }
+        public ConstantDefinition[] Constants { get; }
         public EnumDefinition[] Enums { get; }
         public StructureDefinition[] Structures { get; }
         public StructureDefinition[] Unions{ get; }
@@ -17,6 +18,7 @@ namespace Vk.Generator
 
         public VulkanSpecification(
             CommandDefinition[] commands,
+            ConstantDefinition[] constants,
             EnumDefinition[] enums,
             StructureDefinition[] structures,
             StructureDefinition[] unions,
@@ -25,6 +27,7 @@ namespace Vk.Generator
             Dictionary<string, string> baseTypes)
         {
             Commands = commands;
+            Constants = constants;
             Enums = enums;
             Structures = structures;
             Unions = unions;
@@ -41,8 +44,13 @@ namespace Vk.Generator
             CommandDefinition[] commandDefinitions = commands.Elements("command")
                 .Select(commandx => CommandDefinition.CreateFromXml(commandx)).ToArray();
 
+            ConstantDefinition[] constantDefinitions = registry.Elements("enums")
+                .Where(enumx => enumx.Attribute("name").Value == "API Constants")
+                .SelectMany(enumx => enumx.Elements("enum"))
+                .Select(enumxx => ConstantDefinition.CreateFromXml(enumxx)).ToArray();
+
             EnumDefinition[] enumDefinitions = registry.Elements("enums")
-                .Where(enumx => enumx.Attribute("name").Value != "API Constants")
+                .Where(enumx => enumx.GetTypeAttributeOrNull() == "enum" || enumx.GetTypeAttributeOrNull() == "bitmask")
                 .Select(enumx => EnumDefinition.CreateFromXml(enumx)).ToArray();
 
             var types = registry.Elements("types");
@@ -63,7 +71,7 @@ namespace Vk.Generator
                     typex => typex.GetNameElement(),
                     typex => typex.Element("type").Value);
 
-            return new VulkanSpecification(commandDefinitions, enumDefinitions, structures, unions, handles, bitmaskTypes, baseTypes);
+            return new VulkanSpecification(commandDefinitions, constantDefinitions, enumDefinitions, structures, unions, handles, bitmaskTypes, baseTypes);
         }
     }
 }
