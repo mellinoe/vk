@@ -26,14 +26,25 @@ namespace Vk.Samples
         public VkFormat DepthFormat { get; protected set; }
         public VulkanSwapchain Swapchain { get; } = new VulkanSwapchain();
         public IntPtr Window { get; protected set; }
-        public VkCommandPool CmdPool { get; protected set; }
+        public VkCommandPool CmdPool => _cmdPool;
         public uint Width { get; protected set; }
         public uint Height { get; protected set; }
+        public NativeList<VkCommandBuffer> DrawCmdBuffers { get; protected set; } = new NativeList<VkCommandBuffer>();
+        public VkRenderPass RenderPass => _renderPass;
+        public VkPipelineCache PipelineCache => _pipelineCache;
+        public NativeList<VkFramebuffer> Framebuffers { get; protected set; } = new NativeList<VkFramebuffer>();
+        public VkPhysicalDeviceMemoryProperties DeviceMemoryProperties { get; set; }
+        public VkPhysicalDeviceProperties DeviceProperties { get; protected set; }
+        public VkPhysicalDeviceFeatures DeviceFeatures { get; protected set; }
+        public NativeWindow NativeWindow { get; private set; }
 
         public Semaphores Semaphores;
         public DepthStencil DepthStencil;
         public VkSubmitInfo SubmitInfo;
-        public NativeList<VkPipelineStageFlagBits> submitPipelineStages = new NativeList<VkPipelineStageFlagBits>(1);
+        public NativeList<VkPipelineStageFlags> submitPipelineStages = new NativeList<VkPipelineStageFlags>(1);
+        protected VkRenderPass _renderPass;
+        private VkPipelineCache _pipelineCache;
+        private VkCommandPool _cmdPool;
 
         // Destination dimensions for resizing the window
         private uint destWidth;
@@ -55,15 +66,6 @@ namespace Vk.Samples
         private bool enableTextOverlay;
         private uint lastFPS;
         private readonly FrameTimeAverager _frameTimeAverager = new FrameTimeAverager(666);
-
-        public NativeList<VkCommandBuffer> DrawCmdBuffers { get; protected set; } = new NativeList<VkCommandBuffer>();
-        public VkRenderPass RenderPass { get; protected set; }
-        public VkPipelineCache PipelineCache { get; set; }
-        public NativeList<VkFramebuffer> Framebuffers { get; protected set; } = new NativeList<VkFramebuffer>();
-        public VkPhysicalDeviceMemoryProperties DeviceMemoryProperties { get; set; }
-        public VkPhysicalDeviceProperties DeviceProperties { get; protected set; }
-        public VkPhysicalDeviceFeatures DeviceFeatures { get; protected set; }
-        public NativeWindow NativeWindow { get; private set; }
 
         public void InitVulkan()
         {
@@ -158,7 +160,7 @@ namespace Vk.Samples
             // Semaphores will stay the same during application lifetime
             // Command buffer submission info is set by each example
             var submitInfo = Initializers.SubmitInfo();
-            submitInfo.pWaitDstStageMask = (uint*)submitPipelineStages.Data;
+            submitInfo.pWaitDstStageMask = (VkPipelineStageFlags*)submitPipelineStages.Data;
             submitInfo.waitSemaphoreCount = 1;
             submitInfo.pWaitSemaphores = &semaphores.PresentComplete;
             submitInfo.signalSemaphoreCount = 1;
@@ -249,7 +251,7 @@ namespace Vk.Samples
             SetupDepthStencil();
             SetupRenderPass();
             CreatePipelineCache();
-            setupFrameBuffer();
+            SetupFrameBuffer();
 
             /* TODO: Implement text rendering
             if (enableTextOverlay)
@@ -280,16 +282,16 @@ namespace Vk.Samples
                 attachments.Count = 2;
                 // Color attachment
                 attachments[0].format = Swapchain.ColorFormat;
-                attachments[0].samples = VkSampleCountFlagBits._1;
+                attachments[0].samples = VkSampleCountFlags._1;
                 attachments[0].loadOp = VkAttachmentLoadOp.Clear;
                 attachments[0].storeOp = VkAttachmentStoreOp.Store;
                 attachments[0].stencilLoadOp = VkAttachmentLoadOp.DontCare;
                 attachments[0].stencilStoreOp = VkAttachmentStoreOp.DontCare;
                 attachments[0].initialLayout = VkImageLayout.Undefined;
-                attachments[0].finalLayout = Hacks.VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+                attachments[0].finalLayout = VkImageLayout.PresentSrc;
                 // Depth attachment
                 attachments[1].format = DepthFormat;
-                attachments[1].samples = VkSampleCountFlagBits._1;
+                attachments[1].samples = VkSampleCountFlags._1;
                 attachments[1].loadOp = VkAttachmentLoadOp.Clear;
                 attachments[1].storeOp = VkAttachmentStoreOp.Store;
                 attachments[1].stencilLoadOp = VkAttachmentLoadOp.DontCare;
@@ -323,19 +325,19 @@ namespace Vk.Samples
 
                     dependencies[0].srcSubpass = SubpassExternal;
                     dependencies[0].dstSubpass = 0;
-                    dependencies[0].srcStageMask = (uint)VkPipelineStageFlagBits.BottomOfPipe;
-                    dependencies[0].dstStageMask = (uint)VkPipelineStageFlagBits.ColorAttachmentOutput;
-                    dependencies[0].srcAccessMask = (uint)VkAccessFlagBits.MemoryRead;
-                    dependencies[0].dstAccessMask = (uint)(VkAccessFlagBits.ColorAttachmentRead | VkAccessFlagBits.ColorAttachmentWrite);
-                    dependencies[0].dependencyFlags = (uint)VkDependencyFlagBits.ByRegion;
+                    dependencies[0].srcStageMask = VkPipelineStageFlags.BottomOfPipe;
+                    dependencies[0].dstStageMask = VkPipelineStageFlags.ColorAttachmentOutput;
+                    dependencies[0].srcAccessMask = VkAccessFlags.MemoryRead;
+                    dependencies[0].dstAccessMask = (VkAccessFlags.ColorAttachmentRead | VkAccessFlags.ColorAttachmentWrite);
+                    dependencies[0].dependencyFlags = VkDependencyFlags.ByRegion;
 
                     dependencies[1].srcSubpass = 0;
                     dependencies[1].dstSubpass = SubpassExternal;
-                    dependencies[1].srcStageMask = (uint)VkPipelineStageFlagBits.ColorAttachmentOutput;
-                    dependencies[1].dstStageMask = (uint)VkPipelineStageFlagBits.BottomOfPipe;
-                    dependencies[1].srcAccessMask = (uint)(VkAccessFlagBits.ColorAttachmentRead | VkAccessFlagBits.ColorAttachmentWrite);
-                    dependencies[1].dstAccessMask = (uint)VkAccessFlagBits.MemoryRead;
-                    dependencies[1].dependencyFlags = (uint)VkDependencyFlagBits.ByRegion;
+                    dependencies[1].srcStageMask = VkPipelineStageFlags.ColorAttachmentOutput;
+                    dependencies[1].dstStageMask = VkPipelineStageFlags.BottomOfPipe;
+                    dependencies[1].srcAccessMask = (VkAccessFlags.ColorAttachmentRead | VkAccessFlags.ColorAttachmentWrite);
+                    dependencies[1].dstAccessMask = VkAccessFlags.MemoryRead;
+                    dependencies[1].dependencyFlags = VkDependencyFlags.ByRegion;
 
                     VkRenderPassCreateInfo renderPassInfo = new VkRenderPassCreateInfo();
                     renderPassInfo.sType = VkStructureType.RenderPassCreateInfo;
@@ -346,23 +348,18 @@ namespace Vk.Samples
                     renderPassInfo.dependencyCount = dependencies.Count;
                     renderPassInfo.pDependencies = (VkSubpassDependency*)dependencies.Data;
 
-                    VkRenderPass renderPass;
-                    Util.CheckResult(vkCreateRenderPass(Device, &renderPassInfo, null, &renderPass));
-                    RenderPass = renderPass;
+                    Util.CheckResult(vkCreateRenderPass(Device, &renderPassInfo, null, out _renderPass));
                 }
             }
         }
 
         private void CreatePipelineCache()
         {
-            VkPipelineCacheCreateInfo pipelineCacheCreateInfo = new VkPipelineCacheCreateInfo();
-            pipelineCacheCreateInfo.sType = VkStructureType.PipelineCacheCreateInfo;
-            VkPipelineCache pipelineCache;
-            Util.CheckResult(vkCreatePipelineCache(Device, &pipelineCacheCreateInfo, null, &pipelineCache));
-            PipelineCache = pipelineCache;
+            VkPipelineCacheCreateInfo pipelineCacheCreateInfo = VkPipelineCacheCreateInfo.New();
+            Util.CheckResult(vkCreatePipelineCache(Device, ref pipelineCacheCreateInfo, null, out _pipelineCache));
         }
 
-        protected virtual void setupFrameBuffer()
+        protected virtual void SetupFrameBuffer()
         {
             using (NativeList<VkImageView> attachments = new NativeList<VkImageView>(2))
             {
@@ -370,9 +367,7 @@ namespace Vk.Samples
                 // Depth/Stencil attachment is the same for all frame buffers
                 attachments[1] = DepthStencil.View;
 
-                VkFramebufferCreateInfo frameBufferCreateInfo = new VkFramebufferCreateInfo();
-                frameBufferCreateInfo.sType = VkStructureType.FramebufferCreateInfo;
-                frameBufferCreateInfo.pNext = null;
+                VkFramebufferCreateInfo frameBufferCreateInfo = VkFramebufferCreateInfo.New();
                 frameBufferCreateInfo.renderPass = RenderPass;
                 frameBufferCreateInfo.attachmentCount = 2;
                 frameBufferCreateInfo.pAttachments = (VkImageView*)attachments.Data;
@@ -385,7 +380,7 @@ namespace Vk.Samples
                 for (uint i = 0; i < Framebuffers.Count; i++)
                 {
                     attachments[0] = Swapchain.Buffers[i].View;
-                    Util.CheckResult(vkCreateFramebuffer(Device, &frameBufferCreateInfo, null, (VkFramebuffer*)Unsafe.AsPointer(ref Framebuffers[i])));
+                    Util.CheckResult(vkCreateFramebuffer(Device, ref frameBufferCreateInfo, null, (VkFramebuffer*)Unsafe.AsPointer(ref Framebuffers[i])));
                 }
             }
         }
@@ -401,13 +396,10 @@ namespace Vk.Samples
 
         private void CreateCommandPool()
         {
-            VkCommandPoolCreateInfo cmdPoolInfo = new VkCommandPoolCreateInfo();
-            cmdPoolInfo.sType = VkStructureType.CommandPoolCreateInfo;
+            VkCommandPoolCreateInfo cmdPoolInfo = VkCommandPoolCreateInfo.New();
             cmdPoolInfo.queueFamilyIndex = Swapchain.QueueNodeIndex;
-            cmdPoolInfo.flags = (uint)VkCommandPoolCreateFlagBits.ResetCommandBuffer;
-            VkCommandPool cmdPool;
-            Util.CheckResult(vkCreateCommandPool(Device, &cmdPoolInfo, null, &cmdPool));
-            CmdPool = cmdPool;
+            cmdPoolInfo.flags = VkCommandPoolCreateFlags.ResetCommandBuffer;
+            Util.CheckResult(vkCreateCommandPool(Device, &cmdPoolInfo, null, out _cmdPool));
         }
 
         private void CreateCommandBuffers()
@@ -417,63 +409,48 @@ namespace Vk.Samples
             DrawCmdBuffers.Count = Swapchain.ImageCount;
 
             VkCommandBufferAllocateInfo cmdBufAllocateInfo =
-                Initializers.CommandBufferAllocateInfo(
-                    CmdPool,
-                    VkCommandBufferLevel.Primary,
-                    DrawCmdBuffers.Count);
+                Initializers.CommandBufferAllocateInfo(CmdPool, VkCommandBufferLevel.Primary, DrawCmdBuffers.Count);
 
-            Util.CheckResult(vkAllocateCommandBuffers(Device, &cmdBufAllocateInfo, (VkCommandBuffer*)DrawCmdBuffers.Data));
+            Util.CheckResult(vkAllocateCommandBuffers(Device, ref cmdBufAllocateInfo, (VkCommandBuffer*)DrawCmdBuffers.Data));
         }
 
         protected virtual void SetupDepthStencil()
         {
-            VkImageCreateInfo image = new VkImageCreateInfo();
-            image.sType = VkStructureType.ImageCreateInfo;
-            image.pNext = null;
+            VkImageCreateInfo image = VkImageCreateInfo.New();
             image.imageType = VkImageType._2d;
             image.format = DepthFormat;
             image.extent = new VkExtent3D() { width = Width, height = Height, depth = 1 };
             image.mipLevels = 1;
             image.arrayLayers = 1;
-            image.samples = VkSampleCountFlagBits._1;
+            image.samples = VkSampleCountFlags._1;
             image.tiling = VkImageTiling.Optimal;
-            image.usage = (uint)(VkImageUsageFlagBits.DepthStencilAttachment | VkImageUsageFlagBits.TransferSrc);
+            image.usage = (VkImageUsageFlags.DepthStencilAttachment | VkImageUsageFlags.TransferSrc);
             image.flags = 0;
 
-            VkMemoryAllocateInfo mem_alloc = new VkMemoryAllocateInfo();
-            mem_alloc.sType = VkStructureType.MemoryAllocateInfo;
-            mem_alloc.pNext = null;
+            VkMemoryAllocateInfo mem_alloc = VkMemoryAllocateInfo.New();
             mem_alloc.allocationSize = 0;
             mem_alloc.memoryTypeIndex = 0;
 
-            VkImageViewCreateInfo depthStencilView = new VkImageViewCreateInfo();
-            depthStencilView.sType = VkStructureType.ImageViewCreateInfo;
-            depthStencilView.pNext = null;
+            VkImageViewCreateInfo depthStencilView = VkImageViewCreateInfo.New();
             depthStencilView.viewType = VkImageViewType._2d;
             depthStencilView.format = DepthFormat;
             depthStencilView.flags = 0;
             depthStencilView.subresourceRange = new VkImageSubresourceRange();
-            depthStencilView.subresourceRange.aspectMask = (uint)(VkImageAspectFlagBits.Depth | VkImageAspectFlagBits.Stencil);
+            depthStencilView.subresourceRange.aspectMask = (VkImageAspectFlags.Depth | VkImageAspectFlags.Stencil);
             depthStencilView.subresourceRange.baseMipLevel = 0;
             depthStencilView.subresourceRange.levelCount = 1;
             depthStencilView.subresourceRange.baseArrayLayer = 0;
             depthStencilView.subresourceRange.layerCount = 1;
 
-            VkMemoryRequirements memReqs;
-            DepthStencil depthStencil;
-            Util.CheckResult(vkCreateImage(Device, &image, null, &depthStencil.Image));
-            vkGetImageMemoryRequirements(Device, depthStencil.Image, &memReqs);
+            Util.CheckResult(vkCreateImage(Device, &image, null, out DepthStencil.Image));
+            vkGetImageMemoryRequirements(Device, DepthStencil.Image, out VkMemoryRequirements memReqs);
             mem_alloc.allocationSize = memReqs.size;
-            mem_alloc.memoryTypeIndex = VulkanDevice.getMemoryType(memReqs.memoryTypeBits, VkMemoryPropertyFlagBits.DeviceLocal);
-            Util.CheckResult(vkAllocateMemory(Device, &mem_alloc, null, &depthStencil.Mem));
-            Util.CheckResult(vkBindImageMemory(Device, depthStencil.Image, depthStencil.Mem, 0));
+            mem_alloc.memoryTypeIndex = VulkanDevice.GetMemoryType(memReqs.memoryTypeBits, VkMemoryPropertyFlags.DeviceLocal);
+            Util.CheckResult(vkAllocateMemory(Device, &mem_alloc, null, out DepthStencil.Mem));
+            Util.CheckResult(vkBindImageMemory(Device, DepthStencil.Image, DepthStencil.Mem, 0));
 
-            depthStencilView.image = depthStencil.Image;
-            var view = DepthStencil.View;
-            Util.CheckResult(vkCreateImageView(Device, &depthStencilView, null, &view));
-            depthStencil.View = view;
-
-            DepthStencil = depthStencil;
+            depthStencilView.image = DepthStencil.Image;
+            Util.CheckResult(vkCreateImageView(Device, ref depthStencilView, null, out DepthStencil.View));
         }
 
         public void RenderLoop()
@@ -578,7 +555,7 @@ namespace Vk.Samples
             {
                 vkDestroyFramebuffer(Device, Framebuffers[i], null);
             }
-            setupFrameBuffer();
+            SetupFrameBuffer();
 
             // Command buffers need to be recreated as they may store
             // references to the recreated frame buffer

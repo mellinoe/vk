@@ -31,8 +31,7 @@ namespace Vk.Samples
         {
             VkResult err;
             // Create the os-specific Surface
-            VkWin32SurfaceCreateInfoKHR surfaceCreateInfo = new VkWin32SurfaceCreateInfoKHR();
-            surfaceCreateInfo.sType = Hacks.VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR;
+            VkWin32SurfaceCreateInfoKHR surfaceCreateInfo = VkWin32SurfaceCreateInfoKHR.New();
             surfaceCreateInfo.hinstance = platformHandle;
             surfaceCreateInfo.hwnd = platformWindow;
             VkSurfaceKHR surface;
@@ -65,7 +64,7 @@ namespace Vk.Samples
                 uint presentQueueNodeIndex = uint.MaxValue;
                 for (uint i = 0; i < queueCount; i++)
                 {
-                    if ((queueProps[i].queueFlags & (uint)VkQueueFlagBits.Graphics) != 0)
+                    if ((queueProps[i].queueFlags & VkQueueFlags.Graphics) != 0)
                     {
                         if (graphicsQueueNodeIndex == uint.MaxValue)
                         {
@@ -207,7 +206,7 @@ namespace Vk.Samples
 
                 // The VK_PRESENT_MODE_FIFO_KHR mode must always be present as per spec
                 // This mode waits for the vertical blank ("v-sync")
-                VkPresentModeKHR swapchainPresentMode = VkPresentModeKHR.FifoKhr;
+                VkPresentModeKHR swapchainPresentMode = VkPresentModeKHR.Fifo;
 
                 // If v-sync is not requested, try to find a mailbox mode
                 // It's the lowest latency non-tearing present mode available
@@ -215,14 +214,14 @@ namespace Vk.Samples
                 {
                     for (uint i = 0; i < presentModeCount; i++)
                     {
-                        if (presentModes[i] == VkPresentModeKHR.MailboxKhr)
+                        if (presentModes[i] == VkPresentModeKHR.Mailbox)
                         {
-                            swapchainPresentMode = VkPresentModeKHR.MailboxKhr;
+                            swapchainPresentMode = VkPresentModeKHR.Mailbox;
                             break;
                         }
-                        if ((swapchainPresentMode != VkPresentModeKHR.MailboxKhr) && (presentModes[i] == VkPresentModeKHR.ImmediateKhr))
+                        if ((swapchainPresentMode != VkPresentModeKHR.Mailbox) && (presentModes[i] == VkPresentModeKHR.Immediate))
                         {
-                            swapchainPresentMode = VkPresentModeKHR.ImmediateKhr;
+                            swapchainPresentMode = VkPresentModeKHR.Immediate;
                         }
                     }
                 }
@@ -235,27 +234,26 @@ namespace Vk.Samples
                 }
 
                 // Find the transformation of the Surface
-                VkSurfaceTransformFlagBitsKHR preTransform;
-                if ((surfCaps.supportedTransforms & (uint)VkSurfaceTransformFlagBitsKHR.InheritKhr) != 0)
+                VkSurfaceTransformFlagsKHR preTransform;
+                if ((surfCaps.supportedTransforms & VkSurfaceTransformFlagsKHR.Inherit) != 0)
                 {
                     // We prefer a non-rotated transform
-                    preTransform = VkSurfaceTransformFlagBitsKHR.IdentityKhr;
+                    preTransform = VkSurfaceTransformFlagsKHR.Identity;
                 }
                 else
                 {
                     preTransform = surfCaps.currentTransform;
                 }
 
-                VkSwapchainCreateInfoKHR swapchainCI = new VkSwapchainCreateInfoKHR();
-                swapchainCI.sType = Hacks.VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
+                VkSwapchainCreateInfoKHR swapchainCI = VkSwapchainCreateInfoKHR.New();
                 swapchainCI.pNext = null;
                 swapchainCI.surface = Surface;
                 swapchainCI.minImageCount = desiredNumberOfSwapchainImages;
                 swapchainCI.imageFormat = ColorFormat;
                 swapchainCI.imageColorSpace = ColorSpace;
                 swapchainCI.imageExtent = new VkExtent2D() { width = swapchainExtent.width, height = swapchainExtent.height };
-                swapchainCI.imageUsage = (uint)VkImageUsageFlagBits.ColorAttachment;
-                swapchainCI.preTransform = (VkSurfaceTransformFlagBitsKHR)preTransform;
+                swapchainCI.imageUsage = VkImageUsageFlags.ColorAttachment;
+                swapchainCI.preTransform = preTransform;
                 swapchainCI.imageArrayLayers = 1;
                 swapchainCI.imageSharingMode = VkSharingMode.Exclusive;
                 swapchainCI.queueFamilyIndexCount = 0;
@@ -264,24 +262,24 @@ namespace Vk.Samples
                 swapchainCI.oldSwapchain = oldSwapchain;
                 // Setting clipped to VK_TRUE allows the implementation to discard rendering outside of the Surface area
                 swapchainCI.clipped = True;
-                swapchainCI.compositeAlpha = VkCompositeAlphaFlagBitsKHR.OpaqueKhr;
+                swapchainCI.compositeAlpha = VkCompositeAlphaFlagsKHR.Opaque;
 
                 // Set additional usage flag for blitting from the swapchain Images if supported
                 VkFormatProperties formatProps;
-                vkGetPhysicalDeviceFormatProperties(PhysicalDevice, ColorFormat, &formatProps);
-                if ((formatProps.optimalTilingFeatures & (uint)VkFormatFeatureFlagBits.BlitDst) != 0)
+                vkGetPhysicalDeviceFormatProperties(PhysicalDevice, ColorFormat, out formatProps);
+                if ((formatProps.optimalTilingFeatures & VkFormatFeatureFlags.BlitDst) != 0)
                 {
-                    swapchainCI.imageUsage |= (uint)VkImageUsageFlagBits.TransferSrc;
+                    swapchainCI.imageUsage |= VkImageUsageFlags.TransferSrc;
                 }
 
                 VkSwapchainKHR swapChain;
-                err = vkCreateSwapchainKHR(Device, &swapchainCI, null, &swapChain);
+                err = vkCreateSwapchainKHR(Device, &swapchainCI, null, out swapChain);
                 Debug.Assert(err == VkResult.Success);
                 Swapchain = swapChain;
 
                 // If an existing swap chain is re-created, destroy the old swap chain
                 // This also cleans up all the presentable Images
-                if (oldSwapchain.Handle != Hacks.VK_NULL_HANDLE)
+                if (oldSwapchain.Handle != NullHandle)
                 {
                     for (uint i = 0; i < ImageCount; i++)
                     {
@@ -318,7 +316,7 @@ namespace Vk.Samples
                         a = VkComponentSwizzle.A
                     };
 
-                    colorAttachmentView.subresourceRange.aspectMask = (uint)VkImageAspectFlagBits.Color;
+                    colorAttachmentView.subresourceRange.aspectMask = VkImageAspectFlags.Color;
                     colorAttachmentView.subresourceRange.baseMipLevel = 0;
                     colorAttachmentView.subresourceRange.levelCount = 1;
                     colorAttachmentView.subresourceRange.baseArrayLayer = 0;
@@ -348,11 +346,11 @@ namespace Vk.Samples
         *
         * @return VkResult of the image acquisition
         */
-        public VkResult AcquireNextImage(VkSemaphore presentCompleteSemaphore, uint* imageIndex)
+        public VkResult AcquireNextImage(VkSemaphore presentCompleteSemaphore, ref uint imageIndex)
         {
             // By setting timeout to UINT64_MAX we will always wait until the next image has been acquired or an actual error is thrown
             // With that we don't have to handle VK_NOT_READY
-            return vkAcquireNextImageKHR(Device, Swapchain, ulong.MaxValue, presentCompleteSemaphore, new VkFence(), imageIndex);
+            return vkAcquireNextImageKHR(Device, Swapchain, ulong.MaxValue, presentCompleteSemaphore, new VkFence(), ref imageIndex);
         }
 
         /**
@@ -366,15 +364,14 @@ namespace Vk.Samples
         */
         public VkResult QueuePresent(VkQueue queue, uint imageIndex, VkSemaphore waitSemaphore = new VkSemaphore())
         {
-            VkPresentInfoKHR presentInfo = new VkPresentInfoKHR();
-            presentInfo.sType = Hacks.VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
+            VkPresentInfoKHR presentInfo = VkPresentInfoKHR.New();
             presentInfo.pNext = null;
             presentInfo.swapchainCount = 1;
             var sc = Swapchain;
             presentInfo.pSwapchains = &sc;
             presentInfo.pImageIndices = &imageIndex;
             // Check if a wait semaphore has been specified to wait for before presenting the image
-            if (waitSemaphore.Handle != Hacks.VK_NULL_HANDLE)
+            if (waitSemaphore.Handle != NullHandle)
             {
                 presentInfo.pWaitSemaphores = &waitSemaphore;
                 presentInfo.waitSemaphoreCount = 1;

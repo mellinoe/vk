@@ -21,21 +21,29 @@ namespace Vk.Generator
 
         private static readonly HashSet<string> s_ignoredParts = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {
+            "flags",
             "nvx",
+            "nv",
             "bit",
             "amd",
             "ext",
+            "khr",
         };
 
-        public static void WriteEnum(CsCodeWriter cw, EnumDefinition enumDef)
+        public static void WriteEnum(CsCodeWriter cw, EnumDefinition enumDef, TypeNameMappings tnm)
         {
+            if (enumDef.Name.EndsWith("FlagBits"))
+            {
+
+            }
             if (enumDef.Type == EnumType.Bitmask)
             {
                 cw.WriteLine("[Flags]");
             }
-            using (cw.PushBlock("public enum " + enumDef.Name))
+            string mappedName = tnm.GetMappedName(enumDef.Name);
+            using (cw.PushBlock("public enum " + mappedName))
             {
-                string enumNamePrefix = GetEnumNamePrefix(enumDef.Name);
+                string enumNamePrefix = GetEnumNamePrefix(mappedName);
                 if (enumDef.Type == EnumType.Bitmask && !enumDef.Values.Any(ev => GetPrettyEnumName(ev.Name, enumNamePrefix) == "None"))
                 {
                     cw.WriteLine($"None = 0,");
@@ -87,6 +95,7 @@ namespace Vk.Generator
             {
                 if (
                         parts[i] == "Flag"
+                    ||  parts[i] == "Flags"
                     || (parts[i] == "K" && (i + 2) < parts.Count && parts[i + 1] == "H" && parts[i + 2] == "R")
                     || (parts[i] == "A" && (i + 2) < parts.Count && parts[i + 1] == "M" && parts[i + 2] == "D")
                     || (parts[i] == "E" && (i + 2) < parts.Count && parts[i + 1] == "X" && parts[i + 2] == "T")
@@ -99,6 +108,20 @@ namespace Vk.Generator
             }
 
             return string.Join("_", parts.Select(s => s.ToUpper()));
+        }
+
+        public static string TrimIgnoredParts(string ret)
+        {
+            foreach (string ignored in s_ignoredParts)
+            {
+                int index;
+                if ((index = ret.IndexOf(ignored, StringComparison.OrdinalIgnoreCase)) != -1)
+                {
+                    ret = ret.Remove(index, ignored.Length);
+                }
+            }
+
+            return ret;
         }
 
         public static string GetPrettyEnumName(string value, string enumPrefix)

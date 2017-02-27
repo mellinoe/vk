@@ -14,11 +14,12 @@ namespace Vk.Samples
         public VkPhysicalDeviceMemoryProperties MemoryProperties { get; private set; }
         public NativeList<VkQueueFamilyProperties> QueueFamilyProperties { get; } = new NativeList<VkQueueFamilyProperties>();
         public List<string> SuppertedExcentions { get; } = new List<string>();
-        public VkDevice LogicalDevice { get; private set; }
+        public VkDevice LogicalDevice => _logicalDevice;
         public VkCommandPool CommandPool { get; private set; }
         public bool EnableDebugMarkers { get; internal set; }
 
         public QueueFamilyIndices QFIndices;
+        private VkDevice _logicalDevice;
 
         public VulkanDevice(VkPhysicalDevice physicalDevice)
         {
@@ -28,19 +29,19 @@ namespace Vk.Samples
             // Store Properties features, limits and properties of the physical device for later use
             // Device properties also contain limits and sparse properties
             VkPhysicalDeviceProperties properties;
-            vkGetPhysicalDeviceProperties(physicalDevice, &properties);
+            vkGetPhysicalDeviceProperties(physicalDevice, out properties);
             //Properties = properties;
             // Features should be checked by the examples before using them
             VkPhysicalDeviceFeatures features;
-            vkGetPhysicalDeviceFeatures(physicalDevice, &features);
+            vkGetPhysicalDeviceFeatures(physicalDevice, out features);
             Features = features;
             // Memory properties are used regularly for creating all kinds of buffers
             VkPhysicalDeviceMemoryProperties memoryProperties;
-            vkGetPhysicalDeviceMemoryProperties(physicalDevice, &memoryProperties);
+            vkGetPhysicalDeviceMemoryProperties(physicalDevice, out memoryProperties);
             MemoryProperties = memoryProperties;
             // Queue family properties, used for setting up requested queues upon device creation
-            uint queueFamilyCount;
-            vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &queueFamilyCount, null);
+            uint queueFamilyCount = 0;
+            vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, ref queueFamilyCount, null);
             Debug.Assert(queueFamilyCount > 0);
             QueueFamilyProperties.Resize(queueFamilyCount);
             vkGetPhysicalDeviceQueueFamilyProperties(
@@ -51,11 +52,11 @@ namespace Vk.Samples
 
             // Get list of supported extensions
             uint extCount = 0;
-            vkEnumerateDeviceExtensionProperties(physicalDevice, null, &extCount, null);
+            vkEnumerateDeviceExtensionProperties(physicalDevice, (byte*)null, ref extCount, null);
             if (extCount > 0)
             {
                 VkExtensionProperties* extensions = stackalloc VkExtensionProperties[(int)extCount];
-                if (vkEnumerateDeviceExtensionProperties(physicalDevice, null, &extCount, extensions) == VkResult.Success)
+                if (vkEnumerateDeviceExtensionProperties(physicalDevice, (byte*)null, ref extCount, extensions) == VkResult.Success)
                 {
                     for (uint i = 0; i < extCount; i++)
                     {
@@ -72,7 +73,7 @@ namespace Vk.Samples
             VkPhysicalDeviceFeatures enabledFeatures,
             NativeList<IntPtr> enabledExtensions,
             bool useSwapChain = true,
-            VkQueueFlagBits requestedQueueTypes = VkQueueFlagBits.Graphics | VkQueueFlagBits.Compute)
+            VkQueueFlags requestedQueueTypes = VkQueueFlags.Graphics | VkQueueFlags.Compute)
         {
             // Desired queues need to be requested upon logical device creation
             // Due to differing queue family configurations of Vulkan implementations this can be a bit tricky, especially if the application
@@ -83,9 +84,9 @@ namespace Vk.Samples
                 float defaultQueuePriority = 0.0f;
 
                 // Graphics queue
-                if ((requestedQueueTypes & VkQueueFlagBits.Graphics) != 0)
+                if ((requestedQueueTypes & VkQueueFlags.Graphics) != 0)
                 {
-                    QFIndices.Graphics = GetQueueFamilyIndex(VkQueueFlagBits.Graphics);
+                    QFIndices.Graphics = GetQueueFamilyIndex(VkQueueFlags.Graphics);
                     VkDeviceQueueCreateInfo queueInfo = new VkDeviceQueueCreateInfo();
                     queueInfo.sType = VkStructureType.DeviceQueueCreateInfo;
                     queueInfo.queueFamilyIndex = QFIndices.Graphics;
@@ -95,13 +96,13 @@ namespace Vk.Samples
                 }
                 else
                 {
-                    QFIndices.Graphics = (uint)Hacks.VK_NULL_HANDLE;
+                    QFIndices.Graphics = (uint)NullHandle;
                 }
 
                 // Dedicated compute queue
-                if ((requestedQueueTypes & VkQueueFlagBits.Compute) != 0)
+                if ((requestedQueueTypes & VkQueueFlags.Compute) != 0)
                 {
-                    QFIndices.Compute = GetQueueFamilyIndex(VkQueueFlagBits.Compute);
+                    QFIndices.Compute = GetQueueFamilyIndex(VkQueueFlags.Compute);
                     if (QFIndices.Compute != QFIndices.Graphics)
                     {
                         // If compute family index differs, we need an additional queue create info for the compute queue
@@ -120,9 +121,9 @@ namespace Vk.Samples
                 }
 
                 // Dedicated transfer queue
-                if ((requestedQueueTypes & VkQueueFlagBits.Transfer) != 0)
+                if ((requestedQueueTypes & VkQueueFlags.Transfer) != 0)
                 {
-                    QFIndices.Transfer = GetQueueFamilyIndex(VkQueueFlagBits.Transfer);
+                    QFIndices.Transfer = GetQueueFamilyIndex(VkQueueFlags.Transfer);
                     if (QFIndices.Transfer != QFIndices.Graphics && QFIndices.Transfer != QFIndices.Compute)
                     {
                         // If compute family index differs, we need an additional queue create info for the transfer queue
@@ -149,8 +150,7 @@ namespace Vk.Samples
                         deviceExtensions.Add(Strings.VK_KHR_SWAPCHAIN_EXTENSION_NAME);
                     }
 
-                    VkDeviceCreateInfo deviceCreateInfo = new VkDeviceCreateInfo();
-                    deviceCreateInfo.sType = VkStructureType.DeviceCreateInfo;
+                    VkDeviceCreateInfo deviceCreateInfo = VkDeviceCreateInfo.New();
                     deviceCreateInfo.queueCreateInfoCount = queueCreateInfos.Count;
                     deviceCreateInfo.pQueueCreateInfos = (VkDeviceQueueCreateInfo*)queueCreateInfos.Data.ToPointer();
                     deviceCreateInfo.pEnabledFeatures = &enabledFeatures;
@@ -161,10 +161,7 @@ namespace Vk.Samples
                         deviceCreateInfo.ppEnabledExtensionNames = (byte**)deviceExtensions.Data.ToPointer();
                     }
 
-                    VkDevice logicalDevice;
-                    VkResult result = vkCreateDevice(PhysicalDevice, &deviceCreateInfo, null, &logicalDevice);
-                    LogicalDevice = logicalDevice;
-
+                    VkResult result = vkCreateDevice(PhysicalDevice, &deviceCreateInfo, null, out _logicalDevice);
                     if (result == VkResult.Success)
                     {
                         // Create a default command pool for graphics command buffers
@@ -176,16 +173,16 @@ namespace Vk.Samples
             }
         }
 
-        private uint GetQueueFamilyIndex(VkQueueFlagBits queueFlags)
+        private uint GetQueueFamilyIndex(VkQueueFlags queueFlags)
         {
             // Dedicated queue for compute
             // Try to find a queue family index that supports compute but not graphics
-            if ((queueFlags & VkQueueFlagBits.Compute) != 0)
+            if ((queueFlags & VkQueueFlags.Compute) != 0)
             {
                 for (uint i = 0; i < QueueFamilyProperties.Count; i++)
                 {
-                    if (((QueueFamilyProperties[i].queueFlags & (uint)queueFlags) != 0)
-                        && (((VkQueueFlagBits)QueueFamilyProperties[i].queueFlags & VkQueueFlagBits.Graphics) == 0))
+                    if (((QueueFamilyProperties[i].queueFlags & queueFlags) != 0)
+                        && (QueueFamilyProperties[i].queueFlags & VkQueueFlags.Graphics) == 0)
                     {
                         return i;
                     }
@@ -194,13 +191,13 @@ namespace Vk.Samples
 
             // Dedicated queue for transfer
             // Try to find a queue family index that supports transfer but not graphics and compute
-            if ((queueFlags & VkQueueFlagBits.Transfer) != 0)
+            if ((queueFlags & VkQueueFlags.Transfer) != 0)
             {
                 for (uint i = 0; i < QueueFamilyProperties.Count; i++)
                 {
-                    if (((QueueFamilyProperties[i].queueFlags & (uint)queueFlags) != 0)
-                        && (((VkQueueFlagBits)QueueFamilyProperties[i].queueFlags & VkQueueFlagBits.Graphics) == 0)
-                        && (((VkQueueFlagBits)QueueFamilyProperties[i].queueFlags & VkQueueFlagBits.Compute) == 0))
+                    if (((QueueFamilyProperties[i].queueFlags & queueFlags) != 0)
+                        && (QueueFamilyProperties[i].queueFlags & VkQueueFlags.Graphics) == 0
+                        && (QueueFamilyProperties[i].queueFlags & VkQueueFlags.Compute) == 0)
                     {
                         return i;
                     }
@@ -210,7 +207,7 @@ namespace Vk.Samples
             // For other queue types or if no separate compute queue is present, return the first one to support the requested flags
             for (uint i = 0; i < QueueFamilyProperties.Count; i++)
             {
-                if ((QueueFamilyProperties[i].queueFlags & (uint)queueFlags) != 0)
+                if ((QueueFamilyProperties[i].queueFlags & queueFlags) != 0)
                 {
                     return i;
                 }
@@ -221,35 +218,33 @@ namespace Vk.Samples
 
         private VkCommandPool CreateCommandPool(
             uint queueFamilyIndex,
-            VkCommandPoolCreateFlagBits createFlags = VkCommandPoolCreateFlagBits.ResetCommandBuffer)
+            VkCommandPoolCreateFlags createFlags = VkCommandPoolCreateFlags.ResetCommandBuffer)
         {
-            VkCommandPoolCreateInfo cmdPoolInfo = new VkCommandPoolCreateInfo();
-            cmdPoolInfo.sType = VkStructureType.CommandPoolCreateInfo;
+            VkCommandPoolCreateInfo cmdPoolInfo = VkCommandPoolCreateInfo.New();
             cmdPoolInfo.queueFamilyIndex = queueFamilyIndex;
-            cmdPoolInfo.flags = (uint)createFlags;
-            VkCommandPool cmdPool;
-            Util.CheckResult(vkCreateCommandPool(LogicalDevice, &cmdPoolInfo, null, &cmdPool));
+            cmdPoolInfo.flags = createFlags;
+            Util.CheckResult(vkCreateCommandPool(LogicalDevice, &cmdPoolInfo, null, out VkCommandPool cmdPool));
             return cmdPool;
         }
 
         /**
-* Get the index of a memory type that has all the requested property bits set
-*
-* @param typeBits Bitmask with bits set for each memory type supported by the resource to request for (from VkMemoryRequirements)
-* @param properties Bitmask of properties for the memory type to request
-* @param (Optional) memTypeFound Pointer to a bool that is set to true if a matching memory type has been found
-* 
-* @return Index of the requested memory type
-*
-* @throw Throws an exception if memTypeFound is null and no memory type could be found that supports the requested properties
-*/
-        public uint getMemoryType(uint typeBits, VkMemoryPropertyFlagBits properties, uint* memTypeFound = null)
+        * Get the index of a memory type that has all the requested property bits set
+        *
+        * @param typeBits Bitmask with bits set for each memory type supported by the resource to request for (from VkMemoryRequirements)
+        * @param properties Bitmask of properties for the memory type to request
+        * @param (Optional) memTypeFound Pointer to a bool that is set to true if a matching memory type has been found
+        * 
+        * @return Index of the requested memory type
+        *
+        * @throw Throws an exception if memTypeFound is null and no memory type could be found that supports the requested properties
+        */
+        public uint GetMemoryType(uint typeBits, VkMemoryPropertyFlags properties, uint* memTypeFound = null)
         {
             for (uint i = 0; i < MemoryProperties.memoryTypeCount; i++)
             {
                 if ((typeBits & 1) == 1)
                 {
-                    if ((MemoryProperties.GetMemoryType(i).propertyFlags & (uint)properties) == (uint)properties)
+                    if ((MemoryProperties.GetMemoryType(i).propertyFlags & properties) == properties)
                     {
                         if (memTypeFound != null)
                         {

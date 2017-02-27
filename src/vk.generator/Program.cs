@@ -31,9 +31,16 @@ namespace Vk.Generator
             {
                 VulkanSpecification vs = VulkanSpecification.LoadFromXmlStream(fs);
                 TypeNameMappings tnm = new TypeNameMappings();
-                foreach (var bitmask in vs.BitmaskTypes)
+                foreach (var typedef in vs.Typedefs)
                 {
-                    tnm.AddMapping(bitmask, "uint");
+                    if (typedef.Requires != null)
+                    {
+                        tnm.AddMapping(typedef.Requires, typedef.Name);
+                    }
+                    else
+                    {
+                        tnm.AddMapping(typedef.Name, "uint");
+                    }
                 }
                 foreach (var baseType in vs.BaseTypes)
                 {

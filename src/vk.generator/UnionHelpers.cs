@@ -36,7 +36,7 @@ namespace Vk.Generator
                 cw.WriteLine($"///<summary>{member.Comment}</summary>");
             }
 
-            cw.WriteLine($"public {member.Type.MapTypeSpec(tnm)} {Util.NormalizeName(member.Name)}{nameSuffix};");
+            cw.WriteLine($"public {member.Type.MapTypeSpec(tnm)} {Util.NormalizeFieldName(member.Name)}{nameSuffix};");
         }
     }
 }

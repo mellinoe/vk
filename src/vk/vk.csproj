@@ -26,8 +26,10 @@
     <Compile Include="$(GeneratedCalliCodeFolder)\Handles.gen.cs" />
     <Compile Include="$(GeneratedCalliCodeFolder)\Structures.gen.cs" />
     <Compile Include="$(GeneratedCalliCodeFolder)\Unions.gen.cs" />
+    <Compile Include="BindingsHelpers.cs" />
     <Compile Include="CalliRewriteAttribute.cs" />
     <Compile Include="Commands.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="Delegates.cs" />
     <Compile Include="ExternalTypes.cs" />
     <Compile Include="FunctionPointer.cs" />

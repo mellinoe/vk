@@ -7,12 +7,14 @@ namespace Vk.Generator
     {
         public string Name { get; }
         public TypeSpec Type { get;  }
+        public ParameterModifier Modifier { get; }
         public bool IsOptional { get; }
 
-        public ParameterDefinition(string name, TypeSpec type, bool isOptional)
+        public ParameterDefinition(string name, TypeSpec type, ParameterModifier modifier, bool isOptional)
         {
             Name = name;
             Type = type;
+            Modifier = modifier;
             IsOptional = isOptional;
         }
 
@@ -35,17 +37,40 @@ namespace Vk.Generator
 
             TypeSpec type = new TypeSpec(typeName, pointerLevel);
 
-            return new ParameterDefinition(name, type, isOptional);
+            return new ParameterDefinition(name, type, ParameterModifier.None, isOptional);
         }
 
         public string GetMappedAndNormalizedString(TypeNameMappings tnm)
         {
-            return $"{Type.MapTypeSpec(tnm)} {Util.NormalizeName(Name)}";
+            return $"{GetModifierString()}{Type.MapTypeSpec(tnm)} {Util.NormalizeFieldName(Name)}";
+        }
+
+        public string GetModifierString()
+        {
+            if (Modifier == ParameterModifier.Ref)
+            {
+                return "ref ";
+            }
+            else if (Modifier == ParameterModifier.Out)
+            {
+                return "out ";
+            }
+            else
+            {
+                return string.Empty;
+            }
         }
 
         public override string ToString()
         {
-            return $"{Type} {Name}";
+            return $"{GetModifierString()}{Type} {Name}";
         }
+    }
+
+    public enum ParameterModifier
+    {
+        None,
+        Ref,
+        Out
     }
 }

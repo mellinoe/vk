@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Vk.Samples
 {
-    public unsafe class FixedUtf8String
+    public unsafe class FixedUtf8String : IDisposable
     {
         private GCHandle _handle;
         private uint _numBytes;
@@ -13,6 +13,11 @@ namespace Vk.Samples
 
         public FixedUtf8String(string s)
         {
+            if (s == null)
+            {
+                throw new ArgumentNullException(nameof(s));
+            }
+
             byte[] text = Encoding.UTF8.GetBytes(s);
             _handle = GCHandle.Alloc(text, GCHandleType.Pinned);
             _numBytes = (uint)text.Length;
@@ -20,6 +25,11 @@ namespace Vk.Samples
 
         public void SetText(string s)
         {
+            if (s == null)
+            {
+                throw new ArgumentNullException(nameof(s));
+            }
+
             _handle.Free();
             byte[] text = Encoding.UTF8.GetBytes(s);
             _handle = GCHandle.Alloc(text, GCHandleType.Pinned);
@@ -29,6 +39,11 @@ namespace Vk.Samples
         private string GetString()
         {
             return Encoding.UTF8.GetString(StringPtr, (int)_numBytes);
+        }
+
+        public void Dispose()
+        {
+            _handle.Free();
         }
 
         public static implicit operator byte* (FixedUtf8String utf8String) => utf8String.StringPtr;

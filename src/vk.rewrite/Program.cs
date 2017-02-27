@@ -4,12 +4,17 @@ using System;
 using System.Linq;
 using Mono.Collections.Generic;
 using System.IO;
+using System.Collections.Generic;
+using System.Text;
 
 namespace Vk.Rewrite
 {
     public class Program
     {
         private static TypeReference s_calliRewriteRef;
+        private static MethodReference s_stringToHGlobalUtf8Ref;
+        private static MethodDefinition s_freeHGlobalRef;
+        private static TypeReference s_stringHandleRef;
 
         public static int Main(string[] args)
         {
@@ -55,7 +60,14 @@ namespace Vk.Rewrite
             using (AssemblyDefinition vkDll = AssemblyDefinition.ReadAssembly(vkDllPath))
             {
                 LoadRefs(vkDll);
-                foreach (var type in vkDll.Modules[0].Types)
+                ModuleDefinition mainModule = vkDll.Modules[0];
+
+                s_stringHandleRef = mainModule.GetType("Vulkan.StringHandle");
+                TypeDefinition bindingHelpers = mainModule.GetType("Vulkan.BindingsHelpers");
+                s_stringToHGlobalUtf8Ref = bindingHelpers.Methods.Single(md => md.Name == "StringToHGlobalUtf8");
+                s_freeHGlobalRef = bindingHelpers.Methods.Single(md => md.Name == "FreeHGlobal");
+
+                foreach (var type in mainModule.Types)
                 {
                     ProcessType(type);
                 }
@@ -91,9 +103,19 @@ namespace Vk.Rewrite
             var il = method.Body.GetILProcessor();
             il.Body.Instructions.Clear();
 
+            List<VariableDefinition> stringParams = new List<VariableDefinition>();
             for (int i = 0; i < method.Parameters.Count; i++)
             {
                 EmitLoadArgument(il, i, method.Parameters);
+                if (method.Parameters[i].ParameterType.FullName == "System.String")
+                {
+                    var variableDef = new VariableDefinition(s_stringHandleRef);
+                    method.Body.Variables.Add(variableDef);
+                    il.Emit(OpCodes.Call, s_stringToHGlobalUtf8Ref);
+                    il.Emit(OpCodes.Stloc, variableDef);
+                    il.Emit(OpCodes.Ldloc, variableDef);
+                    stringParams.Add(variableDef);
+                }
             }
 
             string functionPtrName = method.Name + "_ptr";
@@ -113,13 +135,19 @@ namespace Vk.Rewrite
                 callSite.Parameters.Add(pd);
             }
             il.Emit(OpCodes.Calli, callSite);
+
+            foreach (var stringVar in stringParams)
+            {
+                il.Emit(OpCodes.Ldloc, stringVar);
+                il.Emit(OpCodes.Call, s_freeHGlobalRef);
+            }
+
             il.Emit(OpCodes.Ret);
 
             if (method.Body.Variables.Count > 0)
             {
                 method.Body.InitLocals = true;
             }
-
         }
 
         private static void EmitLoadArgument(ILProcessor il, int i, Collection<ParameterDefinition> parameters)

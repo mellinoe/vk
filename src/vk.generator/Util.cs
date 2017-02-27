@@ -30,7 +30,7 @@ namespace Vk.Generator
             return size;
         }
 
-        public static string NormalizeName(string name)
+        public static string NormalizeFieldName(string name)
         {
             if (s_keywords.Contains(name))
             {

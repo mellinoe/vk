@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "vk.rewrite": {
+      "commandName": "Project",
+      "commandLineArgs": "--vkdll \"E:\\projects\\vk\\bin\\Debug\\vk\\netcoreapp1.1\\vk.dll\" --out E:\\projects\\vk\\bin\\Debug\\vk.rewrite\\netcoreapp1.1\\win7-x64\\publish\\rewritten.dll"
+    }
+  }
+}

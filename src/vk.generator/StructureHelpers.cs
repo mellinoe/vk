@@ -33,7 +33,33 @@ namespace Vk.Generator
                         WriteMember(cw, tnm, member, string.Empty);
                     }
                 }
+
+                if (HasAnyFieldWithSpecifiedValues(structure))
+                {
+                    // Add a helper property which fills in the structure type.
+                    using (cw.PushBlock($"public static {structure.Name} New()"))
+                    {
+                        cw.WriteLine($"{structure.Name} ret = new {structure.Name}();");
+                        foreach (var member in structure.Members.Where(ms => ms.LegalValues != null))
+                        {
+                            cw.WriteLine($"ret.{member.Name} = {member.Type}.{GetDefaultValueString(member.Type, member.LegalValues)};");
+                        }
+                        cw.WriteLine("return ret;");
+                    }
+                }
             }
+        }
+
+        private static string GetDefaultValueString(TypeSpec type, string legalValues)
+        {
+            string prefix = EnumHelpers.GetEnumNamePrefix(type.Name);
+            string prettyName = EnumHelpers.GetPrettyEnumName(legalValues, prefix);
+            return prettyName;
+        }
+
+        private static bool HasAnyFieldWithSpecifiedValues(StructureDefinition sd)
+        {
+            return sd.Members.Any(ms => ms.LegalValues != null);
         }
 
         private static void WriteMember(CsCodeWriter cw, TypeNameMappings tnm, MemberSpec member, string nameSuffix)
@@ -43,7 +69,7 @@ namespace Vk.Generator
                 cw.WriteLine($"///<summary>{member.Comment}</summary>");
             }
 
-            cw.WriteLine($"public {member.Type.MapTypeSpec(tnm)} {Util.NormalizeName(member.Name)}{nameSuffix};");
+            cw.WriteLine($"public {member.Type.MapTypeSpec(tnm)} {Util.NormalizeFieldName(member.Name)}{nameSuffix};");
         }
 
         private static void WriteMemberSymbolicCount(CsCodeWriter cw, TypeNameMappings tnm, MemberSpec member, ConstantDefinition[] constants)
@@ -64,7 +90,7 @@ namespace Vk.Generator
                 }
 
                 string mappedSymbolicName = EnumHelpers.GetPrettyEnumName(member.ElementCountSymbolic, "VK_");
-                cw.WriteLine($"public fixed {member.Type.MapTypeSpec(tnm)} {Util.NormalizeName(member.Name)}[(int)VulkanNative.{mappedSymbolicName}];");
+                cw.WriteLine($"public fixed {member.Type.MapTypeSpec(tnm)} {Util.NormalizeFieldName(member.Name)}[(int)VulkanNative.{mappedSymbolicName}];");
             }
         }
 

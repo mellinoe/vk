@@ -24,7 +24,7 @@ namespace Vk.Samples
                 VkFormatProperties formatProps;
                 vkGetPhysicalDeviceFormatProperties(physicalDevice, format, &formatProps);
                 // Format must support depth stencil attachment for optimal tiling
-                if ((formatProps.optimalTilingFeatures & (uint)VkFormatFeatureFlagBits.DepthStencilAttachment) != 0)
+                if ((formatProps.optimalTilingFeatures & VkFormatFeatureFlags.DepthStencilAttachment) != 0)
                 {
                     *depthFormat = format;
                     return True;

@@ -55,11 +55,14 @@ namespace Vk.Generator
                     {
                         SpaceSeparatedList(cw, spec.Enums, enumDef =>
                         {
-                            EnumHelpers.WriteEnum(cw, enumDef);
+                            EnumHelpers.WriteEnum(cw, enumDef, tnm);
                         });
                     }
                 }
             }
+
+            CommandDefinition[] allVariants = spec.Commands.SelectMany(cd => VariantGenerator.GenerateVariants(cd)).ToArray();
+            CommandDefinition[] allCommandsWithVariants = spec.Commands.Concat(allVariants).OrderBy(cd => cd.Name).ToArray();
 
             using (StreamWriter commandWriter = File.CreateText(Path.Combine(path, "Commands.gen.cs")))
             {
@@ -83,7 +86,7 @@ namespace Vk.Generator
 
                         cw.WriteLine();
 
-                        SpaceSeparatedList(cw, spec.Commands, command =>
+                        SpaceSeparatedList(cw, allCommandsWithVariants, command =>
                         {
                             CommandHelpers.WriteCommand(cw, tnm, command);
                         });
@@ -107,7 +110,7 @@ namespace Vk.Generator
                                     }
                                     using (cw.PushBlock("else"))
                                     {
-                                        string invocation = string.Join(", ", command.Parameters.Select(pd => Util.NormalizeName(pd.Name)));
+                                        string invocation = string.Join(", ", command.Parameters.Select(pd => Util.NormalizeFieldName(pd.Name)));
                                         cw.WriteLine($"{command.Name}_ptr = ({invocation}) => {{ throw CreateMissingFunctionException(); }};");
                                     }
                                 }

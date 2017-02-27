@@ -11,8 +11,9 @@ namespace Vk.Generator
         public int ElementCount { get; }
         public string ElementCountSymbolic { get; }
         public string Comment { get; }
+        public string LegalValues { get; }
 
-        public MemberSpec(string name, TypeSpec type, bool isOptional, int elementCount, string elementCountSymbolic, string comment)
+        public MemberSpec(string name, TypeSpec type, bool isOptional, int elementCount, string elementCountSymbolic, string comment, string legalValues)
         {
             Name = name;
             Type = type;
@@ -20,6 +21,7 @@ namespace Vk.Generator
             ElementCount = elementCount;
             ElementCountSymbolic = elementCountSymbolic;
             Comment = comment;
+            LegalValues = legalValues;
         }
 
         public static MemberSpec CreateFromXml(XElement xe)
@@ -59,7 +61,9 @@ namespace Vk.Generator
                 }
             }
 
-            return new MemberSpec(name, type, isOptional, elementCount, elementCountSymbolic, string.Empty);
+            string value = xe.Attribute("values")?.Value;
+
+            return new MemberSpec(name, type, isOptional, elementCount, elementCountSymbolic, string.Empty, value);
         }
 
         public override string ToString()
