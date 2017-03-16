@@ -20,10 +20,18 @@ namespace Vk.Samples
         private static readonly uint s_elementByteSize = InitializeTypeSize();
 
         public NativeList() : this(DefaultCapacity) { }
+
         public NativeList(uint capacity)
         {
             Allocate(capacity);
         }
+
+        public NativeList(uint capacity, uint count)
+        {
+            Allocate(capacity);
+            Count = count;
+        }
+
         public NativeList(NativeList<T> existing)
         {
             Allocate(existing._elementCapacity);

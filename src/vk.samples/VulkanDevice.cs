@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using Vulkan;
 using static Vulkan.VulkanNative;
 
 namespace Vk.Samples
 {
-    public unsafe class VulkanDevice
+    public unsafe class vksVulkanDevice
     {
+        public const ulong DEFAULT_FENCE_TIMEOUT = 100000000000;
+
         public VkPhysicalDevice PhysicalDevice { get; private set; }
         public VkPhysicalDeviceProperties Properties { get; private set; }
         public VkPhysicalDeviceFeatures Features { get; private set; }
@@ -21,7 +24,7 @@ namespace Vk.Samples
         public QueueFamilyIndices QFIndices;
         private VkDevice _logicalDevice;
 
-        public VulkanDevice(VkPhysicalDevice physicalDevice)
+        public vksVulkanDevice(VkPhysicalDevice physicalDevice)
         {
             Debug.Assert(physicalDevice.Handle != IntPtr.Zero);
             PhysicalDevice = physicalDevice;
@@ -225,6 +228,118 @@ namespace Vk.Samples
             cmdPoolInfo.flags = createFlags;
             Util.CheckResult(vkCreateCommandPool(LogicalDevice, &cmdPoolInfo, null, out VkCommandPool cmdPool));
             return cmdPool;
+        }
+
+        /**
+        * Create a buffer on the device
+        *
+        * @param usageFlags Usage flag bitmask for the buffer (i.e. index, vertex, uniform buffer)
+        * @param memoryPropertyFlags Memory properties for this buffer (i.e. device local, host visible, coherent)
+        * @param buffer Pointer to a vk::Vulkan buffer object
+        * @param size Size of the buffer in byes
+        * @param data Pointer to the data that should be copied to the buffer after creation (optional, if not set, no data is copied over)
+        *
+        * @return VK_SUCCESS if buffer handle and memory have been created and (optionally passed) data has been copied
+        */
+        public VkResult createBuffer(VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags, vksBuffer buffer, ulong size, void* data = null)
+        {
+            buffer.device = _logicalDevice;
+
+            // Create the buffer handle
+            VkBufferCreateInfo bufferCreateInfo = VkBufferCreateInfo.New();
+            bufferCreateInfo.usage = usageFlags;
+            bufferCreateInfo.size = size;
+            Util.CheckResult(vkCreateBuffer(_logicalDevice, &bufferCreateInfo, null, out buffer.buffer));
+
+            // Create the memory backing up the buffer handle
+            VkMemoryRequirements memReqs;
+            VkMemoryAllocateInfo memAlloc = VkMemoryAllocateInfo.New();
+            vkGetBufferMemoryRequirements(_logicalDevice, buffer.buffer, &memReqs);
+            memAlloc.allocationSize = memReqs.size;
+            // Find a memory type index that fits the properties of the buffer
+            memAlloc.memoryTypeIndex = GetMemoryType(memReqs.memoryTypeBits, memoryPropertyFlags);
+            Util.CheckResult(vkAllocateMemory(_logicalDevice, &memAlloc, null, out buffer.memory));
+
+            buffer.alignment = memReqs.alignment;
+            buffer.size = memAlloc.allocationSize;
+            buffer.usageFlags = usageFlags;
+            buffer.memoryPropertyFlags = memoryPropertyFlags;
+
+            // If a pointer to the buffer data has been passed, map the buffer and copy over the data
+            if (data != null)
+            {
+                Util.CheckResult(buffer.map());
+                Unsafe.CopyBlock(buffer.mapped, data, (uint)size);
+                buffer.unmap();
+            }
+
+            // Initialize a default descriptor that covers the whole buffer size
+            buffer.setupDescriptor();
+
+            // Attach the memory to the buffer object
+            return buffer.bind();
+        }
+
+        public VkCommandBuffer createCommandBuffer(VkCommandBufferLevel level, bool begin = false)
+        {
+            VkCommandBufferAllocateInfo cmdBufAllocateInfo = VkCommandBufferAllocateInfo.New();
+            cmdBufAllocateInfo.commandPool = CommandPool;
+            cmdBufAllocateInfo.level = level;
+            cmdBufAllocateInfo.commandBufferCount = 1;
+
+            VkCommandBuffer cmdBuffer;
+            Util.CheckResult(vkAllocateCommandBuffers(_logicalDevice, ref cmdBufAllocateInfo, out cmdBuffer));
+
+            // If requested, also start recording for the new command buffer
+            if (begin)
+            {
+                VkCommandBufferBeginInfo cmdBufInfo = VkCommandBufferBeginInfo.New();
+                Util.CheckResult(vkBeginCommandBuffer(cmdBuffer, ref cmdBufInfo));
+            }
+
+            return cmdBuffer;
+        }
+
+        /**
+		* Finish command buffer recording and submit it to a queue
+		*
+		* @param commandBuffer Command buffer to flush
+		* @param queue Queue to submit the command buffer to 
+		* @param free (Optional) Free the command buffer once it has been submitted (Defaults to true)
+		*
+		* @note The queue that the command buffer is submitted to must be from the same family index as the pool it was allocated from
+		* @note Uses a fence to ensure command buffer has finished executing
+		*/
+        public void flushCommandBuffer(VkCommandBuffer commandBuffer, VkQueue queue, bool free = true)
+        {
+            if (commandBuffer.Handle == NullHandle)
+            {
+                return;
+            }
+
+            Util.CheckResult(vkEndCommandBuffer(commandBuffer));
+
+            VkSubmitInfo submitInfo = VkSubmitInfo.New();
+            submitInfo.commandBufferCount = 1;
+            submitInfo.pCommandBuffers = &commandBuffer;
+
+            // Create fence to ensure that the command buffer has finished executing
+            VkFenceCreateInfo fenceInfo = VkFenceCreateInfo.New();
+            fenceInfo.flags = VkFenceCreateFlags.None;
+            VkFence fence;
+            Util.CheckResult(vkCreateFence(_logicalDevice, &fenceInfo, null, &fence));
+
+            // Submit to the queue
+            Util.CheckResult(vkQueueSubmit(queue, 1, &submitInfo, fence));
+            // Wait for the fence to signal that command buffer has finished executing
+            Util.CheckResult(vkWaitForFences(_logicalDevice, 1, &fence, True, DEFAULT_FENCE_TIMEOUT));
+
+            vkDestroyFence(_logicalDevice, fence, null);
+
+            if (free)
+            {
+                vkFreeCommandBuffers(_logicalDevice, CommandPool, 1, &commandBuffer);
+            }
         }
 
         /**

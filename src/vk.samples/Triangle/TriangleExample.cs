@@ -9,7 +9,7 @@ using static Vulkan.VulkanNative;
 
 namespace Vk.Samples
 {
-    public unsafe class VulkanExample : VulkanExampleBase
+    public unsafe class TriangleExample : VulkanExampleBase
     {
         public VkSemaphore PresentCompleteSemaphore => _presentCompleteSemaphore;
         public VkSemaphore RenderCompleteSemaphore => _renderCompleteSemaphore;
@@ -28,14 +28,23 @@ namespace Vk.Samples
         // Default fence timeout in nanoseconds
         public const ulong DEFAULT_FENCE_TIMEOUT = 100000000000;
         private float zoom = -2.5f;
-        private Vector3 rotation;
-        private uint currentBuffer;
+        private Vector3 rotation = new Vector3();
         private VkSemaphore _presentCompleteSemaphore;
         private VkSemaphore _renderCompleteSemaphore;
         private VkDescriptorSetLayout _descriptorSetLayout;
         private VkPipelineLayout _pipelineLayout;
         private VkDescriptorSet _descriptorSet;
         private VkPipeline _pipeline;
+        
+        public static void RunSample()
+        {
+            TriangleExample example = new TriangleExample();
+            example.InitVulkan();
+            example.SetupWin32Window();
+            example.InitSwapchain();
+            example.Prepare();
+            example.RenderLoop();
+        }
 
         public override void Prepare()
         {
@@ -84,20 +93,17 @@ namespace Vk.Samples
             //	what should be done a real-world application, where you should allocate large chunkgs of memory at once isntead.
 
             // Setup vertices
-            using (NativeList<Vertex> vertexBuffer = new NativeList<Vertex>
+            using (NativeList<Vertex> vertexData = new NativeList<Vertex>
             {
                 new Vertex { Position = new Vector3(1f, 1f, 0f), Color = new Vector3(1f, 0f, 0f) },
                 new Vertex { Position = new Vector3(-1f, 1f, 0f), Color = new Vector3(0f, 1f, 0f) },
                 new Vertex { Position = new Vector3(0f, -1f, 0f), Color = new Vector3(0f, 0f, 1f) },
             })
             {
-                uint vertexBufferSize = vertexBuffer.Count * (uint)sizeof(Vertex);
+                uint vertexBufferSize = vertexData.Count * (uint)sizeof(Vertex);
 
                 // Setup indices
-                uint* indexBuffer = stackalloc uint[3];
-                indexBuffer[0] = 0;
-                indexBuffer[1] = 1;
-                indexBuffer[2] = 2;
+                TriangleIndices indexData = new TriangleIndices() { Index0 = 0, Index1 = 1, Index2 = 2 };
                 _Indices.count = 3;
                 uint indexBufferSize = _Indices.count * sizeof(uint);
 
@@ -138,7 +144,7 @@ namespace Vk.Samples
                     // Map and copy
                     Util.CheckResult(vkMapMemory(Device, stagingBuffers.vertices.memory, 0, memAlloc.allocationSize, 0, &data));
 
-                    Unsafe.CopyBlock(data, vertexBuffer.Data.ToPointer(), vertexBufferSize);
+                    Unsafe.CopyBlock(data, vertexData.Data.ToPointer(), vertexBufferSize);
 
                     vkUnmapMemory(Device, stagingBuffers.vertices.memory);
 
@@ -172,7 +178,7 @@ namespace Vk.Samples
 
                     Util.CheckResult(vkMapMemory(Device, stagingBuffers.indices.memory, 0, indexBufferSize, 0, &data));
 
-                    Unsafe.CopyBlock(data, indexBuffer, indexBufferSize);
+                    Unsafe.CopyBlock(data, &indexData, indexBufferSize);
 
                     vkUnmapMemory(Device, stagingBuffers.indices.memory);
 
@@ -243,7 +249,7 @@ namespace Vk.Samples
 
                     Util.CheckResult(vkMapMemory(Device, _Vertices.memory, 0, memAlloc.allocationSize, 0, &data));
 
-                    Unsafe.CopyBlock(data, (void*)vertexBuffer.Data, vertexBufferSize);
+                    Unsafe.CopyBlock(data, (void*)vertexData.Data, vertexBufferSize);
 
                     vkUnmapMemory(Device, _Vertices.memory);
 
@@ -265,7 +271,7 @@ namespace Vk.Samples
 
                     Util.CheckResult(vkMapMemory(Device, _Indices.memory, 0, indexBufferSize, 0, &data));
 
-                    Unsafe.CopyBlock(data, indexBuffer, indexBufferSize);
+                    Unsafe.CopyBlock(data, &indexData, indexBufferSize);
 
                     vkUnmapMemory(Device, _Indices.memory);
 
@@ -568,7 +574,6 @@ namespace Vk.Samples
             VkDescriptorSetLayout dsl = _descriptorSetLayout;
             pPipelineLayoutCreateInfo.pSetLayouts = &dsl;
 
-            VkPipelineLayout pipelineLayout;
             Util.CheckResult(vkCreatePipelineLayout(Device, &pPipelineLayoutCreateInfo, null, out _pipelineLayout));
         }
 
@@ -1027,5 +1032,12 @@ namespace Vk.Samples
         public Matrix4x4 projectionMatrix;
         public Matrix4x4 modelMatrix;
         public Matrix4x4 viewMatrix;
+    }
+
+    public struct TriangleIndices
+    {
+        public int Index0;
+        public int Index1;
+        public int Index2;
     }
 }

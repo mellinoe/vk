@@ -235,7 +235,7 @@ namespace Vk.Samples
 
                 // Find the transformation of the Surface
                 VkSurfaceTransformFlagsKHR preTransform;
-                if ((surfCaps.supportedTransforms & VkSurfaceTransformFlagsKHR.Inherit) != 0)
+                if ((surfCaps.supportedTransforms & VkSurfaceTransformFlagsKHR.Identity) != 0)
                 {
                     // We prefer a non-rotated transform
                     preTransform = VkSurfaceTransformFlagsKHR.Identity;

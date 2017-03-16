@@ -1,7 +1,3 @@
-using System;
-using Vulkan;
-using static Vulkan.VulkanNative;
-
 namespace Vk.Samples
 {
     public class Program
@@ -15,12 +11,8 @@ namespace Vk.Samples
 
         public static unsafe void Main(string[] args)
         {
-            VulkanExample example = new VulkanExample();
-            example.InitVulkan();
-            example.SetupWin32Window();
-            example.InitSwapchain();
-            example.Prepare();
-            example.RenderLoop();
+            //TriangleExample.RunSample();
+            new Pipelines.PipelinesExample().ExampleMain();
         }
     }
 }

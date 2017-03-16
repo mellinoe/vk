@@ -1,5 +1,4 @@
-﻿using OpenTK;
-using OpenTK.Graphics;
+﻿using OpenTK.Graphics;
 using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
@@ -7,18 +6,20 @@ using System.Runtime.InteropServices;
 using System.Text;
 using Vulkan;
 using static Vulkan.VulkanNative;
+using OpenTK.Input;
+using System.Numerics;
 
 namespace Vk.Samples
 {
     public unsafe class VulkanExampleBase
     {
-        public FixedUtf8String Title { get; } = "Vulkan Example";
-        public FixedUtf8String Name { get; } = "VulkanExample";
+        public FixedUtf8String Title { get; set; } = "Vulkan Example";
+        public FixedUtf8String Name { get; set; } = "VulkanExample";
         public Settings Settings { get; } = new Settings();
         public IntPtr WindowInstance { get; protected set; }
         public VkInstance Instance { get; protected set; }
         public VkPhysicalDevice PhysicalDevice { get; protected set; }
-        public VulkanDevice VulkanDevice { get; protected set; }
+        public vksVulkanDevice VulkanDevice { get; protected set; }
         public VkPhysicalDeviceFeatures EnabledFeatures { get; protected set; }
         public NativeList<IntPtr> EnabledExtensions { get; } = new NativeList<IntPtr>();
         public VkDevice Device { get; protected set; }
@@ -36,12 +37,15 @@ namespace Vk.Samples
         public VkPhysicalDeviceMemoryProperties DeviceMemoryProperties { get; set; }
         public VkPhysicalDeviceProperties DeviceProperties { get; protected set; }
         public VkPhysicalDeviceFeatures DeviceFeatures { get; protected set; }
-        public NativeWindow NativeWindow { get; private set; }
+        public OpenTK.NativeWindow NativeWindow { get; private set; }
 
-        public Semaphores Semaphores;
+        public NativeList<Semaphores> Semaphores = new NativeList<Semaphores>(1, 1);
+        public Semaphores* GetSemaphoresPtr() => (Semaphores*)Semaphores.GetAddress(0);
         public DepthStencil DepthStencil;
         public VkSubmitInfo SubmitInfo;
-        public NativeList<VkPipelineStageFlags> submitPipelineStages = new NativeList<VkPipelineStageFlags>(1);
+        public NativeList<VkPipelineStageFlags> submitPipelineStages = CreateSubmitPipelineStages();
+        private static NativeList<VkPipelineStageFlags> CreateSubmitPipelineStages()
+            => new NativeList<VkPipelineStageFlags>() { VkPipelineStageFlags.ColorAttachmentOutput };
         protected VkRenderPass _renderPass;
         private VkPipelineCache _pipelineCache;
         private VkCommandPool _cmdPool;
@@ -52,7 +56,7 @@ namespace Vk.Samples
         private bool viewUpdated;
         private int frameCounter;
         private float frameTimer;
-        private bool paused;
+        private bool paused = false;
         protected bool prepared;
 
         // Defines a frame rate independent timer value clamped from -1.0...1.0
@@ -61,23 +65,40 @@ namespace Vk.Samples
         // Multiplier for speeding up (or slowing down) the global timer
         float timerSpeed = 0.25f;
 
+        protected float zoom;
+        private float zoomSpeed = 50f;
+        protected Vector3 rotation;
+        private float rotationSpeed = 1f;
+        protected Vector3 cameraPos = new Vector3();
+        protected Vector2 mousePos;
+
+        protected Camera camera = new Camera();
+
+        protected VkClearColorValue defaultClearColor = GetDefaultClearColor();
+        private static VkClearColorValue GetDefaultClearColor()
+            => new VkClearColorValue() { float32_0 = 0.025f, float32_1 = 0.025f, float32_2 = 0.025f, float32_3 = 1.0f };
+
         // fps timer (one second interval)
         float fpsTimer = 0.0f;
-        private bool enableTextOverlay;
+        private bool enableTextOverlay = false;
         private uint lastFPS;
         private readonly FrameTimeAverager _frameTimeAverager = new FrameTimeAverager(666);
+        protected uint currentBuffer;
+        protected NativeList<VkShaderModule> shaderModules = new NativeList<VkShaderModule>();
 
         public void InitVulkan()
         {
             VkResult err;
-            err = CreateInstance(false);
+            err = CreateInstance(true);
             if (err != VkResult.Success)
             {
                 throw new InvalidOperationException("Could not create Vulkan instance.");
             }
 
-            // TODO:
-            // if (Settings.Validation)
+            if (Settings.Validation)
+            {
+
+            }
 
             // Physical Device
             uint gpuCount = 0;
@@ -101,18 +122,6 @@ namespace Vk.Samples
 
             PhysicalDevice = ((VkPhysicalDevice*)physicalDevices)[selectedDevice];
 
-            // Vulkan Device creation
-            // This is handled by a separate class that gets a logical Device representation
-            // and encapsulates functions related to a Device
-            VulkanDevice = new VulkanDevice(PhysicalDevice);
-            VkResult res = VulkanDevice.CreateLogicalDevice(EnabledFeatures, EnabledExtensions);
-            if (res != VkResult.Success)
-            {
-                throw new InvalidOperationException("Could not create Vulkan Device.");
-            }
-            Device = VulkanDevice.LogicalDevice;
-
-            // todo: remove
             // Store properties (including limits) and features of the phyiscal Device
             // So examples can check against them and see if a feature is actually supported
             VkPhysicalDeviceProperties deviceProperties;
@@ -128,6 +137,20 @@ namespace Vk.Samples
             vkGetPhysicalDeviceMemoryProperties(PhysicalDevice, &deviceMemoryProperties);
             DeviceMemoryProperties = deviceMemoryProperties;
 
+            // Derived examples can override this to set actual features (based on above readings) to enable for logical device creation
+            getEnabledFeatures();
+
+            // Vulkan Device creation
+            // This is handled by a separate class that gets a logical Device representation
+            // and encapsulates functions related to a Device
+            VulkanDevice = new vksVulkanDevice(PhysicalDevice);
+            VkResult res = VulkanDevice.CreateLogicalDevice(EnabledFeatures, EnabledExtensions);
+            if (res != VkResult.Success)
+            {
+                throw new InvalidOperationException("Could not create Vulkan Device.");
+            }
+            Device = VulkanDevice.LogicalDevice;
+
             // Get a graphics queue from the Device
             VkQueue queue;
             vkGetDeviceQueue(Device, VulkanDevice.QFIndices.Graphics, 0, &queue);
@@ -141,31 +164,33 @@ namespace Vk.Samples
 
             Swapchain.Connect(Instance, PhysicalDevice, Device);
 
-            Semaphores semaphores;
             // Create synchronization objects
             VkSemaphoreCreateInfo semaphoreCreateInfo = Initializers.SemaphoreCreateInfo();
             // Create a semaphore used to synchronize image presentation
             // Ensures that the image is displayed before we start submitting new commands to the queu
-            Util.CheckResult(vkCreateSemaphore(Device, &semaphoreCreateInfo, null, &semaphores.PresentComplete));
+            Util.CheckResult(vkCreateSemaphore(Device, &semaphoreCreateInfo, null, &GetSemaphoresPtr()->PresentComplete));
             // Create a semaphore used to synchronize command submission
             // Ensures that the image is not presented until all commands have been sumbitted and executed
-            Util.CheckResult(vkCreateSemaphore(Device, &semaphoreCreateInfo, null, &semaphores.RenderComplete));
+            Util.CheckResult(vkCreateSemaphore(Device, &semaphoreCreateInfo, null, &GetSemaphoresPtr()->RenderComplete));
             // Create a semaphore used to synchronize command submission
             // Ensures that the image is not presented until all commands for the text overlay have been sumbitted and executed
             // Will be inserted after the render complete semaphore if the text overlay is enabled
-            Util.CheckResult(vkCreateSemaphore(Device, &semaphoreCreateInfo, null, &semaphores.TextOverlayComplete));
-            Semaphores = semaphores;
+            Util.CheckResult(vkCreateSemaphore(Device, &semaphoreCreateInfo, null, &GetSemaphoresPtr()->TextOverlayComplete));
 
             // Set up submit info structure
             // Semaphores will stay the same during application lifetime
             // Command buffer submission info is set by each example
-            var submitInfo = Initializers.SubmitInfo();
-            submitInfo.pWaitDstStageMask = (VkPipelineStageFlags*)submitPipelineStages.Data;
-            submitInfo.waitSemaphoreCount = 1;
-            submitInfo.pWaitSemaphores = &semaphores.PresentComplete;
-            submitInfo.signalSemaphoreCount = 1;
-            submitInfo.pSignalSemaphores = &semaphores.RenderComplete;
-            SubmitInfo = submitInfo;
+            SubmitInfo = Initializers.SubmitInfo();
+            SubmitInfo.pWaitDstStageMask = (VkPipelineStageFlags*)submitPipelineStages.Data;
+            SubmitInfo.waitSemaphoreCount = 1;
+            SubmitInfo.pWaitSemaphores = &GetSemaphoresPtr()->PresentComplete;
+            SubmitInfo.signalSemaphoreCount = 1;
+            SubmitInfo.pSignalSemaphores = &GetSemaphoresPtr()->RenderComplete;
+        }
+
+        protected virtual void getEnabledFeatures()
+        {
+            // Used in some derived classes.
         }
 
         private VkResult CreateInstance(bool enableValidation)
@@ -180,30 +205,42 @@ namespace Vk.Samples
                 pEngineName = Name,
             };
 
-            byte** instanceExtensions = stackalloc byte*[2];
-            instanceExtensions[0] = Strings.VK_KHR_SURFACE_EXTENSION_NAME;
+            NativeList<IntPtr> instanceExtensions = new NativeList<IntPtr>(2);
+            instanceExtensions.Add(Strings.VK_KHR_SURFACE_EXTENSION_NAME);
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                instanceExtensions[1] = Strings.VK_KHR_WIN32_SURFACE_EXTENSION_NAME;
+                instanceExtensions.Add(Strings.VK_KHR_WIN32_SURFACE_EXTENSION_NAME);
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
-                instanceExtensions[1] = Strings.VK_KHR_XCB_SURFACE_EXTENSION_NAME;
+                instanceExtensions.Add(Strings.VK_KHR_XCB_SURFACE_EXTENSION_NAME);
             }
             else
             {
                 throw new PlatformNotSupportedException();
             }
 
-            VkInstanceCreateInfo instanceCreateInfo = new VkInstanceCreateInfo()
-            {
-                sType = VkStructureType.InstanceCreateInfo,
-                pApplicationInfo = &appInfo,
-                enabledExtensionCount = 2,
-                ppEnabledExtensionNames = instanceExtensions
-            };
+            VkInstanceCreateInfo instanceCreateInfo = VkInstanceCreateInfo.New();
+            instanceCreateInfo.pApplicationInfo = &appInfo;
 
-            // TODO: VALIDATION
+            if (instanceExtensions.Count > 0)
+            {
+                if (enableValidation)
+                {
+                    instanceExtensions.Add(Strings.VK_EXT_DEBUG_REPORT_EXTENSION_NAME);
+                }
+                instanceCreateInfo.enabledExtensionCount = instanceExtensions.Count;
+                instanceCreateInfo.ppEnabledExtensionNames = (byte**)instanceExtensions.Data;
+            }
+
+
+            if (enableValidation)
+            {
+                NativeList<IntPtr> enabledLayerNames = new NativeList<IntPtr>(1);
+                enabledLayerNames.Add(Strings.StandardValidationLayeName);
+                instanceCreateInfo.enabledLayerCount = enabledLayerNames.Count;
+                instanceCreateInfo.ppEnabledLayerNames = (byte**)enabledLayerNames.Data;
+            }
 
             VkInstance instance;
             VkResult result = vkCreateInstance(&instanceCreateInfo, null, &instance);
@@ -214,11 +251,64 @@ namespace Vk.Samples
         public IntPtr SetupWin32Window()
         {
             WindowInstance = Process.GetCurrentProcess().SafeHandle.DangerousGetHandle();
-            NativeWindow = new NativeWindow(960, 540, Name, GameWindowFlags.Default, GraphicsMode.Default, DisplayDevice.Default);
+            NativeWindow = new OpenTK.NativeWindow(960, 540, Name, OpenTK.GameWindowFlags.Default, GraphicsMode.Default, OpenTK.DisplayDevice.Default);
             NativeWindow.Visible = true;
             NativeWindow.Resize += OnNativeWindowResized;
+            NativeWindow.MouseWheel += OnMouseWheel;
+            NativeWindow.MouseMove += OnMouseMove;
+            NativeWindow.MouseDown += OnMouseDown;
             Window = NativeWindow.WindowInfo.Handle;
             return NativeWindow.WindowInfo.Handle;
+        }
+
+        private void OnMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.IsPressed)
+            {
+                mousePos = new Vector2(e.X, e.Y);
+            }
+        }
+
+        private void OnMouseMove(object sender, MouseMoveEventArgs e)
+        {
+            if (e.Mouse.RightButton == ButtonState.Pressed)
+            {
+                int posx = e.X;
+                int posy = e.Y;
+                zoom += (mousePos.Y - posy) * .005f * zoomSpeed;
+                camera.translate(new Vector3(-0.0f, 0.0f, (mousePos.Y - posy) * .005f * zoomSpeed));
+                mousePos = new Vector2(posx, posy);
+                viewUpdated = true;
+            }
+            if (e.Mouse.LeftButton == ButtonState.Pressed)
+            {
+                int posx = e.X;
+                int posy = e.Y;
+                rotation.X += (mousePos.Y - posy) * 1.25f * rotationSpeed;
+                rotation.Y -= (mousePos.X - posx) * 1.25f * rotationSpeed;
+                camera.rotate(new Vector3((mousePos.Y - posy) * camera.rotationSpeed, -(mousePos.X - posx) * camera.rotationSpeed, 0.0f));
+                mousePos = new Vector2(posx, posy);
+                viewUpdated = true;
+            }
+            if (e.Mouse.MiddleButton == ButtonState.Pressed)
+            {
+                int posx = e.X;
+                int posy = e.Y;
+                cameraPos.X -= (mousePos.X - posx) * 0.01f;
+                cameraPos.Y -= (mousePos.Y - posy) * 0.01f;
+                camera.translate(new Vector3(-(mousePos.X - posx) * 0.01f, -(mousePos.Y - posy) * 0.01f, 0.0f));
+                viewUpdated = true;
+                mousePos.X = posx;
+                mousePos.Y = posy;
+            }
+        }
+
+        private void OnMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            var wheelDelta = e.DeltaPrecise;
+            zoom += wheelDelta * 0.005f * zoomSpeed;
+            camera.translate(new Vector3(0.0f, 0.0f, wheelDelta * 0.005f * zoomSpeed));
+            viewUpdated = true;
         }
 
         private void OnNativeWindowResized(object sender, EventArgs e)
@@ -275,12 +365,19 @@ namespace Vk.Samples
             */
         }
 
+        protected void prepareFrame()
+        {
+            // Acquire the next image from the swap chaing
+            Util.CheckResult(Swapchain.AcquireNextImage(Semaphores[0].PresentComplete, ref currentBuffer));
+        }
+
         protected virtual void SetupRenderPass()
         {
             using (NativeList<VkAttachmentDescription> attachments = new NativeList<VkAttachmentDescription>())
             {
                 attachments.Count = 2;
                 // Color attachment
+                attachments[0] = new VkAttachmentDescription();
                 attachments[0].format = Swapchain.ColorFormat;
                 attachments[0].samples = VkSampleCountFlags._1;
                 attachments[0].loadOp = VkAttachmentLoadOp.Clear;
@@ -290,6 +387,7 @@ namespace Vk.Samples
                 attachments[0].initialLayout = VkImageLayout.Undefined;
                 attachments[0].finalLayout = VkImageLayout.PresentSrc;
                 // Depth attachment
+                attachments[1] = new VkAttachmentDescription();
                 attachments[1].format = DepthFormat;
                 attachments[1].samples = VkSampleCountFlags._1;
                 attachments[1].loadOp = VkAttachmentLoadOp.Clear;
@@ -376,7 +474,7 @@ namespace Vk.Samples
                 frameBufferCreateInfo.layers = 1;
 
                 // Create frame buffers for every swap chain image
-                Framebuffers.Resize(Swapchain.ImageCount);
+                Framebuffers.Count = (Swapchain.ImageCount);
                 for (uint i = 0; i < Framebuffers.Count; i++)
                 {
                     attachments[0] = Swapchain.Buffers[i].View;
@@ -392,6 +490,46 @@ namespace Vk.Samples
 
             Width = width;
             Height = height;
+        }
+
+        protected void submitFrame()
+        {
+            bool submitTextOverlay = false;
+            /*
+            if (submitTextOverlay)
+            {
+                // Wait for color attachment output to finish before rendering the text overlay
+                VkPipelineStageFlags stageFlags = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+                submitInfo.pWaitDstStageMask = &stageFlags;
+
+                // Set semaphores
+                // Wait for render complete semaphore
+                submitInfo.waitSemaphoreCount = 1;
+                submitInfo.pWaitSemaphores = &semaphores.renderComplete;
+                // Signal ready with text overlay complete semaphpre
+                submitInfo.signalSemaphoreCount = 1;
+                submitInfo.pSignalSemaphores = &semaphores.textOverlayComplete;
+
+                // Submit current text overlay command buffer
+                submitInfo.commandBufferCount = 1;
+                submitInfo.pCommandBuffers = &textOverlay->cmdBuffers[currentBuffer];
+                Util.CheckResult(vkQueueSubmit(queue, 1, &submitInfo, VK_NULL_HANDLE));
+
+                // Reset stage mask
+                submitInfo.pWaitDstStageMask = &submitPipelineStages;
+                // Reset wait and signal semaphores for rendering next frame
+                // Wait for swap chain presentation to finish
+                submitInfo.waitSemaphoreCount = 1;
+                submitInfo.pWaitSemaphores = &semaphores.presentComplete;
+                // Signal ready with offscreen semaphore
+                submitInfo.signalSemaphoreCount = 1;
+                submitInfo.pSignalSemaphores = &semaphores.renderComplete;
+            }
+            */
+
+            Util.CheckResult(Swapchain.QueuePresent(Queue, currentBuffer, submitTextOverlay ? Semaphores[0].TextOverlayComplete : Semaphores[0].RenderComplete));
+
+            Util.CheckResult(vkQueueWaitIdle(Queue));
         }
 
         private void CreateCommandPool()
@@ -578,6 +716,26 @@ namespace Vk.Samples
             viewChanged();
 
             prepared = true;
+        }
+
+        protected VkPipelineShaderStageCreateInfo loadShader(string fileName, VkShaderStageFlags stage)
+        {
+            VkPipelineShaderStageCreateInfo shaderStage = VkPipelineShaderStageCreateInfo.New();
+            shaderStage.stage = stage;
+            shaderStage.module = Tools.loadShader(fileName, Device, stage);
+            shaderStage.pName = Strings.main; // todo : make param
+            Debug.Assert(shaderStage.module.Handle != NullHandle);
+            shaderModules.Add(shaderStage.module);
+            return shaderStage;
+        }
+
+        public void ExampleMain()
+        {
+            InitVulkan();
+            SetupWin32Window();
+            InitSwapchain();
+            Prepare();
+            RenderLoop();
         }
 
         protected virtual void windowResized()

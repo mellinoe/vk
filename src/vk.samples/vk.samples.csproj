@@ -15,15 +15,50 @@
     <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="..\..\libs\Assimp64.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Shaders\triangle.frag.spv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Shaders\triangle.vert.spv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\..\data\models\treasure_smooth.dae">
+      <Link>data/models/treasure_smooth.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\data\shaders\pipelines\phong.vert.spv">
+      <Link>data/shaders/pipelines/phong.vert.spv</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\data\shaders\pipelines\phong.frag.spv">
+      <Link>data/shaders/pipelines/phong.frag.spv</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\data\shaders\pipelines\toon.vert.spv">
+      <Link>data/shaders/pipelines/toon.vert.spv</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\data\shaders\pipelines\toon.frag.spv">
+      <Link>data/shaders/pipelines/toon.frag.spv</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\data\shaders\pipelines\wireframe.vert.spv">
+      <Link>data/shaders/pipelines/wireframe.vert.spv</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\data\shaders\pipelines\wireframe.frag.spv">
+      <Link>data/shaders/pipelines/wireframe.frag.spv</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Camera.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="../vk/vk.csproj" />
+    <ProjectReference Include="..\AssimpNet\AssimpNet.csproj" />
     <PackageReference Include="Microsoft.NETCore.App" Version="1.1.0" />
     <PackageReference Include="Microsoft.NETCore.DotNetHostPolicy" Version="1.1.0" />
     <PackageReference Include="Microsoft.NETCore.Runtime.CoreCLR" Version="1.1.0" />
