@@ -14,6 +14,22 @@
     <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="..\..\..\data\textures\metalplate01_astc_8x8_unorm.ktx">
+      <Link>data\textures\metalplate01_astc_8x8_unorm.ktx</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\data\textures\metalplate01_bc2_unorm.ktx">
+      <Link>data\textures\metalplate01_bc2_unorm.ktx</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\data\shaders\texture\texture.vert.spv">
+      <Link>data\shaders\texture\texture.vert.spv</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\data\shaders\texture\texture.frag.spv">
+      <Link>data\shaders\texture\texture.frag.spv</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="../../vk/vk.csproj" />

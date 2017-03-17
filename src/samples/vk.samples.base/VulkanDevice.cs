@@ -33,7 +33,7 @@ namespace Vk.Samples
             // Device properties also contain limits and sparse properties
             VkPhysicalDeviceProperties properties;
             vkGetPhysicalDeviceProperties(physicalDevice, out properties);
-            //Properties = properties;
+            Properties = properties;
             // Features should be checked by the examples before using them
             VkPhysicalDeviceFeatures features;
             vkGetPhysicalDeviceFeatures(physicalDevice, out features);

@@ -40,9 +40,9 @@ namespace Vk.Samples
         {
             using (var fs = File.OpenRead(fileName))
             {
-                var length= fs.Length;
+                var length = fs.Length;
             }
-                byte[] shaderCode = File.ReadAllBytes(fileName);
+            byte[] shaderCode = File.ReadAllBytes(fileName);
             ulong shaderSize = (ulong)shaderCode.Length;
             fixed (byte* scPtr = shaderCode)
             {

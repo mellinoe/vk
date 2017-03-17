@@ -8,6 +8,7 @@ using Vulkan;
 using static Vulkan.VulkanNative;
 using OpenTK.Input;
 using System.Numerics;
+using System.IO;
 
 namespace Vk.Samples
 {
@@ -49,6 +50,7 @@ namespace Vk.Samples
         protected VkRenderPass _renderPass;
         private VkPipelineCache _pipelineCache;
         private VkCommandPool _cmdPool;
+        protected VkDescriptorPool descriptorPool;
 
         // Destination dimensions for resizing the window
         private uint destWidth;
@@ -270,6 +272,8 @@ namespace Vk.Samples
             {
                 NativeWindow.Close();
             }
+
+            keyPressed(e.Key);
         }
 
         private void OnMouseDown(object sender, MouseButtonEventArgs e)
@@ -740,6 +744,51 @@ namespace Vk.Samples
             return shaderStage;
         }
 
+        protected VkCommandBuffer createCommandBuffer(VkCommandBufferLevel level, bool begin)
+        {
+            VkCommandBuffer cmdBuffer;
+
+            VkCommandBufferAllocateInfo cmdBufAllocateInfo = Initializers.CommandBufferAllocateInfo(CmdPool, level, 1);
+
+            Util.CheckResult(vkAllocateCommandBuffers(Device, &cmdBufAllocateInfo, out cmdBuffer));
+
+            // If requested, also start the new command buffer
+            if (begin)
+            {
+                VkCommandBufferBeginInfo cmdBufInfo = Initializers.CommandBufferBeginInfo();
+                Util.CheckResult(vkBeginCommandBuffer(cmdBuffer, &cmdBufInfo));
+            }
+
+            return cmdBuffer;
+        }
+
+        protected void flushCommandBuffer(VkCommandBuffer commandBuffer, VkQueue queue, bool free)
+        {
+            if (commandBuffer == NullHandle)
+            {
+                return;
+            }
+
+            Util.CheckResult(vkEndCommandBuffer(commandBuffer));
+
+            VkSubmitInfo submitInfo = VkSubmitInfo.New();
+            submitInfo.commandBufferCount = 1;
+            submitInfo.pCommandBuffers = &commandBuffer;
+
+            Util.CheckResult(vkQueueSubmit(queue, 1, &submitInfo, NullHandle));
+            Util.CheckResult(vkQueueWaitIdle(queue));
+
+            if (free)
+            {
+                vkFreeCommandBuffers(Device, CmdPool, 1, &commandBuffer);
+            }
+        }
+
+        protected string getAssetPath()
+        {
+            return Path.Combine(AppContext.BaseDirectory, "data/");
+        }
+
         public void ExampleMain()
         {
             InitVulkan();
@@ -754,6 +803,10 @@ namespace Vk.Samples
         }
 
         protected virtual void buildCommandBuffers()
+        {
+        }
+
+        protected virtual void keyPressed(Key key)
         {
         }
     }

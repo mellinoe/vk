@@ -36,6 +36,11 @@ namespace Vk.Samples
 
         public static void Main()
         {
+            using (var fs = File.OpenRead(Path.Combine(AppContext.BaseDirectory, "metalplate01_bc2_unorm.ktx")))
+            {
+                KtxFile file = KtxFile.Load(fs, true);
+            }
+
             TriangleExample example = new TriangleExample();
             example.zoom = -2.5f;
             example.InitVulkan();

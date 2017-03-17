@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OpenTK.Input;
+using System;
 using System.IO;
 using System.Numerics;
 using System.Runtime.CompilerServices;
@@ -7,6 +8,18 @@ using static Vulkan.VulkanNative;
 
 namespace Vk.Samples
 {
+    // Vertex layout for this example
+    public struct Vertex
+    {
+        public Vector3 pos;
+        public Vector2 uv;
+        public Vector3 normal;
+
+        public const uint PositionOffset = 0;
+        public const uint UvOffset = 12;
+        public const uint NormalOffset = 20;
+    };
+
     public unsafe class TextureMappingExample : VulkanExampleBase, IDisposable
     {
         // Contains all Vulkan objects that are required to store and use a texture
@@ -53,7 +66,7 @@ namespace Vk.Samples
         VkPipelineLayout pipelineLayout;
         VkDescriptorSet descriptorSet;
         VkDescriptorSetLayout descriptorSetLayout;
-
+        private const uint VERTEX_BUFFER_BIND_ID = 0;
 
         TextureMappingExample()
         {
@@ -156,15 +169,17 @@ namespace Vk.Samples
 
         void loadTexture(string fileName, VkFormat format, bool forceLinearTiling)
         {
-            gli::texture2d tex2D(gli::load(fileName));
-
-            assert(!tex2D.empty());
+            KtxFile tex2D;
+            using (var fs = File.OpenRead(fileName))
+            {
+                tex2D = KtxFile.Load(fs, false);
+            }
 
             VkFormatProperties formatProperties;
 
-            texture.width = static_cast<uint>(tex2D[0].extent().x);
-            texture.height = static_cast<uint>(tex2D[0].extent().y);
-            texture.mipLevels = static_cast<uint>(tex2D.levels());
+            texture.width = tex2D.Header.PixelWidth;
+            texture.height = tex2D.Header.PixelHeight;
+            texture.mipLevels = tex2D.Header.NumberOfMipmapLevels;
 
             // Get Device properites for the requested texture format
             vkGetPhysicalDeviceFormatProperties(PhysicalDevice, format, &formatProperties);
@@ -193,10 +208,10 @@ namespace Vk.Samples
                 VkDeviceMemory stagingMemory;
 
                 VkBufferCreateInfo bufferCreateInfo = Initializers.bufferCreateInfo();
-                bufferCreateInfo.size = tex2D.size();
+                bufferCreateInfo.size = tex2D.GetTotalSize();
                 // This buffer is used as a transfer source for the buffer copy
-                bufferCreateInfo.usage =  VkBufferUsageFlags.TransferSrc;
-                bufferCreateInfo.sharingMode =  VkSharingMode.Exclusive;
+                bufferCreateInfo.usage = VkBufferUsageFlags.TransferSrc;
+                bufferCreateInfo.sharingMode = VkSharingMode.Exclusive;
 
                 Util.CheckResult(vkCreateBuffer(Device, &bufferCreateInfo, null, &stagingBuffer));
 
@@ -213,62 +228,66 @@ namespace Vk.Samples
                 // Copy texture data into staging buffer
                 byte* data;
                 Util.CheckResult(vkMapMemory(Device, stagingMemory, 0, memReqs.size, 0, (void**)&data));
-                Unsafe.CopyBlock(data, tex2D.data(), tex2D.size());
+                byte[] allData = tex2D.GetAllTextureData();
+                fixed (byte* tex2DDataPtr = &allData[0])
+                {
+                    Unsafe.CopyBlock(data, tex2DDataPtr, (uint)allData.Length);
+                }
                 vkUnmapMemory(Device, stagingMemory);
 
                 // Setup buffer copy regions for each mip level
-                std::vector<VkBufferImageCopy> bufferCopyRegions;
+                NativeList<VkBufferImageCopy> bufferCopyRegions = new NativeList<VkBufferImageCopy>();
                 uint offset = 0;
 
                 for (uint i = 0; i < texture.mipLevels; i++)
                 {
                     VkBufferImageCopy bufferCopyRegion = new VkBufferImageCopy();
-                    bufferCopyRegion.imageSubresource.aspectMask =  VkImageAspectFlags.Color;
+                    bufferCopyRegion.imageSubresource.aspectMask = VkImageAspectFlags.Color;
                     bufferCopyRegion.imageSubresource.mipLevel = i;
                     bufferCopyRegion.imageSubresource.baseArrayLayer = 0;
                     bufferCopyRegion.imageSubresource.layerCount = 1;
-                    bufferCopyRegion.imageExtent.width = static_cast<uint>(tex2D[i].extent().x);
-                    bufferCopyRegion.imageExtent.height = static_cast<uint>(tex2D[i].extent().y);
+                    bufferCopyRegion.imageExtent.width = tex2D.Mipmaps[i].Width;
+                    bufferCopyRegion.imageExtent.height = tex2D.Mipmaps[i].Height;
                     bufferCopyRegion.imageExtent.depth = 1;
                     bufferCopyRegion.bufferOffset = offset;
 
-                    bufferCopyRegions.push_back(bufferCopyRegion);
+                    bufferCopyRegions.Add(bufferCopyRegion);
 
-                    offset += static_cast<uint>(tex2D[i].size());
+                    offset += tex2D.Mipmaps[i].SizeInBytes;
                 }
 
                 // Create optimal tiled target image
                 VkImageCreateInfo imageCreateInfo = Initializers.imageCreateInfo();
-                imageCreateInfo.imageType = VK_IMAGE_TYPE_2D;
+                imageCreateInfo.imageType = VkImageType._2d;
                 imageCreateInfo.format = format;
                 imageCreateInfo.mipLevels = texture.mipLevels;
                 imageCreateInfo.arrayLayers = 1;
-                imageCreateInfo.samples = VK_SAMPLE_COUNT_1_BIT;
-                imageCreateInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
-                imageCreateInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+                imageCreateInfo.samples = VkSampleCountFlags._1;
+                imageCreateInfo.tiling = VkImageTiling.Optimal;
+                imageCreateInfo.sharingMode = VkSharingMode.Exclusive;
                 // Set initial layout of the image to undefined
-                imageCreateInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-                imageCreateInfo.extent = { texture.width, texture.height, 1 };
-                imageCreateInfo.usage = VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
+                imageCreateInfo.initialLayout = VkImageLayout.Undefined;
+                imageCreateInfo.extent = new VkExtent3D { width = texture.width, height = texture.height, depth = 1 };
+                imageCreateInfo.usage = VkImageUsageFlags.TransferDst | VkImageUsageFlags.Sampled;
 
-                Util.CheckResult(vkCreateImage(Device, &imageCreateInfo, null, &texture.image));
+                Util.CheckResult(vkCreateImage(Device, &imageCreateInfo, null, out texture.image));
 
                 vkGetImageMemoryRequirements(Device, texture.image, &memReqs);
 
                 memAllocInfo.allocationSize = memReqs.size;
-                memAllocInfo.memoryTypeIndex = vulkanDevice->getMemoryType(memReqs.memoryTypeBits, VK_MEMORY_PROPERTY_Device_LOCAL_BIT);
+                memAllocInfo.memoryTypeIndex = VulkanDevice.GetMemoryType(memReqs.memoryTypeBits, VkMemoryPropertyFlags.DeviceLocal);
 
-                Util.CheckResult(vkAllocateMemory(Device, &memAllocInfo, null, &texture.DeviceMemory));
+                Util.CheckResult(vkAllocateMemory(Device, &memAllocInfo, null, out texture.DeviceMemory));
                 Util.CheckResult(vkBindImageMemory(Device, texture.image, texture.DeviceMemory, 0));
 
-                VkCommandBuffer copyCmd = VulkanExampleBase::createCommandBuffer(VK_COMMAND_BUFFER_LEVEL_PRIMARY, true);
+                VkCommandBuffer copyCmd = base.createCommandBuffer(VkCommandBufferLevel.Primary, true);
 
                 // Image barrier for optimal image
 
                 // The sub resource range describes the regions of the image we will be transition
-                VkImageSubresourceRange subresourceRange = { };
+                VkImageSubresourceRange subresourceRange = new VkImageSubresourceRange();
                 // Image only contains color data
-                subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+                subresourceRange.aspectMask = VkImageAspectFlags.Color;
                 // Start at first mip level
                 subresourceRange.baseMipLevel = 0;
                 // We will transition on all mip levels
@@ -281,9 +300,9 @@ namespace Vk.Samples
                 setImageLayout(
                     copyCmd,
                     texture.image,
-                    VK_IMAGE_ASPECT_COLOR_BIT,
-                    VK_IMAGE_LAYOUT_UNDEFINED,
-                    VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                     VkImageAspectFlags.Color,
+                     VkImageLayout.Undefined,
+                     VkImageLayout.TransferDstOptimal,
                     subresourceRange);
 
                 // Copy mip levels from staging buffer
@@ -291,21 +310,21 @@ namespace Vk.Samples
                     copyCmd,
                     stagingBuffer,
                     texture.image,
-                    VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-                    static_cast<uint>(bufferCopyRegions.size()),
-                    bufferCopyRegions.data());
+                     VkImageLayout.TransferDstOptimal,
+                    bufferCopyRegions.Count,
+                    bufferCopyRegions.Data);
 
                 // Change texture image layout to shader read after all mip levels have been copied
-                texture.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+                texture.imageLayout = VkImageLayout.ShaderReadOnlyOptimal;
                 setImageLayout(
                     copyCmd,
                     texture.image,
-                    VK_IMAGE_ASPECT_COLOR_BIT,
-                    VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                    VkImageAspectFlags.Color,
+                    VkImageLayout.TransferDstOptimal,
                     texture.imageLayout,
                     subresourceRange);
 
-                VulkanExampleBase::flushCommandBuffer(copyCmd, queue, true);
+                flushCommandBuffer(copyCmd, Queue, true);
 
                 // Clean up staging resources
                 vkFreeMemory(Device, stagingMemory, null);
@@ -313,6 +332,9 @@ namespace Vk.Samples
             }
             else
             {
+                throw new NotImplementedException();
+
+                /*
                 // Prefer using optimal tiling, as linear tiling 
                 // may support only a small set of features 
                 // depending on implementation (e.g. no mip maps, only one layer, etc.)
@@ -321,17 +343,17 @@ namespace Vk.Samples
                 VkDeviceMemory mappableMemory;
 
                 // Load mip map level 0 to linear tiling image
-                VkImageCreateInfo imageCreateInfo = vks::initializers::imageCreateInfo();
-                imageCreateInfo.imageType = VK_IMAGE_TYPE_2D;
+                VkImageCreateInfo imageCreateInfo = Initializers.imageCreateInfo();
+                imageCreateInfo.imageType = VkImageType._2d;
                 imageCreateInfo.format = format;
                 imageCreateInfo.mipLevels = 1;
                 imageCreateInfo.arrayLayers = 1;
-                imageCreateInfo.samples = VK_SAMPLE_COUNT_1_BIT;
-                imageCreateInfo.tiling = VK_IMAGE_TILING_LINEAR;
-                imageCreateInfo.usage = VK_IMAGE_USAGE_SAMPLED_BIT;
-                imageCreateInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-                imageCreateInfo.initialLayout = VK_IMAGE_LAYOUT_PREINITIALIZED;
-                imageCreateInfo.extent = { texture.width, texture.height, 1 };
+                imageCreateInfo.samples = VkSampleCountFlags._1;
+                imageCreateInfo.tiling = VkImageTiling.Linear;
+                imageCreateInfo.usage = VkImageUsageFlags.Sampled;
+                imageCreateInfo.sharingMode = VkSharingMode.Exclusive;
+                imageCreateInfo.initialLayout = VkImageLayout.Preinitialized;
+                imageCreateInfo.extent = new VkExtent3D { width = texture.width, height = texture.height, depth = 1 };
                 Util.CheckResult(vkCreateImage(Device, &imageCreateInfo, null, &mappableImage));
 
                 // Get memory requirements for this image 
@@ -341,7 +363,7 @@ namespace Vk.Samples
                 memAllocInfo.allocationSize = memReqs.size;
 
                 // Get memory type that can be mapped to host memory
-                memAllocInfo.memoryTypeIndex = vulkanDevice->getMemoryType(memReqs.memoryTypeBits, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+                memAllocInfo.memoryTypeIndex = VulkanDevice.GetMemoryType(memReqs.memoryTypeBits,  VkMemoryPropertyFlags.HostVisible |  VkMemoryPropertyFlags.HostCoherent);
 
                 // Allocate host memory
                 Util.CheckResult(vkAllocateMemory(Device, &memAllocInfo, null, &mappableMemory));
@@ -351,8 +373,8 @@ namespace Vk.Samples
 
                 // Get sub resource layout
                 // Mip map count, array layer, etc.
-                VkImageSubresource subRes = { };
-                subRes.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+                VkImageSubresource subRes = new VkImageSubresource();
+                subRes.aspectMask =  VkImageAspectFlags.Color;
 
                 VkSubresourceLayout subResLayout;
                 void* data;
@@ -399,6 +421,7 @@ namespace Vk.Samples
                     subresourceRange);
 
                 VulkanExampleBase::flushCommandBuffer(copyCmd, queue, true);
+                */
             }
 
             // Create sampler
@@ -408,55 +431,55 @@ namespace Vk.Samples
             // This means you could have multiple sampler objects
             // for the same texture with different settings
             // Similar to the samplers available with OpenGL 3.3
-            VkSamplerCreateInfo sampler = vks::initializers::samplerCreateInfo();
-            sampler.magFilter = VK_FILTER_LINEAR;
-            sampler.minFilter = VK_FILTER_LINEAR;
-            sampler.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
-            sampler.addressModeU = VK_SAMPLER_ADDRESS_MODE_REPEAT;
-            sampler.addressModeV = VK_SAMPLER_ADDRESS_MODE_REPEAT;
-            sampler.addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+            VkSamplerCreateInfo sampler = Initializers.samplerCreateInfo();
+            sampler.magFilter = VkFilter.Linear;
+            sampler.minFilter = VkFilter.Linear;
+            sampler.mipmapMode = VkSamplerMipmapMode.Linear;
+            sampler.addressModeU = VkSamplerAddressMode.Repeat;
+            sampler.addressModeV = VkSamplerAddressMode.Repeat;
+            sampler.addressModeW = VkSamplerAddressMode.Repeat;
             sampler.mipLodBias = 0.0f;
-            sampler.compareOp = VK_COMPARE_OP_NEVER;
+            sampler.compareOp = VkCompareOp.Never;
             sampler.minLod = 0.0f;
             // Set max level-of-detail to mip level count of the texture
-            sampler.maxLod = (useStaging) ? (float)texture.mipLevels : 0.0f;
+            sampler.maxLod = (useStaging == 1) ? (float)texture.mipLevels : 0.0f;
             // Enable anisotropic filtering
             // This feature is optional, so we must check if it's supported on the Device
-            if (vulkanDevice->features.samplerAnisotropy)
+            if (VulkanDevice.Features.samplerAnisotropy == 1)
             {
                 // Use max. level of anisotropy for this example
-                sampler.maxAnisotropy = vulkanDevice->properties.limits.maxSamplerAnisotropy;
-                sampler.anisotropyEnable = VK_TRUE;
+                sampler.maxAnisotropy = VulkanDevice.Properties.limits.maxSamplerAnisotropy;
+                sampler.anisotropyEnable = True;
             }
             else
             {
                 // The Device does not support anisotropic filtering
-                sampler.maxAnisotropy = 1.0;
-                sampler.anisotropyEnable = VK_FALSE;
+                sampler.maxAnisotropy = 1.0f;
+                sampler.anisotropyEnable = False;
             }
-            sampler.borderColor = VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE;
-            Util.CheckResult(vkCreateSampler(Device, &sampler, null, &texture.sampler));
+            sampler.borderColor = VkBorderColor.FloatOpaqueWhite;
+            Util.CheckResult(vkCreateSampler(Device, ref sampler, null, out texture.sampler));
 
             // Create image view
             // Textures are not directly accessed by the shaders and
             // are abstracted by image views containing additional
             // information and sub resource ranges
-            VkImageViewCreateInfo view = vks::initializers::imageViewCreateInfo();
-            view.viewType = VK_IMAGE_VIEW_TYPE_2D;
+            VkImageViewCreateInfo view = Initializers.imageViewCreateInfo();
+            view.viewType = VkImageViewType._2d;
             view.format = format;
-            view.components = { VK_COMPONENT_SWIZZLE_R, VK_COMPONENT_SWIZZLE_G, VK_COMPONENT_SWIZZLE_B, VK_COMPONENT_SWIZZLE_A };
+            view.components = new VkComponentMapping { r = VkComponentSwizzle.R, g = VkComponentSwizzle.G, b = VkComponentSwizzle.B, a = VkComponentSwizzle.A };
             // The subresource range describes the set of mip levels (and array layers) that can be accessed through this image view
             // It's possible to create multiple image views for a single image referring to different (and/or overlapping) ranges of the image
-            view.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+            view.subresourceRange.aspectMask = VkImageAspectFlags.Color;
             view.subresourceRange.baseMipLevel = 0;
             view.subresourceRange.baseArrayLayer = 0;
             view.subresourceRange.layerCount = 1;
             // Linear tiling usually won't support mip maps
             // Only set mip map count if optimal tiling is used
-            view.subresourceRange.levelCount = (useStaging) ? texture.mipLevels : 1;
+            view.subresourceRange.levelCount = (useStaging == 1) ? texture.mipLevels : 1;
             // The view will be based on the texture's image
             view.image = texture.image;
-            Util.CheckResult(vkCreateImageView(Device, &view, null, &texture.view));
+            Util.CheckResult(vkCreateImageView(Device, &view, null, out texture.view));
         }
 
         // Free all Vulkan resources used a texture object
@@ -472,225 +495,225 @@ namespace Vk.Samples
         {
             // Vulkan core supports three different compressed texture formats
             // As the support differs between implemementations we need to check Device features and select a proper format and file
-            std::string filename;
+            string filename;
             VkFormat format;
-            if (DeviceFeatures.textureCompressionBC)
+            if (DeviceFeatures.textureCompressionBC == 1)
             {
                 filename = "metalplate01_bc2_unorm.ktx";
-                format = VK_FORMAT_BC2_UNORM_BLOCK;
+                format = VkFormat.Bc2UnormBlock;
             }
-            else if (DeviceFeatures.textureCompressionASTC_LDR)
+            else if (DeviceFeatures.textureCompressionASTC_LDR == 1)
             {
                 filename = "metalplate01_astc_8x8_unorm.ktx";
-                format = VK_FORMAT_ASTC_8x8_UNORM_BLOCK;
+                format = VkFormat.Astc8x8UnormBlock;
             }
-            else if (DeviceFeatures.textureCompressionETC2)
+            else if (DeviceFeatures.textureCompressionETC2 == 1)
             {
                 filename = "metalplate01_etc2_unorm.ktx";
-                format = VK_FORMAT_ETC2_R8G8B8A8_UNORM_BLOCK;
+                format = VkFormat.Etc2R8g8b8a8UnormBlock;
             }
             else
             {
-                vks::tools::exitFatal("Device does not support any compressed texture format!", "Error");
+                throw new InvalidOperationException("Device does not support any compressed texture format!");
             }
 
             loadTexture(getAssetPath() + "textures/" + filename, format, false);
         }
 
-        void buildCommandBuffers()
+        protected override void buildCommandBuffers()
         {
-            VkCommandBufferBeginInfo cmdBufInfo = vks::initializers::commandBufferBeginInfo();
+            VkCommandBufferBeginInfo cmdBufInfo = Initializers.CommandBufferBeginInfo();
 
-            VkClearValue clearValues[2];
-            clearValues[0].color = defaultClearColor;
-            clearValues[1].depthStencil = { 1.0f, 0 };
+            FixedArray2<VkClearValue> clearValues = new FixedArray2<VkClearValue>();
+            clearValues.First.color = defaultClearColor;
+            clearValues.Second.depthStencil = new VkClearDepthStencilValue() { depth = 1.0f, stencil = 0 };
 
-            VkRenderPassBeginInfo renderPassBeginInfo = vks::initializers::renderPassBeginInfo();
-            renderPassBeginInfo.renderPass = renderPass;
+            VkRenderPassBeginInfo renderPassBeginInfo = Initializers.renderPassBeginInfo();
+            renderPassBeginInfo.renderPass = RenderPass;
             renderPassBeginInfo.renderArea.offset.x = 0;
             renderPassBeginInfo.renderArea.offset.y = 0;
-            renderPassBeginInfo.renderArea.extent.width = width;
-            renderPassBeginInfo.renderArea.extent.height = height;
+            renderPassBeginInfo.renderArea.extent.width = Width;
+            renderPassBeginInfo.renderArea.extent.height = Height;
             renderPassBeginInfo.clearValueCount = 2;
-            renderPassBeginInfo.pClearValues = clearValues;
+            renderPassBeginInfo.pClearValues = (VkClearValue*)Unsafe.AsPointer(ref clearValues);
 
-            for (int32_t i = 0; i < drawCmdBuffers.size(); ++i)
+            for (int i = 0; i < DrawCmdBuffers.Count; ++i)
             {
                 // Set target frame buffer
-                renderPassBeginInfo.framebuffer = frameBuffers[i];
+                renderPassBeginInfo.framebuffer = Framebuffers[i];
 
-                Util.CheckResult(vkBeginCommandBuffer(drawCmdBuffers[i], &cmdBufInfo));
+                Util.CheckResult(vkBeginCommandBuffer(DrawCmdBuffers[i], &cmdBufInfo));
 
-                vkCmdBeginRenderPass(drawCmdBuffers[i], &renderPassBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
+                vkCmdBeginRenderPass(DrawCmdBuffers[i], &renderPassBeginInfo, VkSubpassContents.Inline);
 
-                VkViewport viewport = vks::initializers::viewport((float)width, (float)height, 0.0f, 1.0f);
-                vkCmdSetViewport(drawCmdBuffers[i], 0, 1, &viewport);
+                VkViewport viewport = Initializers.viewport((float)Width, (float)Height, 0.0f, 1.0f);
+                vkCmdSetViewport(DrawCmdBuffers[i], 0, 1, &viewport);
 
-                VkRect2D scissor = vks::initializers::rect2D(width, height, 0, 0);
-                vkCmdSetScissor(drawCmdBuffers[i], 0, 1, &scissor);
+                VkRect2D scissor = Initializers.rect2D(Width, Height, 0, 0);
+                vkCmdSetScissor(DrawCmdBuffers[i], 0, 1, &scissor);
 
-                vkCmdBindDescriptorSets(drawCmdBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0, 1, &descriptorSet, 0, NULL);
-                vkCmdBindPipeline(drawCmdBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, pipelines_solid);
+                vkCmdBindDescriptorSets(DrawCmdBuffers[i], VkPipelineBindPoint.Graphics, pipelineLayout, 0, 1, ref descriptorSet, 0, null);
+                vkCmdBindPipeline(DrawCmdBuffers[i], VkPipelineBindPoint.Graphics, pipelines_solid);
 
-                VkDeviceSize offsets[1] = { 0 };
-                vkCmdBindVertexBuffers(drawCmdBuffers[i], VERTEX_BUFFER_BIND_ID, 1, &vertexBuffer.buffer, offsets);
-                vkCmdBindIndexBuffer(drawCmdBuffers[i], indexBuffer.buffer, 0, VK_INDEX_TYPE_UINT32);
+                ulong offsets = 0;
+                vkCmdBindVertexBuffers(DrawCmdBuffers[i], VERTEX_BUFFER_BIND_ID, 1, ref vertexBuffer.buffer, &offsets);
+                vkCmdBindIndexBuffer(DrawCmdBuffers[i], indexBuffer.buffer, 0, VkIndexType.Uint32);
 
-                vkCmdDrawIndexed(drawCmdBuffers[i], indexCount, 1, 0, 0, 0);
+                vkCmdDrawIndexed(DrawCmdBuffers[i], indexCount, 1, 0, 0, 0);
 
-                vkCmdEndRenderPass(drawCmdBuffers[i]);
+                vkCmdEndRenderPass(DrawCmdBuffers[i]);
 
-                Util.CheckResult(vkEndCommandBuffer(drawCmdBuffers[i]));
+                Util.CheckResult(vkEndCommandBuffer(DrawCmdBuffers[i]));
             }
         }
 
         void draw()
         {
-            VulkanExampleBase::prepareFrame();
+            base.prepareFrame();
 
             // Command buffer to be sumitted to the queue
-            submitInfo.commandBufferCount = 1;
-            submitInfo.pCommandBuffers = &drawCmdBuffers[currentBuffer];
+            SubmitInfo.commandBufferCount = 1;
+            SubmitInfo.pCommandBuffers = (VkCommandBuffer*)DrawCmdBuffers.GetAddress(currentBuffer);
 
             // Submit to queue
-            Util.CheckResult(vkQueueSubmit(queue, 1, &submitInfo, VK_NULL_HANDLE));
+            Util.CheckResult(vkQueueSubmit(Queue, 1, ref SubmitInfo, NullHandle));
 
-            VulkanExampleBase::submitFrame();
+            submitFrame();
         }
 
         void generateQuad()
         {
             // Setup vertices for a single uv-mapped quad made from two triangles
-            std::vector<Vertex> vertices =
+            NativeList<Vertex> vertices = new NativeList<Vertex>()
             {
-                    { {  1.0f,  1.0f, 0.0f }, { 1.0f, 1.0f },{ 0.0f, 0.0f, 1.0f } },
-                    { { -1.0f,  1.0f, 0.0f }, { 0.0f, 1.0f },{ 0.0f, 0.0f, 1.0f } },
-                    { { -1.0f, -1.0f, 0.0f }, { 0.0f, 0.0f },{ 0.0f, 0.0f, 1.0f } },
-                    { {  1.0f, -1.0f, 0.0f }, { 1.0f, 0.0f },{ 0.0f, 0.0f, 1.0f } }
-                };
+                new Vertex() { pos = new Vector3(1.0f,  1.0f, 0.0f), uv = new Vector2(1.0f, 1.0f), normal = new Vector3(0.0f, 0.0f, 1.0f) },
+                new Vertex() { pos = new Vector3(-1.0f,  1.0f, 0.0f), uv = new Vector2(0.0f, 1.0f), normal = new Vector3(0.0f, 0.0f, 1.0f) },
+                new Vertex() { pos = new Vector3(-1.0f, -1.0f, 0.0f), uv = new Vector2(0.0f, 0.0f), normal = new Vector3(0.0f, 0.0f, 1.0f) },
+                new Vertex() { pos = new Vector3(1.0f, -1.0f, 0.0f), uv = new Vector2(1.0f, 0.0f), normal = new Vector3(0.0f, 0.0f, 1.0f) },
+            };
 
             // Setup indices
-            std::vector<uint> indices = { 0, 1, 2, 2, 3, 0 };
-            indexCount = static_cast<uint>(indices.size());
+            NativeList<uint> indices = new NativeList<uint> { 0, 1, 2, 2, 3, 0 };
+            indexCount = indices.Count;
 
             // Create buffers
             // For the sake of simplicity we won't stage the vertex data to the gpu memory
             // Vertex buffer
-            Util.CheckResult(vulkanDevice->createBuffer(
-                VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
-                VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
-                &vertexBuffer,
-                vertices.size() * sizeof(Vertex),
-                vertices.data()));
+            Util.CheckResult(VulkanDevice.createBuffer(
+                VkBufferUsageFlags.VertexBuffer,
+                VkMemoryPropertyFlags.HostVisible | VkMemoryPropertyFlags.HostCoherent,
+                vertexBuffer,
+                (ulong)(vertices.Count * sizeof(Vertex)),
+                vertices.Data.ToPointer()));
             // Index buffer
-            Util.CheckResult(vulkanDevice->createBuffer(
-                VK_BUFFER_USAGE_INDEX_BUFFER_BIT,
-                VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
-                &indexBuffer,
-                indices.size() * sizeof(uint),
-                indices.data()));
+            Util.CheckResult(VulkanDevice.createBuffer(
+                VkBufferUsageFlags.IndexBuffer,
+                VkMemoryPropertyFlags.HostCoherent | VkMemoryPropertyFlags.HostCoherent,
+                indexBuffer,
+                indices.Count * sizeof(uint),
+                indices.Data.ToPointer()));
         }
 
         void setupVertexDescriptions()
         {
             // Binding description
-            vertices.bindingDescriptions.resize(1);
+            vertices.bindingDescriptions.Count = 1;
             vertices.bindingDescriptions[0] =
-                vks::initializers::vertexInputBindingDescription(
+                Initializers.vertexInputBindingDescription(
                     VERTEX_BUFFER_BIND_ID,
-                    sizeof(Vertex),
-                    VK_VERTEX_INPUT_RATE_VERTEX);
+                    (uint)sizeof(Vertex),
+                    VkVertexInputRate.Vertex);
 
             // Attribute descriptions
             // Describes memory layout and shader positions
-            vertices.attributeDescriptions.resize(3);
+            vertices.attributeDescriptions.Count = 3;
             // Location 0 : Position
             vertices.attributeDescriptions[0] =
-                vks::initializers::vertexInputAttributeDescription(
+                Initializers.vertexInputAttributeDescription(
                     VERTEX_BUFFER_BIND_ID,
                     0,
-                    VK_FORMAT_R32G32B32_SFLOAT,
-                    offsetof(Vertex, pos));
+                    VkFormat.R32g32b32Sfloat,
+                    Vertex.PositionOffset);
             // Location 1 : Texture coordinates
             vertices.attributeDescriptions[1] =
-                vks::initializers::vertexInputAttributeDescription(
+                Initializers.vertexInputAttributeDescription(
                     VERTEX_BUFFER_BIND_ID,
                     1,
-                    VK_FORMAT_R32G32_SFLOAT,
-                    offsetof(Vertex, uv));
+                    VkFormat.R32g32Sfloat,
+                    Vertex.UvOffset);
             // Location 1 : Vertex normal
             vertices.attributeDescriptions[2] =
-                vks::initializers::vertexInputAttributeDescription(
+                Initializers.vertexInputAttributeDescription(
                     VERTEX_BUFFER_BIND_ID,
                     2,
-                    VK_FORMAT_R32G32B32_SFLOAT,
-                    offsetof(Vertex, normal));
+                    VkFormat.R32g32b32Sfloat,
+                    Vertex.NormalOffset);
 
-            vertices.inputState = vks::initializers::pipelineVertexInputStateCreateInfo();
-            vertices.inputState.vertexBindingDescriptionCount = static_cast<uint>(vertices.bindingDescriptions.size());
-            vertices.inputState.pVertexBindingDescriptions = vertices.bindingDescriptions.data();
-            vertices.inputState.vertexAttributeDescriptionCount = static_cast<uint>(vertices.attributeDescriptions.size());
-            vertices.inputState.pVertexAttributeDescriptions = vertices.attributeDescriptions.data();
+            vertices.inputState = Initializers.pipelineVertexInputStateCreateInfo();
+            vertices.inputState.vertexBindingDescriptionCount = vertices.bindingDescriptions.Count;
+            vertices.inputState.pVertexBindingDescriptions = (VkVertexInputBindingDescription*)vertices.bindingDescriptions.Data;
+            vertices.inputState.vertexAttributeDescriptionCount = vertices.attributeDescriptions.Count;
+            vertices.inputState.pVertexAttributeDescriptions = (VkVertexInputAttributeDescription*)vertices.attributeDescriptions.Data;
         }
 
         void setupDescriptorPool()
         {
             // Example uses one ubo and one image sampler
-            std::vector<VkDescriptorPoolSize> poolSizes =
-            {
-                    vks::initializers::descriptorPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1),
-                    vks::initializers::descriptorPoolSize(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1)
-                };
+            FixedArray2<VkDescriptorPoolSize> poolSizes = new FixedArray2<VkDescriptorPoolSize>(
+                    Initializers.descriptorPoolSize(VkDescriptorType.UniformBuffer, 1),
+                    Initializers.descriptorPoolSize(VkDescriptorType.CombinedImageSampler, 1)
+            );
 
             VkDescriptorPoolCreateInfo descriptorPoolInfo =
-                vks::initializers::descriptorPoolCreateInfo(
-                    static_cast<uint>(poolSizes.size()),
-                    poolSizes.data(),
+                Initializers.descriptorPoolCreateInfo(
+                    poolSizes.Count,
+                    (VkDescriptorPoolSize*)Unsafe.AsPointer(ref poolSizes),
                     2);
 
-            Util.CheckResult(vkCreateDescriptorPool(Device, &descriptorPoolInfo, null, &descriptorPool));
+            Util.CheckResult(vkCreateDescriptorPool(Device, &descriptorPoolInfo, null, out descriptorPool));
         }
 
         void setupDescriptorSetLayout()
         {
-            std::vector<VkDescriptorSetLayoutBinding> setLayoutBindings =
-            {
-        			// Binding 0 : Vertex shader uniform buffer
-        			vks::initializers::descriptorSetLayoutBinding(
-                        VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
-                        VK_SHADER_STAGE_VERTEX_BIT,
-                        0),
-        			// Binding 1 : Fragment shader image sampler
-        			vks::initializers::descriptorSetLayoutBinding(
-                        VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-                        VK_SHADER_STAGE_FRAGMENT_BIT,
-                        1)
-                };
+            FixedArray2<VkDescriptorSetLayoutBinding> setLayoutBindings = new FixedArray2<VkDescriptorSetLayoutBinding>(
+                // Binding 0 : Vertex shader uniform buffer
+                Initializers.descriptorSetLayoutBinding(
+                    VkDescriptorType.UniformBuffer,
+                    VkShaderStageFlags.Vertex,
+                    0),
+                // Binding 1 : Fragment shader image sampler
+                Initializers.descriptorSetLayoutBinding(
+                    VkDescriptorType.CombinedImageSampler,
+                    VkShaderStageFlags.Fragment,
+                    1)
+            );
 
             VkDescriptorSetLayoutCreateInfo descriptorLayout =
-                vks::initializers::descriptorSetLayoutCreateInfo(
-                    setLayoutBindings.data(),
-                    static_cast<uint>(setLayoutBindings.size()));
+                Initializers.descriptorSetLayoutCreateInfo(
+                    (VkDescriptorSetLayoutBinding*)Unsafe.AsPointer(ref setLayoutBindings),
+                    setLayoutBindings.Count);
 
-            Util.CheckResult(vkCreateDescriptorSetLayout(Device, &descriptorLayout, null, &descriptorSetLayout));
+            Util.CheckResult(vkCreateDescriptorSetLayout(Device, &descriptorLayout, null, out descriptorSetLayout));
 
+            var layout = descriptorSetLayout;
             VkPipelineLayoutCreateInfo pPipelineLayoutCreateInfo =
-                vks::initializers::pipelineLayoutCreateInfo(
-                    &descriptorSetLayout,
+                Initializers.pipelineLayoutCreateInfo(
+                    &layout,
                     1);
 
-            Util.CheckResult(vkCreatePipelineLayout(Device, &pPipelineLayoutCreateInfo, null, &pipelineLayout));
+            Util.CheckResult(vkCreatePipelineLayout(Device, &pPipelineLayoutCreateInfo, null, out pipelineLayout));
         }
 
         void setupDescriptorSet()
         {
+            var layout = descriptorSetLayout;
             VkDescriptorSetAllocateInfo allocInfo =
-                vks::initializers::descriptorSetAllocateInfo(
+                Initializers.descriptorSetAllocateInfo(
                     descriptorPool,
-                    &descriptorSetLayout,
+                    &layout,
                     1);
 
-            Util.CheckResult(vkAllocateDescriptorSets(Device, &allocInfo, &descriptorSet));
+            Util.CheckResult(vkAllocateDescriptorSets(Device, &allocInfo, out descriptorSet));
 
             // Setup a descriptor image info for the current texture to be used as a combined image sampler
             VkDescriptorImageInfo textureDescriptor;
@@ -698,88 +721,88 @@ namespace Vk.Samples
             textureDescriptor.sampler = texture.sampler;            //	The sampler (Telling the pipeline how to sample the texture, including repeat, border, etc.)
             textureDescriptor.imageLayout = texture.imageLayout;    //	The current layout of the image (Note: Should always fit the actual use, e.g. shader read)
 
-            std::vector<VkWriteDescriptorSet> writeDescriptorSets =
-            {
-        			// Binding 0 : Vertex shader uniform buffer
-        			vks::initializers::writeDescriptorSet(
+            var descriptor = uniformBufferVS.descriptor;
+            FixedArray2<VkWriteDescriptorSet> writeDescriptorSets = new FixedArray2<VkWriteDescriptorSet>(
+                    // Binding 0 : Vertex shader uniform buffer
+                    Initializers.writeDescriptorSet(
                         descriptorSet,
-                        VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
+                        VkDescriptorType.UniformBuffer,
                         0,
-                        &uniformBufferVS.descriptor),
-        			// Binding 1 : Fragment shader texture sampler
-        			//	Fragment shader: layout (binding = 1) uniform sampler2D samplerColor;
-        			vks::initializers::writeDescriptorSet(
+                        &descriptor),
+                    // Binding 1 : Fragment shader texture sampler
+                    //	Fragment shader: layout (binding = 1) uniform sampler2D samplerColor;
+                    Initializers.writeDescriptorSet(
                         descriptorSet,
-                        VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,			// The descriptor set will use a combined image sampler (sampler and image could be split)
-        				1,													// Shader binding point 1
-        				&textureDescriptor)								// Pointer to the descriptor image for our texture
-        		};
+                        VkDescriptorType.CombinedImageSampler,          // The descriptor set will use a combined image sampler (sampler and image could be split)
+                        1,                                                  // Shader binding point 1
+                        &textureDescriptor)								// Pointer to the descriptor image for our texture
+            );
 
-            vkUpdateDescriptorSets(Device, static_cast<uint>(writeDescriptorSets.size()), writeDescriptorSets.data(), 0, NULL);
+            vkUpdateDescriptorSets(Device, writeDescriptorSets.Count, ref writeDescriptorSets.First, 0, null);
         }
 
         void preparePipelines()
         {
             VkPipelineInputAssemblyStateCreateInfo inputAssemblyState =
-                vks::initializers::pipelineInputAssemblyStateCreateInfo(
-                    VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST,
+                Initializers.pipelineInputAssemblyStateCreateInfo(
+                    VkPrimitiveTopology.TriangleList,
                     0,
-                    VK_FALSE);
+                    False);
 
             VkPipelineRasterizationStateCreateInfo rasterizationState =
-                vks::initializers::pipelineRasterizationStateCreateInfo(
-                    VK_POLYGON_MODE_FILL,
-                    VK_CULL_MODE_NONE,
-                    VK_FRONT_FACE_COUNTER_CLOCKWISE,
+                Initializers.pipelineRasterizationStateCreateInfo(
+                    VkPolygonMode.Fill,
+                    VkCullModeFlags.None,
+                    VkFrontFace.CounterClockwise,
                     0);
 
             VkPipelineColorBlendAttachmentState blendAttachmentState =
-                vks::initializers::pipelineColorBlendAttachmentState(
-                    0xf,
-                    VK_FALSE);
+                Initializers.pipelineColorBlendAttachmentState(
+                    (VkColorComponentFlags)0xf,
+                    False);
 
             VkPipelineColorBlendStateCreateInfo colorBlendState =
-                vks::initializers::pipelineColorBlendStateCreateInfo(
+                Initializers.pipelineColorBlendStateCreateInfo(
                     1,
                     &blendAttachmentState);
 
             VkPipelineDepthStencilStateCreateInfo depthStencilState =
-                vks::initializers::pipelineDepthStencilStateCreateInfo(
-                    VK_TRUE,
-                    VK_TRUE,
-                    VK_COMPARE_OP_LESS_OR_EQUAL);
+                Initializers.pipelineDepthStencilStateCreateInfo(
+                    True,
+                    True,
+                    VkCompareOp.LessOrEqual);
 
             VkPipelineViewportStateCreateInfo viewportState =
-                vks::initializers::pipelineViewportStateCreateInfo(1, 1, 0);
+                Initializers.pipelineViewportStateCreateInfo(1, 1, 0);
 
             VkPipelineMultisampleStateCreateInfo multisampleState =
-                vks::initializers::pipelineMultisampleStateCreateInfo(
-                    VK_SAMPLE_COUNT_1_BIT,
+                Initializers.pipelineMultisampleStateCreateInfo(
+                    VkSampleCountFlags._1,
                     0);
 
-            std::vector<VkDynamicState> dynamicStateEnables = {
-                    VK_DYNAMIC_STATE_VIEWPORT,
-                    VK_DYNAMIC_STATE_SCISSOR
-                };
+            FixedArray2<VkDynamicState> dynamicStateEnables = new FixedArray2<VkDynamicState>(
+                VkDynamicState.Viewport,
+                VkDynamicState.Scissor);
             VkPipelineDynamicStateCreateInfo dynamicState =
-                vks::initializers::pipelineDynamicStateCreateInfo(
-                    dynamicStateEnables.data(),
-                    static_cast<uint>(dynamicStateEnables.size()),
+                Initializers.pipelineDynamicStateCreateInfo(
+                    (VkDynamicState*)Unsafe.AsPointer(ref dynamicStateEnables),
+                    dynamicStateEnables.Count,
                     0);
 
             // Load shaders
-            std::array < VkPipelineShaderStageCreateInfo,2 > shaderStages;
+            FixedArray2<VkPipelineShaderStageCreateInfo> shaderStages = new FixedArray2<VkPipelineShaderStageCreateInfo>();
 
-            shaderStages[0] = loadShader(getAssetPath() + "shaders/texture/texture.vert.spv", VK_SHADER_STAGE_VERTEX_BIT);
-            shaderStages[1] = loadShader(getAssetPath() + "shaders/texture/texture.frag.spv", VK_SHADER_STAGE_FRAGMENT_BIT);
+            shaderStages.First = loadShader(getAssetPath() + "shaders/texture/texture.vert.spv", VkShaderStageFlags.Vertex);
+            shaderStages.Second = loadShader(getAssetPath() + "shaders/texture/texture.frag.spv",  VkShaderStageFlags.Fragment);
 
             VkGraphicsPipelineCreateInfo pipelineCreateInfo =
-                vks::initializers::pipelineCreateInfo(
+                Initializers.pipelineCreateInfo(
                     pipelineLayout,
-                    renderPass,
+                    RenderPass,
                     0);
 
-            pipelineCreateInfo.pVertexInputState = &vertices.inputState;
+            var vertexInputState = vertices.inputState;
+            pipelineCreateInfo.pVertexInputState = &vertexInputState;
             pipelineCreateInfo.pInputAssemblyState = &inputAssemblyState;
             pipelineCreateInfo.pRasterizationState = &rasterizationState;
             pipelineCreateInfo.pColorBlendState = &colorBlendState;
@@ -787,22 +810,23 @@ namespace Vk.Samples
             pipelineCreateInfo.pViewportState = &viewportState;
             pipelineCreateInfo.pDepthStencilState = &depthStencilState;
             pipelineCreateInfo.pDynamicState = &dynamicState;
-            pipelineCreateInfo.stageCount = static_cast<uint>(shaderStages.size());
-            pipelineCreateInfo.pStages = shaderStages.data();
+            pipelineCreateInfo.stageCount = shaderStages.Count;
+            pipelineCreateInfo.pStages = (VkPipelineShaderStageCreateInfo*)Unsafe.AsPointer(ref shaderStages);
 
-            Util.CheckResult(vkCreateGraphicsPipelines(Device, pipelineCache, 1, &pipelineCreateInfo, null, &pipelines_solid));
+            Util.CheckResult(vkCreateGraphicsPipelines(Device, PipelineCache, 1, &pipelineCreateInfo, null, out pipelines_solid));
         }
 
         // Prepare and initialize uniform buffer containing shader uniforms
         void prepareUniformBuffers()
         {
+            var localUboVS = uboVS;
             // Vertex shader uniform buffer block
-            Util.CheckResult(vulkanDevice->createBuffer(
-                VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
-                VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
-                &uniformBufferVS,
-                sizeof(uboVS),
-                &uboVS));
+            Util.CheckResult(VulkanDevice.createBuffer(
+                VkBufferUsageFlags.UniformBuffer,
+                VkMemoryPropertyFlags.HostVisible|  VkMemoryPropertyFlags.HostCoherent,
+                uniformBufferVS,
+                (uint)sizeof(UboVS),
+                &localUboVS));
 
             updateUniformBuffers();
         }
@@ -810,24 +834,26 @@ namespace Vk.Samples
         void updateUniformBuffers()
         {
             // Vertex shader
-            uboVS.projection = glm::perspective(glm::radians(60.0f), (float)width / (float)height, 0.001f, 256.0f);
-            Matrix4x4 viewMatrix = glm::translate(Matrix4x4(), glm::vec3(0.0f, 0.0f, zoom));
+            uboVS.projection = Matrix4x4.CreatePerspectiveFieldOfView(Util.DegreesToRadians(60f), Width / (float)Height, 0.1f, 256.0f);
+            Matrix4x4 viewMatrix = Matrix4x4.CreateTranslation(new Vector3(0f, 0f, zoom));
 
-            uboVS.model = viewMatrix * glm::translate(Matrix4x4(), cameraPos);
-            uboVS.model = glm::rotate(uboVS.model, glm::radians(rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
-            uboVS.model = glm::rotate(uboVS.model, glm::radians(rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
-            uboVS.model = glm::rotate(uboVS.model, glm::radians(rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+            uboVS.model = viewMatrix * Matrix4x4.CreateTranslation(cameraPos);
+            uboVS.model = Matrix4x4.CreateRotationX(Util.DegreesToRadians(rotation.X)) * uboVS.model;
+            uboVS.model = Matrix4x4.CreateRotationY(Util.DegreesToRadians(rotation.Y)) * uboVS.model;
+            uboVS.model = Matrix4x4.CreateRotationZ(Util.DegreesToRadians(rotation.Z)) * uboVS.model;
 
-            uboVS.viewPos = vector4(0.0f, 0.0f, -zoom, 0.0f);
+            uboVS.viewPos = new Vector4(0.0f, 0.0f, -zoom, 0.0f);
 
             Util.CheckResult(uniformBufferVS.map());
-            memcpy(uniformBufferVS.mapped, &uboVS, sizeof(uboVS));
+            var local = uboVS;
+            Unsafe.CopyBlock(uniformBufferVS.mapped, &local, (uint)sizeof(UboVS));
             uniformBufferVS.unmap();
         }
 
-        void prepare()
+
+        public override void Prepare()
         {
-            VulkanExampleBase::prepare();
+            base.Prepare();
             loadTextures();
             generateQuad();
             setupVertexDescriptions();
@@ -840,14 +866,14 @@ namespace Vk.Samples
             prepared = true;
         }
 
-        virtual void render()
+        protected override void render()
         {
             if (!prepared)
                 return;
             draw();
         }
 
-        virtual void viewChanged()
+        protected override void viewChanged()
         {
             updateUniformBuffers();
         }
@@ -864,30 +890,30 @@ namespace Vk.Samples
                 uboVS.lodBias = (float)texture.mipLevels;
             }
             updateUniformBuffers();
-            updateTextOverlay();
+            // updateTextOverlay();
         }
 
-        virtual void keyPressed(uint keyCode)
+        protected override void keyPressed(Key keyCode)
         {
             switch (keyCode)
             {
-                case KEY_KPADD:
-                case GAMEPAD_BUTTON_R1:
+                case Key.KeypadAdd:
                     changeLodBias(0.1f);
                     break;
-                case KEY_KPSUB:
-                case GAMEPAD_BUTTON_L1:
+                case Key.KeypadSubtract:
                     changeLodBias(-0.1f);
                     break;
             }
         }
 
+        /*
         virtual void getOverlayText(VulkanTextOverlay* textOverlay)
         {
             std::stringstream ss;
             ss << std::setprecision(2) << std::fixed << uboVS.lodBias;
             textOverlay->addText("LOD bias: " + ss.str() + " (numpad +/- to change)", 5.0f, 85.0f, VulkanTextOverlay::alignLeft);
         }
+        */
 
         public static void Main() => new TextureMappingExample().ExampleMain();
     }

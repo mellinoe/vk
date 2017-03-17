@@ -45,9 +45,6 @@ namespace Vk.Samples
         VkPipeline pipelines_wireframe;
         VkPipeline pipelines_toon;
 
-        // NOTE: On ExampleBase in original example code.
-        VkDescriptorPool descriptorPool;
-
         public PipelinesExample() : base()
         {
             zoom = -10.5f;
@@ -166,11 +163,6 @@ namespace Vk.Samples
         void loadAssets()
         {
             models_cube.loadFromFile(getAssetPath() + "models/treasure_smooth.dae", vertexLayout, 1.0f, VulkanDevice, Queue);
-        }
-
-        private string getAssetPath()
-        {
-            return Path.Combine(AppContext.BaseDirectory, "data/");
         }
 
         void setupDescriptorPool()

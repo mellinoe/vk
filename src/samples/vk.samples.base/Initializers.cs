@@ -40,6 +40,13 @@ namespace Vk.Samples
             return cmdBufferBeginInfo;
         }
 
+
+        public static VkRenderPassBeginInfo renderPassBeginInfo()
+        {
+            VkRenderPassBeginInfo renderPassBeginInfo = VkRenderPassBeginInfo.New();
+            return renderPassBeginInfo;
+        }
+
         public static VkPipelineInputAssemblyStateCreateInfo pipelineInputAssemblyStateCreateInfo(
             VkPrimitiveTopology topology,
             uint flags,
@@ -211,6 +218,23 @@ namespace Vk.Samples
             return writeDescriptorSet;
         }
 
+        public static VkWriteDescriptorSet writeDescriptorSet(
+            VkDescriptorSet dstSet,
+            VkDescriptorType type,
+            uint binding,
+            VkDescriptorImageInfo* imageInfo,
+            uint descriptorCount = 1)
+        {
+            VkWriteDescriptorSet writeDescriptorSet = VkWriteDescriptorSet.New();
+            writeDescriptorSet.dstSet = dstSet;
+            writeDescriptorSet.descriptorType = type;
+            writeDescriptorSet.dstBinding = binding;
+            writeDescriptorSet.pImageInfo = imageInfo;
+            writeDescriptorSet.descriptorCount = descriptorCount;
+            return writeDescriptorSet;
+        }
+
+
         /** @brief Initialize an image memory barrier with no image transfer ownership */
         public static VkImageMemoryBarrier imageMemoryBarrier()
         {
@@ -220,10 +244,16 @@ namespace Vk.Samples
             return imageMemoryBarrier;
         }
 
+        public static VkImageCreateInfo imageCreateInfo()
+        {
+            VkImageCreateInfo imageCreateInfo = VkImageCreateInfo.New();
+            return imageCreateInfo;
+        }
+
         public static VkMemoryAllocateInfo memoryAllocateInfo()
         {
             VkMemoryAllocateInfo memAllocInfo = new VkMemoryAllocateInfo();
-            memAllocInfo.sType =  VkStructureType.MemoryAllocateInfo;
+            memAllocInfo.sType = VkStructureType.MemoryAllocateInfo;
             return memAllocInfo;
         }
 
@@ -233,5 +263,120 @@ namespace Vk.Samples
             VkBufferCreateInfo bufCreateInfo = VkBufferCreateInfo.New();
             return bufCreateInfo;
         }
-    }
+
+        public static VkSamplerCreateInfo samplerCreateInfo()
+        {
+            VkSamplerCreateInfo samplerCreateInfo = VkSamplerCreateInfo.New();
+            return samplerCreateInfo;
+        }
+
+        public static VkImageViewCreateInfo imageViewCreateInfo()
+        {
+            VkImageViewCreateInfo imageViewCreateInfo = VkImageViewCreateInfo.New();
+            return imageViewCreateInfo;
+        }
+
+        public static VkViewport viewport(
+            float width,
+            float height,
+            float minDepth,
+            float maxDepth)
+        {
+            VkViewport viewport = new VkViewport();
+            viewport.width = width;
+            viewport.height = height;
+            viewport.minDepth = minDepth;
+            viewport.maxDepth = maxDepth;
+            return viewport;
+        }
+
+        public static VkRect2D rect2D(
+            uint width,
+            uint height,
+            int offsetX,
+            int offsetY)
+        {
+            VkRect2D rect2D = new VkRect2D();
+            rect2D.extent.width = width;
+            rect2D.extent.height = height;
+            rect2D.offset.x = offsetX;
+            rect2D.offset.y = offsetY;
+            return rect2D;
+        }
+
+        public static VkPipelineVertexInputStateCreateInfo pipelineVertexInputStateCreateInfo()
+        {
+            VkPipelineVertexInputStateCreateInfo pipelineVertexInputStateCreateInfo = VkPipelineVertexInputStateCreateInfo.New();
+            return pipelineVertexInputStateCreateInfo;
+        }
+
+        public static VkDescriptorPoolCreateInfo descriptorPoolCreateInfo(
+            uint poolSizeCount,
+            VkDescriptorPoolSize* pPoolSizes,
+            uint maxSets)
+        {
+            VkDescriptorPoolCreateInfo descriptorPoolInfo = VkDescriptorPoolCreateInfo.New();
+            descriptorPoolInfo.poolSizeCount = poolSizeCount;
+            descriptorPoolInfo.pPoolSizes = pPoolSizes;
+            descriptorPoolInfo.maxSets = maxSets;
+            return descriptorPoolInfo;
+        }
+
+        public static VkDescriptorPoolSize descriptorPoolSize(
+            VkDescriptorType type,
+            uint descriptorCount)
+        {
+            VkDescriptorPoolSize descriptorPoolSize = new VkDescriptorPoolSize();
+            descriptorPoolSize.type = type;
+            descriptorPoolSize.descriptorCount = descriptorCount;
+            return descriptorPoolSize;
+        }
+
+        public static VkDescriptorSetLayoutBinding descriptorSetLayoutBinding(
+            VkDescriptorType type,
+            VkShaderStageFlags stageFlags,
+            uint binding,
+            uint descriptorCount = 1)
+        {
+            VkDescriptorSetLayoutBinding setLayoutBinding = new VkDescriptorSetLayoutBinding();
+            setLayoutBinding.descriptorType = type;
+            setLayoutBinding.stageFlags = stageFlags;
+            setLayoutBinding.binding = binding;
+            setLayoutBinding.descriptorCount = descriptorCount;
+            return setLayoutBinding;
+        }
+
+        public static VkDescriptorSetLayoutCreateInfo descriptorSetLayoutCreateInfo(
+            VkDescriptorSetLayoutBinding* pBindings,
+            uint bindingCount)
+        {
+            VkDescriptorSetLayoutCreateInfo descriptorSetLayoutCreateInfo = VkDescriptorSetLayoutCreateInfo.New();
+            descriptorSetLayoutCreateInfo.pBindings = pBindings;
+            descriptorSetLayoutCreateInfo.bindingCount = bindingCount;
+            return descriptorSetLayoutCreateInfo;
+        }
+
+        public static  VkPipelineLayoutCreateInfo pipelineLayoutCreateInfo(
+            VkDescriptorSetLayout* pSetLayouts,
+            uint setLayoutCount = 1)
+		{
+            VkPipelineLayoutCreateInfo pipelineLayoutCreateInfo = VkPipelineLayoutCreateInfo.New();
+			pipelineLayoutCreateInfo.setLayoutCount = setLayoutCount;
+			pipelineLayoutCreateInfo.pSetLayouts = pSetLayouts;
+			return pipelineLayoutCreateInfo;
+		}
+
+        public static  VkDescriptorSetAllocateInfo descriptorSetAllocateInfo(
+            VkDescriptorPool descriptorPool,
+            VkDescriptorSetLayout* pSetLayouts,
+            uint descriptorSetCount)
+		{
+            VkDescriptorSetAllocateInfo descriptorSetAllocateInfo = VkDescriptorSetAllocateInfo.New();
+            descriptorSetAllocateInfo.descriptorPool = descriptorPool;
+			descriptorSetAllocateInfo.pSetLayouts = pSetLayouts;
+			descriptorSetAllocateInfo.descriptorSetCount = descriptorSetCount;
+			return descriptorSetAllocateInfo;
+		}
+
+}
 }
