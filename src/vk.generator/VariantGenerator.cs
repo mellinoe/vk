@@ -62,6 +62,7 @@ namespace Vk.Generator
                 else
                 {
                     yield return RefVariant(pd);
+                    yield return IntPtrVariant(pd);
                     if (pd.Name.EndsWith("Infos"))
                     {
                         yield return ArrayVariant(pd, 1);
@@ -92,6 +93,12 @@ namespace Vk.Generator
         {
             TypeSpec typeSpec = new TypeSpec(pd.Type.Name, pd.Type.PointerIndirection - 1);
             return new ParameterDefinition(pd.Name, typeSpec, ParameterModifier.Ref, pd.IsOptional);
+        }
+
+        private static ParameterDefinition IntPtrVariant(ParameterDefinition pd)
+        {
+            TypeSpec typeSpec = new TypeSpec(nameof(IntPtr));
+            return new ParameterDefinition(pd.Name, typeSpec, ParameterModifier.None, pd.IsOptional);
         }
 
         private static bool CanHaveVariant(ParameterDefinition pd)

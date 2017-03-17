@@ -1,0 +1,3 @@
+[submodule "ext/assimp-net"]
+	path = ext/assimp-net
+	url = https://github.com/mellinoe/assimp-net

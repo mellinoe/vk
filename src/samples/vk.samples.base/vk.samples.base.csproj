@@ -1,21 +1,26 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk" DefaultTargets="Build;Publish">
   <PropertyGroup>
     <TargetFramework>netcoreapp1.1</TargetFramework>
-    <OutputType>Exe</OutputType>
-    <AssemblyName>vk.rewrite</AssemblyName>
-    <RootNamespace>Vk.Generator.Rewrite</RootNamespace>
+    <AssemblyName>vk.samples.base</AssemblyName>
+    <RootNamespace>Vk.Samples</RootNamespace>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
-    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Content Include="..\..\..\ext\assimp-net\libs\Assimp\Assimp64.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../vk/vk.csproj" />
+    <ProjectReference Include="../../../ext/assimp-net/AssimpNet/AssimpNet.csproj" />
     <PackageReference Include="Microsoft.NETCore.App" Version="1.1.0" />
     <PackageReference Include="Microsoft.NETCore.DotNetHostPolicy" Version="1.1.0" />
     <PackageReference Include="Microsoft.NETCore.Runtime.CoreCLR" Version="1.1.0" />
     <PackageReference Include="System.CommandLine" Version="0.1.0-e160908-1" />
     <PackageReference Include="System.Xml.XmlDocument" Version="4.3.0" />
-    <PackageReference Include="Mono.Cecil" Version="0.10.0-beta2" />
+    <PackageReference Include="OpenTK.NETCore" Version="1.1.2287.6424" />
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.3.0" />
   </ItemGroup>
 </Project>
