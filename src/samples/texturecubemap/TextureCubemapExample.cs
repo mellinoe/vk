@@ -489,18 +489,18 @@ namespace Vk.Samples
             var bufferInfo = uniformBuffers_object.descriptor;
             FixedArray2<VkWriteDescriptorSet> writeDescriptorSets = new FixedArray2<VkWriteDescriptorSet>
             (
-            // Binding 0 : Vertex shader uniform buffer
-            Initializers.writeDescriptorSet(
-                descriptorSets_object,
-                VkDescriptorType.UniformBuffer,
-                0,
-                &bufferInfo),
-            // Binding 1 : Fragment shader cubemap sampler
-            Initializers.writeDescriptorSet(
-                descriptorSets_object,
-                 VkDescriptorType.CombinedImageSampler,
-                1,
-                &textureDescriptor));
+                // Binding 0 : Vertex shader uniform buffer
+                Initializers.writeDescriptorSet(
+                    descriptorSets_object,
+                    VkDescriptorType.UniformBuffer,
+                    0,
+                    &bufferInfo),
+                // Binding 1 : Fragment shader cubemap sampler
+                Initializers.writeDescriptorSet(
+                    descriptorSets_object,
+                     VkDescriptorType.CombinedImageSampler,
+                    1,
+                    &textureDescriptor));
 
             vkUpdateDescriptorSets(Device, writeDescriptorSets.Count, ref writeDescriptorSets.First, 0, null);
 
@@ -659,7 +659,7 @@ namespace Vk.Samples
             uboVS.model = Matrix4x4.CreateRotationZ(Util.DegreesToRadians(rotation.Z)) * uboVS.model;
 
             local = uboVS;
-            Unsafe.CopyBlock(uniformBuffers_object.mapped, &local, (uint)sizeof(UboVS));
+            Unsafe.CopyBlock(uniformBuffers_skybox.mapped, &local, (uint)sizeof(UboVS));
         }
 
         void draw()
