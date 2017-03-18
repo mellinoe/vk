@@ -68,9 +68,9 @@ namespace Vk.Samples
         float timerSpeed = 0.25f;
 
         protected float zoom;
-        private float zoomSpeed = 50f;
+        protected float zoomSpeed = 50f;
         protected Vector3 rotation;
-        private float rotationSpeed = 1f;
+        protected float rotationSpeed = 1f;
         protected Vector3 cameraPos = new Vector3();
         protected Vector2 mousePos;
 
@@ -268,7 +268,7 @@ namespace Vk.Samples
 
         private void OnKeyDown(object sender, KeyboardKeyEventArgs e)
         {
-            if (e.Key == Key.F4 && e.Alt)
+            if (e.Key == Key.F4 && e.Alt || e.Key == Key.Escape)
             {
                 NativeWindow.Close();
             }
@@ -555,7 +555,7 @@ namespace Vk.Samples
             Util.CheckResult(vkCreateCommandPool(Device, &cmdPoolInfo, null, out _cmdPool));
         }
 
-        private void CreateCommandBuffers()
+        protected void CreateCommandBuffers()
         {
             // Create one command buffer for each swap chain image and reuse for rendering
             DrawCmdBuffers.Resize(Swapchain.ImageCount);
@@ -565,6 +565,23 @@ namespace Vk.Samples
                 Initializers.CommandBufferAllocateInfo(CmdPool, VkCommandBufferLevel.Primary, DrawCmdBuffers.Count);
 
             Util.CheckResult(vkAllocateCommandBuffers(Device, ref cmdBufAllocateInfo, (VkCommandBuffer*)DrawCmdBuffers.Data));
+        }
+
+        protected bool CheckCommandBuffers()
+        {
+            foreach (var cmdBuffer in DrawCmdBuffers)
+            {
+                if (cmdBuffer == NullHandle)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        protected void DestroyCommandBuffers()
+        {
+            vkFreeCommandBuffers(Device, CmdPool, DrawCmdBuffers.Count, DrawCmdBuffers.Data);
         }
 
         protected virtual void SetupDepthStencil()
@@ -712,7 +729,7 @@ namespace Vk.Samples
 
             // Command buffers need to be recreated as they may store
             // references to the recreated frame buffer
-            // destroyCommandBuffers();
+            DestroyCommandBuffers();
             CreateCommandBuffers();
             buildCommandBuffers();
 

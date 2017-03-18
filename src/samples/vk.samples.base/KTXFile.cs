@@ -13,13 +13,13 @@ namespace Vk.Samples
     {
         public KtxHeader Header { get; }
         public KtxKeyValuePair[] KeyValuePairs { get; }
-        public KtxMipmap[] Mipmaps { get; }
+        public KtxFace[] Faces { get; }
 
-        public KtxFile(KtxHeader header, KtxKeyValuePair[] keyValuePairs, KtxMipmap[] mipmaps)
+        public KtxFile(KtxHeader header, KtxKeyValuePair[] keyValuePairs, KtxFace[] faces)
         {
             Header = header;
             KeyValuePairs = keyValuePairs;
-            Mipmaps = mipmaps;
+            Faces = faces;
         }
 
         public static KtxFile Load(Stream s, bool readKeyValuePairs)
@@ -48,22 +48,34 @@ namespace Vk.Samples
                     br.BaseStream.Seek(header.BytesOfKeyValueData, SeekOrigin.Current); // Skip over header data.
                 }
 
-                List<KtxMipmap> mipmaps = new List<KtxMipmap>();
+                uint numberOfFaces = Math.Max(1, header.NumberOfFaces);
+                List<KtxFace> faces = new List<KtxFace>((int)numberOfFaces);
+                for (int i = 0; i < numberOfFaces; i++)
+                {
+                    faces.Add(new KtxFace(header.NumberOfMipmapLevels));
+                }
                 for (uint mipLevel = 0; mipLevel < header.NumberOfMipmapLevels; mipLevel++)
                 {
                     uint imageSize = br.ReadUInt32();
-                    if (header.NumberOfFaces != 1)
+                    // For cubemap textures, imageSize is actually the size of an individual face.
+                    bool isCubemap = header.NumberOfFaces == 6 && header.NumberOfArrayElements == 0;
+                    for (uint face = 0; face < numberOfFaces; face++)
                     {
-                        throw new NotImplementedException();
+                        byte[] faceData = br.ReadBytes((int)imageSize);
+                        faces[(int)face].Mipmaps[mipLevel] = new KtxMipmap(imageSize, faceData, header.PixelWidth / (uint)(Math.Pow(2, mipLevel)), header.PixelHeight / (uint)(Math.Pow(2, mipLevel)));
+                        uint cubePadding = 0u;
+                        if (isCubemap)
+                        {
+                            cubePadding = 3 - ((imageSize + 3) % 4);
+                        }
+                        br.BaseStream.Seek(cubePadding, SeekOrigin.Current);
                     }
-                    byte[] mipmapData = br.ReadBytes((int)imageSize);
-                    mipmaps.Add(new KtxMipmap(imageSize, mipmapData, header.PixelWidth / (uint)(Math.Pow(2, mipLevel)), header.PixelHeight / (uint)(Math.Pow(2, mipLevel))));
 
                     uint mipPaddingBytes = 3 - ((imageSize + 3) % 4);
                     br.BaseStream.Seek(mipPaddingBytes, SeekOrigin.Current);
                 }
 
-                return new KtxFile(header, kvps, mipmaps.ToArray());
+                return new KtxFile(header, kvps, faces.ToArray());
             }
         }
 
@@ -124,9 +136,14 @@ namespace Vk.Samples
         public ulong GetTotalSize()
         {
             ulong totalSize = 0;
-            foreach (KtxMipmap mipmap in Mipmaps)
+
+            for (int mipLevel = 0; mipLevel < Header.NumberOfMipmapLevels; mipLevel++)
             {
-                totalSize += mipmap.SizeInBytes;
+                for (int face = 0; face < Header.NumberOfFaces; face++)
+                {
+                    KtxMipmap mipmap = Faces[face].Mipmaps[mipLevel];
+                    totalSize += mipmap.SizeInBytes;
+                }
             }
 
             return totalSize;
@@ -136,10 +153,14 @@ namespace Vk.Samples
         {
             byte[] result = new byte[GetTotalSize()];
             uint start = 0;
-            foreach (KtxMipmap mipmap in Mipmaps)
+            for (int face = 0; face < Header.NumberOfFaces; face++)
             {
-                mipmap.Data.CopyTo(result, (int)start);
-                start += mipmap.SizeInBytes;
+                for (int mipLevel = 0; mipLevel < Header.NumberOfMipmapLevels; mipLevel++)
+                {
+                    KtxMipmap mipmap = Faces[face].Mipmaps[mipLevel];
+                    mipmap.Data.CopyTo(result, (int)start);
+                    start += mipmap.SizeInBytes;
+                }
             }
 
             return result;
@@ -173,6 +194,28 @@ namespace Vk.Samples
         public readonly uint NumberOfFaces;
         public readonly uint NumberOfMipmapLevels;
         public readonly uint BytesOfKeyValueData;
+    }
+
+    public class KtxFace
+    {
+        public uint Width { get; set; }
+        public uint Height { get; set; }
+        public uint NumberOfMipmapLevels { get; }
+        public KtxMipmap[] Mipmaps { get; }
+
+        public KtxFace(uint width, uint height, uint numberOfMipmapLevels, KtxMipmap[] mipmaps)
+        {
+            Width = width;
+            Height = height;
+            NumberOfMipmapLevels = numberOfMipmapLevels;
+            Mipmaps = mipmaps;
+        }
+
+        public KtxFace(uint numberOfMipmapLevels)
+        {
+            NumberOfMipmapLevels = numberOfMipmapLevels;
+            Mipmaps = new KtxMipmap[numberOfMipmapLevels];
+        }
     }
 
     public class KtxMipmap

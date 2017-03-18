@@ -246,14 +246,14 @@ namespace Vk.Samples
                     bufferCopyRegion.imageSubresource.mipLevel = i;
                     bufferCopyRegion.imageSubresource.baseArrayLayer = 0;
                     bufferCopyRegion.imageSubresource.layerCount = 1;
-                    bufferCopyRegion.imageExtent.width = tex2D.Mipmaps[i].Width;
-                    bufferCopyRegion.imageExtent.height = tex2D.Mipmaps[i].Height;
+                    bufferCopyRegion.imageExtent.width = tex2D.Faces[0].Mipmaps[i].Width;
+                    bufferCopyRegion.imageExtent.height = tex2D.Faces[0].Mipmaps[i].Height;
                     bufferCopyRegion.imageExtent.depth = 1;
                     bufferCopyRegion.bufferOffset = offset;
 
                     bufferCopyRegions.Add(bufferCopyRegion);
 
-                    offset += tex2D.Mipmaps[i].SizeInBytes;
+                    offset += tex2D.Faces[0].Mipmaps[i].SizeInBytes;
                 }
 
                 // Create optimal tiled target image

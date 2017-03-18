@@ -24,6 +24,8 @@ namespace Vk.Samples
     {
         public List<VertexComponent> Components { get; } = new List<VertexComponent>();
 
+        public vksVertexLayout(params VertexComponent[] components) { Components = new List<VertexComponent>(components); }
+
         public uint GetStride()
         {
             uint result = 0;

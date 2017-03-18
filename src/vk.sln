@@ -23,6 +23,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pipelines", "samples\pipeli
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "texture", "samples\texture\texture.csproj", "{DB543F36-B4AF-491F-83B2-B07F43C0A64A}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "texturecubemap", "samples\texturecubemap\texturecubemap.csproj", "{A324DBCD-9184-4567-B76A-DA7223BBAF7B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -129,6 +131,18 @@ Global
 		{DB543F36-B4AF-491F-83B2-B07F43C0A64A}.Release|x64.Build.0 = Release|Any CPU
 		{DB543F36-B4AF-491F-83B2-B07F43C0A64A}.Release|x86.ActiveCfg = Release|Any CPU
 		{DB543F36-B4AF-491F-83B2-B07F43C0A64A}.Release|x86.Build.0 = Release|Any CPU
+		{A324DBCD-9184-4567-B76A-DA7223BBAF7B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A324DBCD-9184-4567-B76A-DA7223BBAF7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A324DBCD-9184-4567-B76A-DA7223BBAF7B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A324DBCD-9184-4567-B76A-DA7223BBAF7B}.Debug|x64.Build.0 = Debug|Any CPU
+		{A324DBCD-9184-4567-B76A-DA7223BBAF7B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A324DBCD-9184-4567-B76A-DA7223BBAF7B}.Debug|x86.Build.0 = Debug|Any CPU
+		{A324DBCD-9184-4567-B76A-DA7223BBAF7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A324DBCD-9184-4567-B76A-DA7223BBAF7B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A324DBCD-9184-4567-B76A-DA7223BBAF7B}.Release|x64.ActiveCfg = Release|Any CPU
+		{A324DBCD-9184-4567-B76A-DA7223BBAF7B}.Release|x64.Build.0 = Release|Any CPU
+		{A324DBCD-9184-4567-B76A-DA7223BBAF7B}.Release|x86.ActiveCfg = Release|Any CPU
+		{A324DBCD-9184-4567-B76A-DA7223BBAF7B}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -139,5 +153,6 @@ Global
 		{6CAF233D-FA8D-4D67-AF9C-7F7995349ED6} = {2B0FDFF4-F2C0-4A0C-AA8B-1BFACE57E32C}
 		{45170DDE-AA94-43D4-A45A-69A01D901310} = {2B0FDFF4-F2C0-4A0C-AA8B-1BFACE57E32C}
 		{DB543F36-B4AF-491F-83B2-B07F43C0A64A} = {2B0FDFF4-F2C0-4A0C-AA8B-1BFACE57E32C}
+		{A324DBCD-9184-4567-B76A-DA7223BBAF7B} = {2B0FDFF4-F2C0-4A0C-AA8B-1BFACE57E32C}
 	EndGlobalSection
 EndGlobal

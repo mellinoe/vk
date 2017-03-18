@@ -378,5 +378,13 @@ namespace Vk.Samples
 			return descriptorSetAllocateInfo;
 		}
 
-}
+        public static VkDescriptorImageInfo descriptorImageInfo(VkSampler sampler, VkImageView imageView, VkImageLayout imageLayout)
+        {
+            VkDescriptorImageInfo descriptorImageInfo = new VkDescriptorImageInfo();
+            descriptorImageInfo.sampler = sampler;
+            descriptorImageInfo.imageView = imageView;
+            descriptorImageInfo.imageLayout = imageLayout;
+            return descriptorImageInfo;
+        }
+    }
 }
