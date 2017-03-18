@@ -280,6 +280,68 @@ namespace Vk.Samples
             return buffer.bind();
         }
 
+        /**
+        * Create a buffer on the device
+        *
+        * @param usageFlags Usage flag bitmask for the buffer (i.e. index, vertex, uniform buffer)
+        * @param memoryPropertyFlags Memory properties for this buffer (i.e. device local, host visible, coherent)
+        * @param size Size of the buffer in byes
+        * @param buffer Pointer to the buffer handle acquired by the function
+        * @param memory Pointer to the memory handle acquired by the function
+        * @param data Pointer to the data that should be copied to the buffer after creation (optional, if not set, no data is copied over)
+        *
+        * @return VK_SUCCESS if buffer handle and memory have been created and (optionally passed) data has been copied
+        */
+        public VkResult createBuffer(VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags, ulong size, VkBuffer* buffer, VkDeviceMemory* memory, void* data = null)
+        {
+            // Create the buffer handle
+            VkBufferCreateInfo bufferCreateInfo = Initializers.bufferCreateInfo(usageFlags, size);
+            bufferCreateInfo.sharingMode = VkSharingMode.Exclusive;
+            Util.CheckResult(vkCreateBuffer(LogicalDevice, &bufferCreateInfo, null, buffer));
+
+            // Create the memory backing up the buffer handle
+            VkMemoryRequirements memReqs;
+            VkMemoryAllocateInfo memAlloc = Initializers.memoryAllocateInfo();
+            vkGetBufferMemoryRequirements(LogicalDevice, *buffer, &memReqs);
+            memAlloc.allocationSize = memReqs.size;
+            // Find a memory type index that fits the properties of the buffer
+            memAlloc.memoryTypeIndex = GetMemoryType(memReqs.memoryTypeBits, memoryPropertyFlags);
+            Util.CheckResult(vkAllocateMemory(LogicalDevice, &memAlloc, null, memory));
+
+            // If a pointer to the buffer data has been passed, map the buffer and copy over the data
+            if (data != null)
+            {
+                void* mapped;
+                Util.CheckResult(vkMapMemory(LogicalDevice, *memory, 0, size, 0, &mapped));
+                Unsafe.CopyBlock(mapped, data, (uint)size);
+                // If host coherency hasn't been requested, do a manual flush to make writes visible
+                if ((memoryPropertyFlags & VkMemoryPropertyFlags.HostCoherent) == 0)
+                {
+                    VkMappedMemoryRange mappedRange = Initializers.mappedMemoryRange();
+                    mappedRange.memory = *memory;
+                    mappedRange.offset = 0;
+                    mappedRange.size = size;
+                    vkFlushMappedMemoryRanges(LogicalDevice, 1, &mappedRange);
+                }
+                vkUnmapMemory(LogicalDevice, *memory);
+            }
+
+            // Attach the memory to the buffer object
+            Util.CheckResult(vkBindBufferMemory(LogicalDevice, *buffer, *memory, 0));
+
+            return VkResult.Success;
+        }
+
+        public VkResult createBuffer(VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags, ulong size, out VkBuffer buffer, out VkDeviceMemory memory, void* data = null)
+        {
+            VkBuffer b;
+            VkDeviceMemory dm;
+            VkResult result = createBuffer(usageFlags, memoryPropertyFlags, size, &b, &dm, data);
+            buffer = b;
+            memory = dm;
+            return result;
+        }
+
         public VkCommandBuffer createCommandBuffer(VkCommandBufferLevel level, bool begin = false)
         {
             VkCommandBufferAllocateInfo cmdBufAllocateInfo = VkCommandBufferAllocateInfo.New();

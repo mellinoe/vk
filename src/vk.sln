@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26228.9
+VisualStudioVersion = 15.0.26228.4
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "vk", "vk\vk.csproj", "{D8573039-9FE1-4554-A659-4E77CFBA83C1}"
 EndProject
@@ -24,6 +24,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "texture", "samples\texture\texture.csproj", "{DB543F36-B4AF-491F-83B2-B07F43C0A64A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "texturecubemap", "samples\texturecubemap\texturecubemap.csproj", "{A324DBCD-9184-4567-B76A-DA7223BBAF7B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mesh", "samples\mesh\mesh.csproj", "{57986356-88D2-497B-8D29-670CA6BD82CC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -143,6 +145,18 @@ Global
 		{A324DBCD-9184-4567-B76A-DA7223BBAF7B}.Release|x64.Build.0 = Release|Any CPU
 		{A324DBCD-9184-4567-B76A-DA7223BBAF7B}.Release|x86.ActiveCfg = Release|Any CPU
 		{A324DBCD-9184-4567-B76A-DA7223BBAF7B}.Release|x86.Build.0 = Release|Any CPU
+		{57986356-88D2-497B-8D29-670CA6BD82CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57986356-88D2-497B-8D29-670CA6BD82CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57986356-88D2-497B-8D29-670CA6BD82CC}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{57986356-88D2-497B-8D29-670CA6BD82CC}.Debug|x64.Build.0 = Debug|Any CPU
+		{57986356-88D2-497B-8D29-670CA6BD82CC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{57986356-88D2-497B-8D29-670CA6BD82CC}.Debug|x86.Build.0 = Debug|Any CPU
+		{57986356-88D2-497B-8D29-670CA6BD82CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57986356-88D2-497B-8D29-670CA6BD82CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57986356-88D2-497B-8D29-670CA6BD82CC}.Release|x64.ActiveCfg = Release|Any CPU
+		{57986356-88D2-497B-8D29-670CA6BD82CC}.Release|x64.Build.0 = Release|Any CPU
+		{57986356-88D2-497B-8D29-670CA6BD82CC}.Release|x86.ActiveCfg = Release|Any CPU
+		{57986356-88D2-497B-8D29-670CA6BD82CC}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -154,5 +168,6 @@ Global
 		{45170DDE-AA94-43D4-A45A-69A01D901310} = {2B0FDFF4-F2C0-4A0C-AA8B-1BFACE57E32C}
 		{DB543F36-B4AF-491F-83B2-B07F43C0A64A} = {2B0FDFF4-F2C0-4A0C-AA8B-1BFACE57E32C}
 		{A324DBCD-9184-4567-B76A-DA7223BBAF7B} = {2B0FDFF4-F2C0-4A0C-AA8B-1BFACE57E32C}
+		{57986356-88D2-497B-8D29-670CA6BD82CC} = {2B0FDFF4-F2C0-4A0C-AA8B-1BFACE57E32C}
 	EndGlobalSection
 EndGlobal

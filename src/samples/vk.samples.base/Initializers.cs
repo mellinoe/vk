@@ -85,6 +85,16 @@ namespace Vk.Samples
             return pipelineColorBlendAttachmentState;
         }
 
+        public static VkPipelineColorBlendAttachmentState pipelineColorBlendAttachmentState(
+            uint colorWriteMask,
+            uint blendEnable)
+        {
+            VkPipelineColorBlendAttachmentState pipelineColorBlendAttachmentState = new VkPipelineColorBlendAttachmentState();
+            pipelineColorBlendAttachmentState.colorWriteMask = (VkColorComponentFlags)colorWriteMask;
+            pipelineColorBlendAttachmentState.blendEnable = blendEnable;
+            return pipelineColorBlendAttachmentState;
+        }
+
         public static VkPipelineColorBlendStateCreateInfo pipelineColorBlendStateCreateInfo(
             uint attachmentCount,
              VkPipelineColorBlendAttachmentState* pAttachments)
@@ -264,6 +274,16 @@ namespace Vk.Samples
             return bufCreateInfo;
         }
 
+        public static VkBufferCreateInfo bufferCreateInfo(
+            VkBufferUsageFlags usage,
+            ulong size)
+        {
+            VkBufferCreateInfo bufCreateInfo = VkBufferCreateInfo.New();
+            bufCreateInfo.usage = usage;
+            bufCreateInfo.size = size;
+            return bufCreateInfo;
+        }
+
         public static VkSamplerCreateInfo samplerCreateInfo()
         {
             VkSamplerCreateInfo samplerCreateInfo = VkSamplerCreateInfo.New();
@@ -356,27 +376,33 @@ namespace Vk.Samples
             return descriptorSetLayoutCreateInfo;
         }
 
-        public static  VkPipelineLayoutCreateInfo pipelineLayoutCreateInfo(
+        public static VkPipelineLayoutCreateInfo pipelineLayoutCreateInfo(
             VkDescriptorSetLayout* pSetLayouts,
             uint setLayoutCount = 1)
-		{
+        {
             VkPipelineLayoutCreateInfo pipelineLayoutCreateInfo = VkPipelineLayoutCreateInfo.New();
-			pipelineLayoutCreateInfo.setLayoutCount = setLayoutCount;
-			pipelineLayoutCreateInfo.pSetLayouts = pSetLayouts;
-			return pipelineLayoutCreateInfo;
-		}
+            pipelineLayoutCreateInfo.setLayoutCount = setLayoutCount;
+            pipelineLayoutCreateInfo.pSetLayouts = pSetLayouts;
+            return pipelineLayoutCreateInfo;
+        }
 
-        public static  VkDescriptorSetAllocateInfo descriptorSetAllocateInfo(
+        public static VkMappedMemoryRange mappedMemoryRange()
+        {
+            VkMappedMemoryRange mappedMemoryRange = VkMappedMemoryRange.New();
+            return mappedMemoryRange;
+        }
+
+        public static VkDescriptorSetAllocateInfo descriptorSetAllocateInfo(
             VkDescriptorPool descriptorPool,
             VkDescriptorSetLayout* pSetLayouts,
             uint descriptorSetCount)
-		{
+        {
             VkDescriptorSetAllocateInfo descriptorSetAllocateInfo = VkDescriptorSetAllocateInfo.New();
             descriptorSetAllocateInfo.descriptorPool = descriptorPool;
-			descriptorSetAllocateInfo.pSetLayouts = pSetLayouts;
-			descriptorSetAllocateInfo.descriptorSetCount = descriptorSetCount;
-			return descriptorSetAllocateInfo;
-		}
+            descriptorSetAllocateInfo.pSetLayouts = pSetLayouts;
+            descriptorSetAllocateInfo.descriptorSetCount = descriptorSetCount;
+            return descriptorSetAllocateInfo;
+        }
 
         public static VkDescriptorImageInfo descriptorImageInfo(VkSampler sampler, VkImageView imageView, VkImageLayout imageLayout)
         {
