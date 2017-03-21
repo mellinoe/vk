@@ -1,4 +1,17 @@
-﻿using System;
+﻿// This code has been adapted from the "Vulkan" C++ example repository, by Sascha Willems: https://github.com/SaschaWillems/Vulkan
+// It is a direct translation from the original C++ code and style, with as little transformation as possible.
+
+// Original file: pipelines/pipelines.cpp, 
+
+/*
+* Vulkan Example base class
+*
+* Copyright (C) 2016 by Sascha Willems - www.saschawillems.de
+*
+* This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
+*/
+
+using System;
 using System.IO;
 using System.Numerics;
 using System.Runtime.CompilerServices;

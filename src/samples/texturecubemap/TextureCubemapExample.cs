@@ -1,4 +1,17 @@
-﻿using OpenTK.Input;
+﻿// This code has been adapted from the "Vulkan" C++ example repository, by Sascha Willems: https://github.com/SaschaWillems/Vulkan
+// It is a direct translation from the original C++ code and style, with as little transformation as possible.
+
+// Original file: texturecubemap/texturecubemap.cpp, 
+
+/*
+* Vulkan Example base class
+*
+* Copyright (C) 2016 by Sascha Willems - www.saschawillems.de
+*
+* This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
+*/
+
+using OpenTK.Input;
 using System;
 using System.Collections.Generic;
 using System.IO;
