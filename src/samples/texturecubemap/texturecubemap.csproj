@@ -58,6 +58,7 @@
   <ItemGroup>
     <ProjectReference Include="../../vk/vk.csproj" />
     <ProjectReference Include="../vk.samples.base/vk.samples.base.csproj" />
+    <ProjectReference Include="..\..\..\ext\veldrid.collections\src\Veldrid.Collections\Veldrid.Collections.csproj" />
     <PackageReference Include="Microsoft.NETCore.App" Version="1.1.0" />
     <PackageReference Include="Microsoft.NETCore.DotNetHostPolicy" Version="1.1.0" />
     <PackageReference Include="Microsoft.NETCore.Runtime.CoreCLR" Version="1.1.0" />

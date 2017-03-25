@@ -22,6 +22,7 @@ using static Vulkan.VulkanNative;
 using OpenTK.Input;
 using System.Numerics;
 using System.IO;
+using Veldrid.Collections;
 
 namespace Vk.Samples
 {
@@ -71,14 +72,14 @@ namespace Vk.Samples
         private bool viewUpdated;
         private int frameCounter;
         private float frameTimer;
-        private bool paused = false;
+        protected bool paused = false;
         protected bool prepared;
 
         // Defines a frame rate independent timer value clamped from -1.0...1.0
         // For use in animations, rotations, etc.
-        float timer = 0.0f;
+        protected float timer = 0.0f;
         // Multiplier for speeding up (or slowing down) the global timer
-        float timerSpeed = 0.25f;
+        protected float timerSpeed = 0.25f;
 
         protected float zoom;
         protected float zoomSpeed = 50f;

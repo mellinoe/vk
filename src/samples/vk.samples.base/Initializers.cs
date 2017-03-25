@@ -12,6 +12,7 @@
 */
 
 using System;
+using Veldrid.Collections;
 using Vulkan;
 using static Vulkan.VulkanNative;
 
@@ -424,6 +425,18 @@ namespace Vk.Samples
             descriptorImageInfo.imageView = imageView;
             descriptorImageInfo.imageLayout = imageLayout;
             return descriptorImageInfo;
+        }
+
+        public static VkPushConstantRange pushConstantRange(
+            VkShaderStageFlags stageFlags,
+            uint size,
+            uint offset)
+        {
+            VkPushConstantRange pushConstantRange = new VkPushConstantRange();
+            pushConstantRange.stageFlags = stageFlags;
+            pushConstantRange.offset = offset;
+            pushConstantRange.size = size;
+            return pushConstantRange;
         }
     }
 }

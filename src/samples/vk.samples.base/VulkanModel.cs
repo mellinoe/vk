@@ -18,6 +18,7 @@ using System.Numerics;
 using Vulkan;
 using System.Collections.Generic;
 using static Vulkan.VulkanNative;
+using Veldrid.Collections;
 
 namespace Vk.Samples
 {
@@ -39,6 +40,7 @@ namespace Vk.Samples
 
         public vksVertexLayout(params VertexComponent[] components) { Components = new List<VertexComponent>(components); }
 
+        public uint stride() => GetStride();
         public uint GetStride()
         {
             uint result = 0;
