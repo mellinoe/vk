@@ -1,16 +1,24 @@
 ﻿// This code has been adapted from the "Vulkan" C++ example repository, by Sascha Willems: https://github.com/SaschaWillems/Vulkan
 // It is a direct translation from the original C++ code and style, with as little transformation as possible.
 
-// Original file: specializationconstants/specializationconstants.cpp
+// Original file: dynamicuniformbuffer/dynamicuniformbuffer.cpp
 
 /*
-* Vulkan Example - Shader specialization constants
-*
-* For details see https://www.khronos.org/registry/vulkan/specs/misc/GL_KHR_vulkan_glsl.txt
+* Vulkan Example - Dynamic uniform buffers
 *
 * Copyright (C) 2016 by Sascha Willems - www.saschawillems.de
 *
 * This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
+*
+* Summary:
+* Demonstrates the use of dynamic uniform buffers.
+*
+* Instead of using one uniform buffer per-object, this example allocates one big uniform buffer
+* with respect to the alignment reported by the device via minUniformBufferOffsetAlignment that
+* contains all matrices for the objects in the scene.
+*
+* The used descriptor type VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC then allows to set a dynamic
+* offset used to pass data from the single uniform buffer to the connected shader binding point.
 */
 
 using System;
