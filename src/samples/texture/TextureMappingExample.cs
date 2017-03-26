@@ -4,7 +4,7 @@
 // Original file: texture/texture.cpp, 
 
 /*
-* Vulkan Example base class
+* Vulkan Example - Texture loading (and display) example (including mip maps)
 *
 * Copyright (C) 2016 by Sascha Willems - www.saschawillems.de
 *

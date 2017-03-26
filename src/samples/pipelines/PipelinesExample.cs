@@ -4,7 +4,7 @@
 // Original file: pipelines/pipelines.cpp, 
 
 /*
-* Vulkan Example base class
+* Vulkan Example - Using different pipelines in one single renderpass
 *
 * Copyright (C) 2016 by Sascha Willems - www.saschawillems.de
 *

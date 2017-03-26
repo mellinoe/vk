@@ -4,7 +4,7 @@
 // Original file: texturecubemap/texturecubemap.cpp, 
 
 /*
-* Vulkan Example base class
+* Vulkan Example - Cube map texture loading and displaying
 *
 * Copyright (C) 2016 by Sascha Willems - www.saschawillems.de
 *

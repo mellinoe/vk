@@ -4,7 +4,7 @@
 // Original file: mesh/mesh.cpp, 
 
 /*
-* Vulkan Example base class
+* Vulkan Example - Model loading and rendering
 *
 * Copyright (C) 2016 by Sascha Willems - www.saschawillems.de
 *
