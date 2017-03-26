@@ -32,18 +32,18 @@ namespace Vk.Samples
 
             transM = Matrix4x4.CreateTranslation(position);
 
-            if (type == CameraType.firstperson)
+            //if (type == CameraType.firstperson)
             {
                 matrices_view = rotM * transM;
             }
-            else
-            {
-                matrices_view = transM * rotM;
-            }
+            //else
+            //{
+            //    matrices_view = transM * rotM;
+            //}
         }
 
-        enum CameraType { lookat, firstperson }
-        CameraType type = CameraType.lookat;
+        public enum CameraType { lookat, firstperson }
+        public CameraType type = CameraType.lookat;
 
         Vector3 rotation = new Vector3();
         Vector3 position = new Vector3();
@@ -51,8 +51,8 @@ namespace Vk.Samples
         public float rotationSpeed = 1.0f;
         public float movementSpeed = 1.0f;
 
-        Matrix4x4 matrices_perspective;
-        Matrix4x4 matrices_view;
+        public Matrix4x4 matrices_perspective;
+        public Matrix4x4 matrices_view;
 
         bool keys_left = false;
         bool keys_right = false;

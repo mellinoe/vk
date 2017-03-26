@@ -43,8 +43,8 @@ namespace Vk.Samples
         public VulkanSwapchain Swapchain { get; } = new VulkanSwapchain();
         public IntPtr Window { get; protected set; }
         public VkCommandPool CmdPool => _cmdPool;
-        public uint Width { get; protected set; }
-        public uint Height { get; protected set; }
+        public uint Width { get; protected set; } = 1280;
+        public uint Height { get; protected set; } = 720;
         public NativeList<VkCommandBuffer> DrawCmdBuffers { get; protected set; } = new NativeList<VkCommandBuffer>();
         public VkRenderPass RenderPass => _renderPass;
         public VkPipelineCache PipelineCache => _pipelineCache;
