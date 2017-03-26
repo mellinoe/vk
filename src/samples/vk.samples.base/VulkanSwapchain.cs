@@ -65,7 +65,7 @@ namespace Vk.Samples
                 // Iterate over each queue to learn whether it supports presenting:
                 // Find a queue with present support
                 // Will be used to present the swap chain Images to the windowing system
-                uint* supportsPresent = stackalloc uint[(int)queueCount];
+                VkBool32* supportsPresent = stackalloc VkBool32[(int)queueCount];
 
                 for (uint i = 0; i < queueCount; i++)
                 {

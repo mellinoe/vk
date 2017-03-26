@@ -39,5 +39,17 @@ namespace Vk.Generator
 
             return name;
         }
+        public static void SpaceSeparatedList<T>(CsCodeWriter cw, IList<T> list, Action<T> action)
+        {
+            for (int i = 0; i < list.Count; i++)
+            {
+                var item = list[i];
+                action(item);
+                if (i != list.Count - 1)
+                {
+                    cw.WriteLine();
+                }
+            }
+        }
     }
 }

@@ -32,7 +32,7 @@ namespace Vk.Generator
 
                     using (cw.PushBlock("namespace Vulkan"))
                     {
-                        SpaceSeparatedList(cw, spec.Structures, structure =>
+                        Util.SpaceSeparatedList(cw, spec.Structures, structure =>
                         {
                             StructureHelpers.WriteStructure(cw, structure, tnm, spec.Constants);
                         });
@@ -53,7 +53,7 @@ namespace Vk.Generator
 
                     using (cw.PushBlock("namespace Vulkan"))
                     {
-                        SpaceSeparatedList(cw, spec.Enums, enumDef =>
+                        Util.SpaceSeparatedList(cw, spec.Enums, enumDef =>
                         {
                             EnumHelpers.WriteEnum(cw, enumDef, tnm);
                         });
@@ -79,14 +79,7 @@ namespace Vk.Generator
                     using (cw.PushBlock("namespace Vulkan"))
                     using (cw.PushBlock("public static unsafe partial class VulkanNative"))
                     {
-                        SpaceSeparatedList(cw, spec.Constants, constant =>
-                        {
-                            ConstantHelpers.WriteConstant(cw, tnm, constant);
-                        });
-
-                        cw.WriteLine();
-
-                        SpaceSeparatedList(cw, allCommandsWithVariants, command =>
+                        Util.SpaceSeparatedList(cw, allCommandsWithVariants, command =>
                         {
                             CommandHelpers.WriteCommand(cw, tnm, command);
                         });
@@ -133,7 +126,7 @@ namespace Vk.Generator
 
                     using (cw.PushBlock("namespace Vulkan"))
                     {
-                        SpaceSeparatedList(cw, spec.Handles, handle =>
+                        Util.SpaceSeparatedList(cw, spec.Handles, handle =>
                         {
                             HandleHelpers.WriteHandle(cw, handle);
                         });
@@ -154,10 +147,27 @@ namespace Vk.Generator
 
                     using (cw.PushBlock("namespace Vulkan"))
                     {
-                        SpaceSeparatedList(cw, spec.Unions, union =>
+                        Util.SpaceSeparatedList(cw, spec.Unions, union =>
                         {
                             UnionHelpers.WriteUnion(cw, tnm, union);
                         });
+                    }
+                }
+            }
+
+            using (StreamWriter unionWriter = File.CreateText(Path.Combine(path, "Constants.gen.cs")))
+            {
+                CsCodeWriter cw = new CsCodeWriter(unionWriter);
+                cw.WriteHeader();
+                cw.WriteLine();
+                using (cw.PushIfDef(GetActiveCalliCondition()))
+                {
+                    cw.Using("System.Runtime.InteropServices");
+                    cw.WriteLine();
+
+                    using (cw.PushBlock("namespace Vulkan"))
+                    {
+                        ConstantHelpers.WriteAllConstants(cw, tnm, spec.Constants);
                     }
                 }
             }
@@ -166,19 +176,6 @@ namespace Vk.Generator
         private static string GetActiveCalliCondition()
         {
             return Configuration.GenerateCalliStubs ? "CALLI_STUBS" : "!CALLI_STUBS";
-        }
-
-        private static void SpaceSeparatedList<T>(CsCodeWriter cw, IList<T> list, Action<T> action)
-        {
-            for (int i = 0; i < list.Count; i++)
-            {
-                var item = list[i];
-                action(item);
-                if (i != list.Count - 1)
-                {
-                    cw.WriteLine();
-                }
-            }
         }
     }
 

@@ -20,11 +20,13 @@
     <Compile Include="$(GeneratedCodeFolder)\Handles.gen.cs" />
     <Compile Include="$(GeneratedCodeFolder)\Structures.gen.cs" />
     <Compile Include="$(GeneratedCodeFolder)\Unions.gen.cs" />
+    <Compile Include="$(GeneratedCodeFolder)\Constants.gen.cs" />
     <Compile Include="$(GeneratedCalliCodeFolder)\Commands.gen.cs" />
     <Compile Include="$(GeneratedCalliCodeFolder)\Enums.gen.cs" />
     <Compile Include="$(GeneratedCalliCodeFolder)\Handles.gen.cs" />
     <Compile Include="$(GeneratedCalliCodeFolder)\Structures.gen.cs" />
     <Compile Include="$(GeneratedCalliCodeFolder)\Unions.gen.cs" />
+    <Compile Include="$(GeneratedCalliCodeFolder)\Constants.gen.cs" />
     <Compile Include="BindingsHelpers.cs" />
     <Compile Include="CalliRewriteAttribute.cs" />
     <Compile Include="Commands.cs" />
@@ -34,6 +36,7 @@
     <Compile Include="FunctionPointer.cs" />
     <Compile Include="Kernel32.cs" />
     <Compile Include="Libdl.cs" />
+    <Compile Include="VkBool32.cs" />
     <ProjectReference Include="..\vk.generator\vk.generator.csproj">
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>

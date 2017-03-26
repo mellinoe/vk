@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.CommandLine;
+using System.Collections.Generic;
 
 namespace Vk.Generator
 {
@@ -42,9 +43,21 @@ namespace Vk.Generator
                         tnm.AddMapping(typedef.Name, "uint");
                     }
                 }
-                foreach (var baseType in vs.BaseTypes)
+
+                HashSet<string> definedBaseTypes = new HashSet<string>
                 {
-                    tnm.AddMapping(baseType.Key, baseType.Value);
+                    "VkBool32"
+                };
+
+                if (Configuration.MapBaseTypes)
+                {
+                    foreach (var baseType in vs.BaseTypes)
+                    {
+                        if (!definedBaseTypes.Contains(baseType.Key))
+                        {
+                            tnm.AddMapping(baseType.Key, baseType.Value);
+                        }
+                    }
                 }
 
                 CodeGenerator.GenerateCodeFiles(vs, tnm, Configuration.CodeOutputPath);

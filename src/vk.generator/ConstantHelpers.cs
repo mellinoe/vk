@@ -4,14 +4,39 @@ namespace Vk.Generator
 {
     public static class ConstantHelpers
     {
-        public static void WriteConstant(CsCodeWriter cw, TypeNameMappings tnm, ConstantDefinition constant)
+        public static void WriteAllConstants(CsCodeWriter cw, TypeNameMappings tnm, ConstantDefinition[] constants)
         {
-            if (constant.Comment != null)
+            using (cw.PushBlock("public static partial class VulkanNative"))
             {
-                cw.WriteLine($"///<summary>{constant.Comment}</summary>");
+                foreach (ConstantDefinition constant in constants)
+                {
+                    if (constant.Comment != null)
+                    {
+                        cw.WriteLine($"///<summary>{constant.Comment}</summary>");
+                    }
+
+                    cw.WriteLine($"public const {GetCSharpNameForConstantType(constant.Type)} {EnumHelpers.GetPrettyEnumName(constant.Name, "VK_")} = {NormalizeValue(constant.Value)};");
+                }
             }
 
-            cw.WriteLine($"public const {GetCSharpNameForConstantType(constant.Type)} {EnumHelpers.GetPrettyEnumName(constant.Name, "VK_")} = {NormalizeValue(constant.Value)};");
+            cw.WriteLine();
+
+            using (cw.PushBlock("public static partial class RawConstants"))
+            {
+                foreach (ConstantDefinition constant in constants)
+                {
+                    if (constant.Comment != null)
+                    {
+                        cw.WriteLine($"///<summary>{constant.Comment}</summary>");
+                    }
+
+                    cw.WriteLine($"public const {GetCSharpNameForConstantType(constant.Type)} {constant.Name} = VulkanNative.{EnumHelpers.GetPrettyEnumName(constant.Name, "VK_")};");
+                }
+            }
+        }
+
+        public static void WriteConstant(CsCodeWriter cw, TypeNameMappings tnm, ConstantDefinition constant)
+        {
         }
 
         public static string GetCSharpNameForConstantType(ConstantDefinition.ConstantType type)

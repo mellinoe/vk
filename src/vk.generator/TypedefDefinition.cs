@@ -22,5 +22,10 @@ namespace Vk.Generator
             string type = xe.GetTypeElement();
             return new TypedefDefinition(name, requires, type);
         }
+
+        public override string ToString()
+        {
+            return $"{Name}, {Requires} -> {Type}";
+        }
     }
 }
