@@ -41,9 +41,9 @@ namespace Vk.Generator
                 cw.WriteLine("[Flags]");
             }
             string mappedName = tnm.GetMappedName(enumDef.Name);
+            string enumNamePrefix = GetEnumNamePrefix(mappedName);
             using (cw.PushBlock("public enum " + mappedName))
             {
-                string enumNamePrefix = GetEnumNamePrefix(mappedName);
                 if (enumDef.Type == EnumType.Bitmask && !enumDef.Values.Any(ev => GetPrettyEnumName(ev.Name, enumNamePrefix) == "None"))
                 {
                     cw.WriteLine($"None = 0,");
@@ -57,6 +57,20 @@ namespace Vk.Generator
 
                     string prettyName = GetPrettyEnumName(value.Name, enumNamePrefix);
                     cw.WriteLine($"{prettyName} = {value.ValueOrBitPosition},");
+                }
+            }
+
+            using (cw.PushBlock("public static partial class RawConstants"))
+            {
+                foreach (var value in enumDef.Values)
+                {
+                    if (!string.IsNullOrEmpty(value.Comment))
+                    {
+                        cw.WriteLine($"///<summary>{value.Comment}</summary>");
+                    }
+
+                    string prettyName = GetPrettyEnumName(value.Name, enumNamePrefix);
+                    cw.WriteLine($"public const {mappedName} {value.Name} = {mappedName}.{prettyName};");
                 }
             }
         }
@@ -95,7 +109,7 @@ namespace Vk.Generator
             {
                 if (
                         parts[i] == "Flag"
-                    ||  parts[i] == "Flags"
+                    || parts[i] == "Flags"
                     || (parts[i] == "K" && (i + 2) < parts.Count && parts[i + 1] == "H" && parts[i + 2] == "R")
                     || (parts[i] == "A" && (i + 2) < parts.Count && parts[i + 1] == "M" && parts[i + 2] == "D")
                     || (parts[i] == "E" && (i + 2) < parts.Count && parts[i + 1] == "X" && parts[i + 2] == "T")
