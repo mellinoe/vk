@@ -2,18 +2,41 @@
 
 namespace Vulkan
 {
+    /// <summary>
+    /// A boolean value stored in a 4-byte unsigned integer.
+    /// </summary>
     public struct VkBool32 : IEquatable<VkBool32>
     {
+        /// <summary>
+        /// The raw value of the <see cref="VkBool32"/>. A value of 0 represents "false", all other values represent "true".
+        /// </summary>
         public uint Value;
 
+        /// <summary>
+        /// Constructs a new <see cref="VkBool32"/> with the given raw value. 
+        /// </summary>
+        /// <param name="value"></param>
         public VkBool32(uint value)
         {
             Value = value;
         }
 
-        public static VkBool32 True = new VkBool32(1);
-        public static VkBool32 False = new VkBool32(0);
+        /// <summary>
+        /// Represents the boolean "true" value. Has a raw value of 1.
+        /// </summary>
+        public static readonly VkBool32 True = new VkBool32(1);
 
+        /// <summary>
+        /// Represents the boolean "true" value. Has a raw value of 0.
+        /// </summary>
+        public static readonly VkBool32 False = new VkBool32(0);
+
+        /// <summary>
+        /// Returns whether another <see cref="VkBool32"/> value is considered equal to this one.
+        /// Two <see cref="VkBool32"/>s are considered equal when their raw values are equal.
+        /// </summary>
+        /// <param name="other">The value to compare to.</param>
+        /// <returns>True if the other value's underlying raw value is equal to this instance's. False otherwise.</returns>
         public bool Equals(VkBool32 other)
         {
             return Value.Equals(other.Value);
@@ -31,7 +54,7 @@ namespace Vulkan
 
         public override string ToString()
         {
-            return $"{(this ? "true" : "false")} ({Value})";
+            return $"{(this ? "True" : "False")} ({Value})";
         }
 
         public static implicit operator bool(VkBool32 b) => b.Value != 0;
