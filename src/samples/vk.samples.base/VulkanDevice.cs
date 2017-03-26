@@ -26,7 +26,7 @@ namespace Vk.Samples
         public const ulong DEFAULT_FENCE_TIMEOUT = 100000000000;
 
         public VkPhysicalDevice PhysicalDevice { get; private set; }
-        public VkPhysicalDeviceProperties Properties { get; private set; }
+        public VkPhysicalDeviceProperties properties { get; private set; }
         public VkPhysicalDeviceFeatures Features { get; private set; }
         public VkPhysicalDeviceMemoryProperties MemoryProperties { get; private set; }
         public NativeList<VkQueueFamilyProperties> QueueFamilyProperties { get; } = new NativeList<VkQueueFamilyProperties>();
@@ -47,7 +47,7 @@ namespace Vk.Samples
             // Device properties also contain limits and sparse properties
             VkPhysicalDeviceProperties properties;
             vkGetPhysicalDeviceProperties(physicalDevice, out properties);
-            Properties = properties;
+            this.properties = properties;
             // Features should be checked by the examples before using them
             VkPhysicalDeviceFeatures features;
             vkGetPhysicalDeviceFeatures(physicalDevice, out features);
@@ -293,6 +293,9 @@ namespace Vk.Samples
             // Attach the memory to the buffer object
             return buffer.bind();
         }
+
+        public VkResult createBuffer(VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags, vksBuffer buffer, ulong size, IntPtr data)
+            => createBuffer(usageFlags, memoryPropertyFlags, buffer, size, data.ToPointer());
 
         /**
         * Create a buffer on the device

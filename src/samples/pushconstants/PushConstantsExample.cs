@@ -74,10 +74,10 @@ namespace Vk.Samples
         {
             // Clean up used Vulkan resources 
             // Note : Inherited destructor cleans up resources stored in base class
-            vkDestroyPipeline(Device, pipelines_solid, null);
+            vkDestroyPipeline(device, pipelines_solid, null);
 
-            vkDestroyPipelineLayout(Device, pipelineLayout, null);
-            vkDestroyDescriptorSetLayout(Device, descriptorSetLayout, null);
+            vkDestroyPipelineLayout(device, pipelineLayout, null);
+            vkDestroyDescriptorSetLayout(device, descriptorSetLayout, null);
 
             models_scene.destroy();
 
@@ -96,35 +96,35 @@ namespace Vk.Samples
 
         protected override void buildCommandBuffers()
         {
-            VkCommandBufferBeginInfo cmdBufInfo = Initializers.CommandBufferBeginInfo();
+            VkCommandBufferBeginInfo cmdBufInfo = Initializers.commandBufferBeginInfo();
 
             FixedArray2<VkClearValue> clearValues = new FixedArray2<VkClearValue>();
             clearValues.First.color = defaultClearColor;
             clearValues.Second.depthStencil = new VkClearDepthStencilValue { depth = 1.0f, stencil = 0 };
 
             VkRenderPassBeginInfo renderPassBeginInfo = Initializers.renderPassBeginInfo();
-            renderPassBeginInfo.renderPass = RenderPass;
+            renderPassBeginInfo.renderPass = renderPass;
             renderPassBeginInfo.renderArea.offset.x = 0;
             renderPassBeginInfo.renderArea.offset.y = 0;
-            renderPassBeginInfo.renderArea.extent.width = Width;
-            renderPassBeginInfo.renderArea.extent.height = Height;
+            renderPassBeginInfo.renderArea.extent.width = width;
+            renderPassBeginInfo.renderArea.extent.height = height;
             renderPassBeginInfo.clearValueCount = 2;
             renderPassBeginInfo.pClearValues = &clearValues.First;
 
-            for (int i = 0; i < DrawCmdBuffers.Count; ++i)
+            for (int i = 0; i < drawCmdBuffers.Count; ++i)
             {
                 // Set target frame buffer
-                renderPassBeginInfo.framebuffer = Framebuffers[i];
+                renderPassBeginInfo.framebuffer = frameBuffers[i];
 
-                Util.CheckResult(vkBeginCommandBuffer(DrawCmdBuffers[i], &cmdBufInfo));
+                Util.CheckResult(vkBeginCommandBuffer(drawCmdBuffers[i], &cmdBufInfo));
 
-                vkCmdBeginRenderPass(DrawCmdBuffers[i], &renderPassBeginInfo, VkSubpassContents.Inline);
+                vkCmdBeginRenderPass(drawCmdBuffers[i], &renderPassBeginInfo, VkSubpassContents.Inline);
 
-                VkViewport viewport = Initializers.viewport((float)Width, (float)Height, 0.0f, 1.0f);
-                vkCmdSetViewport(DrawCmdBuffers[i], 0, 1, &viewport);
+                VkViewport viewport = Initializers.viewport((float)width, (float)height, 0.0f, 1.0f);
+                vkCmdSetViewport(drawCmdBuffers[i], 0, 1, &viewport);
 
-                VkRect2D scissor = Initializers.rect2D(Width, Height, 0, 0);
-                vkCmdSetScissor(DrawCmdBuffers[i], 0, 1, &scissor);
+                VkRect2D scissor = Initializers.rect2D(width, height, 0, 0);
+                vkCmdSetScissor(drawCmdBuffers[i], 0, 1, &scissor);
 
                 // Update light positions
                 // w component = light radius scale
@@ -141,31 +141,31 @@ namespace Vk.Samples
 
                 // Submit via push constant (rather than a UBO)
                 vkCmdPushConstants(
-                    DrawCmdBuffers[i],
+                    drawCmdBuffers[i],
                     pipelineLayout,
                     VkShaderStageFlags.Vertex,
                     0,
                     pushConstants.Count * (uint)sizeof(Vector4),
                     pushConstants.Data.ToPointer());
 
-                vkCmdBindPipeline(DrawCmdBuffers[i], VkPipelineBindPoint.Graphics, pipelines_solid);
-                vkCmdBindDescriptorSets(DrawCmdBuffers[i], VkPipelineBindPoint.Graphics, pipelineLayout, 0, 1, ref descriptorSet, 0, null);
+                vkCmdBindPipeline(drawCmdBuffers[i], VkPipelineBindPoint.Graphics, pipelines_solid);
+                vkCmdBindDescriptorSets(drawCmdBuffers[i], VkPipelineBindPoint.Graphics, pipelineLayout, 0, 1, ref descriptorSet, 0, null);
 
                 ulong offsets = 0;
-                vkCmdBindVertexBuffers(DrawCmdBuffers[i], VERTEX_BUFFER_BIND_ID, 1, ref models_scene.vertices.buffer, &offsets);
-                vkCmdBindIndexBuffer(DrawCmdBuffers[i], models_scene.indices.buffer, 0, VkIndexType.Uint32);
+                vkCmdBindVertexBuffers(drawCmdBuffers[i], VERTEX_BUFFER_BIND_ID, 1, ref models_scene.vertices.buffer, &offsets);
+                vkCmdBindIndexBuffer(drawCmdBuffers[i], models_scene.indices.buffer, 0, VkIndexType.Uint32);
 
-                vkCmdDrawIndexed(DrawCmdBuffers[i], models_scene.indexCount, 1, 0, 0, 0);
+                vkCmdDrawIndexed(drawCmdBuffers[i], models_scene.indexCount, 1, 0, 0, 0);
 
-                vkCmdEndRenderPass(DrawCmdBuffers[i]);
+                vkCmdEndRenderPass(drawCmdBuffers[i]);
 
-                Util.CheckResult(vkEndCommandBuffer(DrawCmdBuffers[i]));
+                Util.CheckResult(vkEndCommandBuffer(drawCmdBuffers[i]));
             }
         }
 
         void loadAssets()
         {
-            models_scene.loadFromFile(getAssetPath() + "models/samplescene.dae", vertexLayout, 0.35f, VulkanDevice, Queue);
+            models_scene.loadFromFile(getAssetPath() + "models/samplescene.dae", vertexLayout, 0.35f, vulkanDevice, queue);
         }
 
         void setupVertexDescriptions()
@@ -228,7 +228,7 @@ namespace Vk.Samples
                     &poolSizes,
                     2);
 
-            Util.CheckResult(vkCreateDescriptorPool(Device, &descriptorPoolInfo, null, out descriptorPool));
+            Util.CheckResult(vkCreateDescriptorPool(device, &descriptorPoolInfo, null, out descriptorPool));
         }
 
         void setupDescriptorSetLayout()
@@ -245,7 +245,7 @@ namespace Vk.Samples
                     &setLayoutBindings,
                     1);
 
-            Util.CheckResult(vkCreateDescriptorSetLayout(Device, &descriptorLayout, null, out descriptorSetLayout));
+            Util.CheckResult(vkCreateDescriptorSetLayout(device, &descriptorLayout, null, out descriptorSetLayout));
 
             var dsl = descriptorSetLayout;
             VkPipelineLayoutCreateInfo pipelineLayoutCreateInfo =
@@ -270,7 +270,7 @@ namespace Vk.Samples
             pipelineLayoutCreateInfo.pushConstantRangeCount = 1;
             pipelineLayoutCreateInfo.pPushConstantRanges = &pushConstantRange;
 
-            Util.CheckResult(vkCreatePipelineLayout(Device, &pipelineLayoutCreateInfo, null, out pipelineLayout));
+            Util.CheckResult(vkCreatePipelineLayout(device, &pipelineLayoutCreateInfo, null, out pipelineLayout));
         }
 
         void setupDescriptorSet()
@@ -282,7 +282,7 @@ namespace Vk.Samples
                     &dsl,
                     1);
 
-            Util.CheckResult(vkAllocateDescriptorSets(Device, &allocInfo, out descriptorSet));
+            Util.CheckResult(vkAllocateDescriptorSets(device, &allocInfo, out descriptorSet));
 
             var descriptor = uniformBuffer.descriptor;
             // Binding 0 : Vertex shader uniform buffer
@@ -293,7 +293,7 @@ namespace Vk.Samples
                     0,
                     &descriptor);
 
-            vkUpdateDescriptorSets(Device, 1, &writeDescriptorSet, 0, null);
+            vkUpdateDescriptorSets(device, 1, &writeDescriptorSet, 0, null);
         }
 
         void preparePipelines()
@@ -354,7 +354,7 @@ namespace Vk.Samples
             VkGraphicsPipelineCreateInfo pipelineCreateInfo =
                 Initializers.pipelineCreateInfo(
                     pipelineLayout,
-                    RenderPass,
+                    renderPass,
                     0);
 
             var vis = vertices_inputState;
@@ -369,13 +369,13 @@ namespace Vk.Samples
             pipelineCreateInfo.stageCount = shaderStages.Count;
             pipelineCreateInfo.pStages = &shaderStages.First;
 
-            Util.CheckResult(vkCreateGraphicsPipelines(Device, PipelineCache, 1, &pipelineCreateInfo, null, out pipelines_solid));
+            Util.CheckResult(vkCreateGraphicsPipelines(device, pipelineCache, 1, &pipelineCreateInfo, null, out pipelines_solid));
         }
 
         void prepareUniformBuffers()
         {
             // Vertex shader uniform buffer block
-            Util.CheckResult(VulkanDevice.createBuffer(
+            Util.CheckResult(vulkanDevice.createBuffer(
                 VkBufferUsageFlags.UniformBuffer,
                 VkMemoryPropertyFlags.HostVisible | VkMemoryPropertyFlags.HostCoherent,
                 uniformBuffer,
@@ -390,7 +390,7 @@ namespace Vk.Samples
         void updateUniformBuffers()
         {
             // Vertex shader
-            _uboVS.projection = Matrix4x4.CreatePerspectiveFieldOfView(Util.DegreesToRadians(60.0f), (float)Width / (float)Height, 0.001f, 256.0f);
+            _uboVS.projection = Matrix4x4.CreatePerspectiveFieldOfView(Util.DegreesToRadians(60.0f), (float)width / (float)height, 0.001f, 256.0f);
             Matrix4x4 viewMatrix = Matrix4x4.CreateTranslation(new Vector3(0, 2, zoom));
 
             _uboVS.model = viewMatrix;
@@ -407,11 +407,11 @@ namespace Vk.Samples
             base.prepareFrame();
 
             // Command buffer to be sumitted to the queue
-            SubmitInfo.commandBufferCount = 1;
-            SubmitInfo.pCommandBuffers = (VkCommandBuffer*)DrawCmdBuffers.GetAddress(currentBuffer);
+            submitInfo.commandBufferCount = 1;
+            submitInfo.pCommandBuffers = (VkCommandBuffer*)drawCmdBuffers.GetAddress(currentBuffer);
 
             // Submit to queue
-            Util.CheckResult(vkQueueSubmit(Queue, 1, ref SubmitInfo, NullHandle));
+            Util.CheckResult(vkQueueSubmit(queue, 1, ref submitInfo, NullHandle));
 
             base.submitFrame();
         }
@@ -422,7 +422,7 @@ namespace Vk.Samples
 
             // Check requested push constant size against hardware limit
             // Specs require 128 bytes, so if the Device complies our push constant buffer should always fit into memory		
-            Debug.Assert(pushConstants.Count * (uint)sizeof(Vector4) <= VulkanDevice.Properties.limits.maxPushConstantsSize);
+            Debug.Assert(pushConstants.Count * (uint)sizeof(Vector4) <= vulkanDevice.properties.limits.maxPushConstantsSize);
 
             loadAssets();
             setupVertexDescriptions();

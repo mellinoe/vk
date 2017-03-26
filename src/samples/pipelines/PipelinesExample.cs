@@ -71,15 +71,15 @@ namespace Vk.Samples
         {
             // Clean up used Vulkan resources 
             // Note : Inherited destructor cleans up resources stored in base class
-            vkDestroyPipeline(Device, pipelines_phong, null);
+            vkDestroyPipeline(device, pipelines_phong, null);
             if (DeviceFeatures.fillModeNonSolid != 0)
             {
-                vkDestroyPipeline(Device, pipelines_wireframe, null);
+                vkDestroyPipeline(device, pipelines_wireframe, null);
             }
-            vkDestroyPipeline(Device, pipelines_toon, null);
+            vkDestroyPipeline(device, pipelines_toon, null);
 
-            vkDestroyPipelineLayout(Device, pipelineLayout, null);
-            vkDestroyDescriptorSetLayout(Device, descriptorSetLayout[0], null);
+            vkDestroyPipelineLayout(device, pipelineLayout, null);
+            vkDestroyDescriptorSetLayout(device, descriptorSetLayout[0], null);
 
             models_cube.destroy();
             uniformBuffer.destroy();
@@ -112,71 +112,71 @@ namespace Vk.Samples
             clearValues.Second.depthStencil = new VkClearDepthStencilValue() { depth = 1f, stencil = 0 };
 
             VkRenderPassBeginInfo renderPassBeginInfo = VkRenderPassBeginInfo.New();
-            renderPassBeginInfo.renderPass = RenderPass;
+            renderPassBeginInfo.renderPass = renderPass;
             renderPassBeginInfo.renderArea.offset.x = 0;
             renderPassBeginInfo.renderArea.offset.y = 0;
-            renderPassBeginInfo.renderArea.extent.width = Width;
-            renderPassBeginInfo.renderArea.extent.height = Height;
+            renderPassBeginInfo.renderArea.extent.width = width;
+            renderPassBeginInfo.renderArea.extent.height = height;
             renderPassBeginInfo.clearValueCount = 2;
             renderPassBeginInfo.pClearValues = (VkClearValue*)Unsafe.AsPointer(ref clearValues);
 
-            for (int i = 0; i < DrawCmdBuffers.Count; ++i)
+            for (int i = 0; i < drawCmdBuffers.Count; ++i)
             {
                 // Set target frame buffer
-                renderPassBeginInfo.framebuffer = Framebuffers[i];
+                renderPassBeginInfo.framebuffer = frameBuffers[i];
 
-                Util.CheckResult(vkBeginCommandBuffer(DrawCmdBuffers[i], ref cmdBufInfo));
+                Util.CheckResult(vkBeginCommandBuffer(drawCmdBuffers[i], ref cmdBufInfo));
 
-                vkCmdBeginRenderPass(DrawCmdBuffers[i], ref renderPassBeginInfo, VkSubpassContents.Inline);
+                vkCmdBeginRenderPass(drawCmdBuffers[i], ref renderPassBeginInfo, VkSubpassContents.Inline);
 
-                VkViewport viewport = new VkViewport() { width = Width, height = Height, minDepth = 0f, maxDepth = 1f };
-                vkCmdSetViewport(DrawCmdBuffers[i], 0, 1, ref viewport);
+                VkViewport viewport = new VkViewport() { width = width, height = height, minDepth = 0f, maxDepth = 1f };
+                vkCmdSetViewport(drawCmdBuffers[i], 0, 1, ref viewport);
 
-                VkRect2D scissor = new VkRect2D() { extent = new VkExtent2D() { width = Width, height = Height }, offset = new VkOffset2D() };
-                vkCmdSetScissor(DrawCmdBuffers[i], 0, 1, ref scissor);
+                VkRect2D scissor = new VkRect2D() { extent = new VkExtent2D() { width = width, height = height }, offset = new VkOffset2D() };
+                vkCmdSetScissor(drawCmdBuffers[i], 0, 1, ref scissor);
 
-                vkCmdBindDescriptorSets(DrawCmdBuffers[i], VkPipelineBindPoint.Graphics, pipelineLayout, 0, 1, ref descriptorSet, 0, null);
+                vkCmdBindDescriptorSets(drawCmdBuffers[i], VkPipelineBindPoint.Graphics, pipelineLayout, 0, 1, ref descriptorSet, 0, null);
 
                 ulong offsets = 0;
-                vkCmdBindVertexBuffers(DrawCmdBuffers[i], VERTEX_BUFFER_BIND_ID, 1, ref models_cube.vertices.buffer, ref offsets);
-                vkCmdBindIndexBuffer(DrawCmdBuffers[i], models_cube.indices.buffer, 0, VkIndexType.Uint32);
+                vkCmdBindVertexBuffers(drawCmdBuffers[i], VERTEX_BUFFER_BIND_ID, 1, ref models_cube.vertices.buffer, ref offsets);
+                vkCmdBindIndexBuffer(drawCmdBuffers[i], models_cube.indices.buffer, 0, VkIndexType.Uint32);
 
                 // Left : Solid colored 
-                viewport.width = Width / 3.0f;
-                vkCmdSetViewport(DrawCmdBuffers[i], 0, 1, &viewport);
-                vkCmdBindPipeline(DrawCmdBuffers[i], VkPipelineBindPoint.Graphics, pipelines_phong);
+                viewport.width = width / 3.0f;
+                vkCmdSetViewport(drawCmdBuffers[i], 0, 1, &viewport);
+                vkCmdBindPipeline(drawCmdBuffers[i], VkPipelineBindPoint.Graphics, pipelines_phong);
 
-                vkCmdDrawIndexed(DrawCmdBuffers[i], models_cube.indexCount, 1, 0, 0, 0);
+                vkCmdDrawIndexed(drawCmdBuffers[i], models_cube.indexCount, 1, 0, 0, 0);
 
                 // Center : Toon
-                viewport.x = Width / 3.0f;
-                vkCmdSetViewport(DrawCmdBuffers[i], 0, 1, &viewport);
-                vkCmdBindPipeline(DrawCmdBuffers[i], VkPipelineBindPoint.Graphics, pipelines_toon);
+                viewport.x = width / 3.0f;
+                vkCmdSetViewport(drawCmdBuffers[i], 0, 1, &viewport);
+                vkCmdBindPipeline(drawCmdBuffers[i], VkPipelineBindPoint.Graphics, pipelines_toon);
                 // Line Width > 1.0f only if wide lines feature is supported
                 if (DeviceFeatures.wideLines != 0)
                 {
-                    vkCmdSetLineWidth(DrawCmdBuffers[i], 2.0f);
+                    vkCmdSetLineWidth(drawCmdBuffers[i], 2.0f);
                 }
-                vkCmdDrawIndexed(DrawCmdBuffers[i], models_cube.indexCount, 1, 0, 0, 0);
+                vkCmdDrawIndexed(drawCmdBuffers[i], models_cube.indexCount, 1, 0, 0, 0);
 
                 if (DeviceFeatures.fillModeNonSolid != 0)
                 {
                     // Right : Wireframe 
-                    viewport.x = Width / 3.0f + Width / 3.0f;
-                    vkCmdSetViewport(DrawCmdBuffers[i], 0, 1, &viewport);
-                    vkCmdBindPipeline(DrawCmdBuffers[i], VkPipelineBindPoint.Graphics, pipelines_wireframe);
-                    vkCmdDrawIndexed(DrawCmdBuffers[i], models_cube.indexCount, 1, 0, 0, 0);
+                    viewport.x = width / 3.0f + width / 3.0f;
+                    vkCmdSetViewport(drawCmdBuffers[i], 0, 1, &viewport);
+                    vkCmdBindPipeline(drawCmdBuffers[i], VkPipelineBindPoint.Graphics, pipelines_wireframe);
+                    vkCmdDrawIndexed(drawCmdBuffers[i], models_cube.indexCount, 1, 0, 0, 0);
                 }
 
-                vkCmdEndRenderPass(DrawCmdBuffers[i]);
+                vkCmdEndRenderPass(drawCmdBuffers[i]);
 
-                Util.CheckResult(vkEndCommandBuffer(DrawCmdBuffers[i]));
+                Util.CheckResult(vkEndCommandBuffer(drawCmdBuffers[i]));
             }
         }
 
         void loadAssets()
         {
-            models_cube.loadFromFile(getAssetPath() + "models/treasure_smooth.dae", vertexLayout, 1.0f, VulkanDevice, Queue);
+            models_cube.loadFromFile(getAssetPath() + "models/treasure_smooth.dae", vertexLayout, 1.0f, vulkanDevice, queue);
         }
 
         void setupDescriptorPool()
@@ -189,7 +189,7 @@ namespace Vk.Samples
             descriptorPoolInfo.pPoolSizes = &poolSizes;
             descriptorPoolInfo.maxSets = 2;
 
-            Util.CheckResult(vkCreateDescriptorPool(Device, &descriptorPoolInfo, null, out descriptorPool));
+            Util.CheckResult(vkCreateDescriptorPool(device, &descriptorPoolInfo, null, out descriptorPool));
         }
 
         void setupDescriptorSetLayout()
@@ -208,13 +208,13 @@ namespace Vk.Samples
             descriptorLayout.bindingCount = 1;
 
             descriptorSetLayout.Count = 1;
-            Util.CheckResult(vkCreateDescriptorSetLayout(Device, &descriptorLayout, null, (VkDescriptorSetLayout*)descriptorSetLayout.GetAddress(0)));
+            Util.CheckResult(vkCreateDescriptorSetLayout(device, &descriptorLayout, null, (VkDescriptorSetLayout*)descriptorSetLayout.GetAddress(0)));
 
             VkPipelineLayoutCreateInfo pPipelineLayoutCreateInfo = VkPipelineLayoutCreateInfo.New();
             pPipelineLayoutCreateInfo.setLayoutCount = 1;
             pPipelineLayoutCreateInfo.pSetLayouts = (VkDescriptorSetLayout*)descriptorSetLayout.Data.ToPointer();
 
-            Util.CheckResult(vkCreatePipelineLayout(Device, &pPipelineLayoutCreateInfo, null, out pipelineLayout));
+            Util.CheckResult(vkCreatePipelineLayout(device, &pPipelineLayoutCreateInfo, null, out pipelineLayout));
         }
 
         void setupDescriptorSet()
@@ -223,7 +223,7 @@ namespace Vk.Samples
             allocInfo.descriptorPool = descriptorPool;
             allocInfo.pSetLayouts = (VkDescriptorSetLayout*)descriptorSetLayout.Data.ToPointer();
             allocInfo.descriptorSetCount = 1;
-            Util.CheckResult(vkAllocateDescriptorSets(Device, &allocInfo, out descriptorSet));
+            Util.CheckResult(vkAllocateDescriptorSets(device, &allocInfo, out descriptorSet));
 
             var descriptor = uniformBuffer.descriptor;
             VkWriteDescriptorSet writeDescriptorSets = Initializers.writeDescriptorSet(
@@ -231,7 +231,7 @@ namespace Vk.Samples
                  VkDescriptorType.UniformBuffer,
                 0,
                 &descriptor);
-            vkUpdateDescriptorSets(Device, 1, ref writeDescriptorSets, 0, null);
+            vkUpdateDescriptorSets(device, 1, ref writeDescriptorSets, 0, null);
         }
 
         void preparePipelines()
@@ -279,7 +279,7 @@ namespace Vk.Samples
                 Initializers.pipelineDynamicStateCreateInfo((VkDynamicState*)Unsafe.AsPointer(ref dynamicStateEnables), dynamicStateEnables.Count);
 
             VkGraphicsPipelineCreateInfo pipelineCreateInfo =
-                Initializers.pipelineCreateInfo(pipelineLayout, RenderPass);
+                Initializers.pipelineCreateInfo(pipelineLayout, renderPass);
 
             FixedArray2<VkPipelineShaderStageCreateInfo> shaderStages = new FixedArray2<VkPipelineShaderStageCreateInfo>();
             shaderStages.First = loadShader(getAssetPath() + "shaders/pipelines/phong.vert.spv", VkShaderStageFlags.Vertex);
@@ -330,7 +330,7 @@ namespace Vk.Samples
             // Phong shading pipeline
             shaderStages.First = loadShader(getAssetPath() + "shaders/pipelines/phong.vert.spv", VkShaderStageFlags.Vertex);
             shaderStages.Second = loadShader(getAssetPath() + "shaders/pipelines/phong.frag.spv", VkShaderStageFlags.Fragment);
-            Util.CheckResult(vkCreateGraphicsPipelines(Device, PipelineCache, 1, ref pipelineCreateInfo, null, out pipelines_phong));
+            Util.CheckResult(vkCreateGraphicsPipelines(device, pipelineCache, 1, ref pipelineCreateInfo, null, out pipelines_phong));
 
             // All pipelines created after the base pipeline will be derivatives
             pipelineCreateInfo.flags = VkPipelineCreateFlags.Derivative;
@@ -343,7 +343,7 @@ namespace Vk.Samples
             // Toon shading pipeline
             shaderStages.First = loadShader(getAssetPath() + "shaders/pipelines/toon.vert.spv", VkShaderStageFlags.Vertex);
             shaderStages.Second = loadShader(getAssetPath() + "shaders/pipelines/toon.frag.spv", VkShaderStageFlags.Fragment);
-            Util.CheckResult(vkCreateGraphicsPipelines(Device, PipelineCache, 1, ref pipelineCreateInfo, null, out pipelines_toon));
+            Util.CheckResult(vkCreateGraphicsPipelines(device, pipelineCache, 1, ref pipelineCreateInfo, null, out pipelines_toon));
 
             // Pipeline for wire frame rendering
             // Non solid rendering is not a mandatory Vulkan feature
@@ -352,7 +352,7 @@ namespace Vk.Samples
                 rasterizationState.polygonMode = VkPolygonMode.Line;
                 shaderStages.First = loadShader(getAssetPath() + "shaders/pipelines/wireframe.vert.spv", VkShaderStageFlags.Vertex);
                 shaderStages.Second = loadShader(getAssetPath() + "shaders/pipelines/wireframe.frag.spv", VkShaderStageFlags.Fragment);
-                Util.CheckResult(vkCreateGraphicsPipelines(Device, PipelineCache, 1, ref pipelineCreateInfo, null, out pipelines_wireframe));
+                Util.CheckResult(vkCreateGraphicsPipelines(device, pipelineCache, 1, ref pipelineCreateInfo, null, out pipelines_wireframe));
             }
         }
 
@@ -360,7 +360,7 @@ namespace Vk.Samples
         void prepareUniformBuffers()
         {
             // Create the vertex shader uniform buffer block
-            Util.CheckResult(VulkanDevice.createBuffer(
+            Util.CheckResult(vulkanDevice.createBuffer(
                 VkBufferUsageFlags.UniformBuffer,
                 VkMemoryPropertyFlags.HostVisible | VkMemoryPropertyFlags.HostCoherent,
                 uniformBuffer,
@@ -374,7 +374,7 @@ namespace Vk.Samples
 
         void updateUniformBuffers()
         {
-            uboVS.projection = Matrix4x4.CreatePerspectiveFieldOfView(Util.DegreesToRadians(60f), Width / 3.0f / (float)Height, 0.1f, 256.0f);
+            uboVS.projection = Matrix4x4.CreatePerspectiveFieldOfView(Util.DegreesToRadians(60f), width / 3.0f / (float)height, 0.1f, 256.0f);
 
             Matrix4x4 viewMatrix = Matrix4x4.CreateTranslation(new Vector3(0f, 0f, zoom));
 
@@ -392,9 +392,9 @@ namespace Vk.Samples
         {
             base.prepareFrame();
 
-            SubmitInfo.commandBufferCount = 1;
-            SubmitInfo.pCommandBuffers = (VkCommandBuffer*)DrawCmdBuffers.GetAddress(currentBuffer);
-            Util.CheckResult(vkQueueSubmit(Queue, 1, ref SubmitInfo, new VkFence()));
+            submitInfo.commandBufferCount = 1;
+            submitInfo.pCommandBuffers = (VkCommandBuffer*)drawCmdBuffers.GetAddress(currentBuffer);
+            Util.CheckResult(vkQueueSubmit(queue, 1, ref submitInfo, new VkFence()));
 
             base.submitFrame();
         }

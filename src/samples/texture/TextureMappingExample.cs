@@ -97,10 +97,10 @@ namespace Vk.Samples
 
             destroyTextureImage(texture);
 
-            vkDestroyPipeline(Device, pipelines_solid, null);
+            vkDestroyPipeline(device, pipelines_solid, null);
 
-            vkDestroyPipelineLayout(Device, pipelineLayout, null);
-            vkDestroyDescriptorSetLayout(Device, descriptorSetLayout, null);
+            vkDestroyPipelineLayout(device, pipelineLayout, null);
+            vkDestroyDescriptorSetLayout(device, descriptorSetLayout, null);
 
             vertexBuffer.destroy();
             indexBuffer.destroy();
@@ -227,27 +227,27 @@ namespace Vk.Samples
                 bufferCreateInfo.usage = VkBufferUsageFlags.TransferSrc;
                 bufferCreateInfo.sharingMode = VkSharingMode.Exclusive;
 
-                Util.CheckResult(vkCreateBuffer(Device, &bufferCreateInfo, null, &stagingBuffer));
+                Util.CheckResult(vkCreateBuffer(device, &bufferCreateInfo, null, &stagingBuffer));
 
                 // Get memory requirements for the staging buffer (alignment, memory type bits)
-                vkGetBufferMemoryRequirements(Device, stagingBuffer, &memReqs);
+                vkGetBufferMemoryRequirements(device, stagingBuffer, &memReqs);
 
                 memAllocInfo.allocationSize = memReqs.size;
                 // Get memory type index for a host visible buffer
-                memAllocInfo.memoryTypeIndex = VulkanDevice.GetMemoryType(memReqs.memoryTypeBits, VkMemoryPropertyFlags.HostVisible | VkMemoryPropertyFlags.HostCoherent);
+                memAllocInfo.memoryTypeIndex = vulkanDevice.GetMemoryType(memReqs.memoryTypeBits, VkMemoryPropertyFlags.HostVisible | VkMemoryPropertyFlags.HostCoherent);
 
-                Util.CheckResult(vkAllocateMemory(Device, &memAllocInfo, null, &stagingMemory));
-                Util.CheckResult(vkBindBufferMemory(Device, stagingBuffer, stagingMemory, 0));
+                Util.CheckResult(vkAllocateMemory(device, &memAllocInfo, null, &stagingMemory));
+                Util.CheckResult(vkBindBufferMemory(device, stagingBuffer, stagingMemory, 0));
 
                 // Copy texture data into staging buffer
                 byte* data;
-                Util.CheckResult(vkMapMemory(Device, stagingMemory, 0, memReqs.size, 0, (void**)&data));
+                Util.CheckResult(vkMapMemory(device, stagingMemory, 0, memReqs.size, 0, (void**)&data));
                 byte[] allData = tex2D.GetAllTextureData();
                 fixed (byte* tex2DDataPtr = &allData[0])
                 {
                     Unsafe.CopyBlock(data, tex2DDataPtr, (uint)allData.Length);
                 }
-                vkUnmapMemory(Device, stagingMemory);
+                vkUnmapMemory(device, stagingMemory);
 
                 // Setup buffer copy regions for each mip level
                 NativeList<VkBufferImageCopy> bufferCopyRegions = new NativeList<VkBufferImageCopy>();
@@ -284,15 +284,15 @@ namespace Vk.Samples
                 imageCreateInfo.extent = new VkExtent3D { width = texture.width, height = texture.height, depth = 1 };
                 imageCreateInfo.usage = VkImageUsageFlags.TransferDst | VkImageUsageFlags.Sampled;
 
-                Util.CheckResult(vkCreateImage(Device, &imageCreateInfo, null, out texture.image));
+                Util.CheckResult(vkCreateImage(device, &imageCreateInfo, null, out texture.image));
 
-                vkGetImageMemoryRequirements(Device, texture.image, &memReqs);
+                vkGetImageMemoryRequirements(device, texture.image, &memReqs);
 
                 memAllocInfo.allocationSize = memReqs.size;
-                memAllocInfo.memoryTypeIndex = VulkanDevice.GetMemoryType(memReqs.memoryTypeBits, VkMemoryPropertyFlags.DeviceLocal);
+                memAllocInfo.memoryTypeIndex = vulkanDevice.GetMemoryType(memReqs.memoryTypeBits, VkMemoryPropertyFlags.DeviceLocal);
 
-                Util.CheckResult(vkAllocateMemory(Device, &memAllocInfo, null, out texture.DeviceMemory));
-                Util.CheckResult(vkBindImageMemory(Device, texture.image, texture.DeviceMemory, 0));
+                Util.CheckResult(vkAllocateMemory(device, &memAllocInfo, null, out texture.DeviceMemory));
+                Util.CheckResult(vkBindImageMemory(device, texture.image, texture.DeviceMemory, 0));
 
                 VkCommandBuffer copyCmd = base.createCommandBuffer(VkCommandBufferLevel.Primary, true);
 
@@ -338,11 +338,11 @@ namespace Vk.Samples
                     texture.imageLayout,
                     subresourceRange);
 
-                flushCommandBuffer(copyCmd, Queue, true);
+                flushCommandBuffer(copyCmd, queue, true);
 
                 // Clean up staging resources
-                vkFreeMemory(Device, stagingMemory, null);
-                vkDestroyBuffer(Device, stagingBuffer, null);
+                vkFreeMemory(device, stagingMemory, null);
+                vkDestroyBuffer(device, stagingBuffer, null);
             }
             else
             {
@@ -459,10 +459,10 @@ namespace Vk.Samples
             sampler.maxLod = (useStaging == 1) ? (float)texture.mipLevels : 0.0f;
             // Enable anisotropic filtering
             // This feature is optional, so we must check if it's supported on the Device
-            if (VulkanDevice.Features.samplerAnisotropy == 1)
+            if (vulkanDevice.Features.samplerAnisotropy == 1)
             {
                 // Use max. level of anisotropy for this example
-                sampler.maxAnisotropy = VulkanDevice.Properties.limits.maxSamplerAnisotropy;
+                sampler.maxAnisotropy = vulkanDevice.properties.limits.maxSamplerAnisotropy;
                 sampler.anisotropyEnable = True;
             }
             else
@@ -472,7 +472,7 @@ namespace Vk.Samples
                 sampler.anisotropyEnable = False;
             }
             sampler.borderColor = VkBorderColor.FloatOpaqueWhite;
-            Util.CheckResult(vkCreateSampler(Device, ref sampler, null, out texture.sampler));
+            Util.CheckResult(vkCreateSampler(device, ref sampler, null, out texture.sampler));
 
             // Create image view
             // Textures are not directly accessed by the shaders and
@@ -493,16 +493,16 @@ namespace Vk.Samples
             view.subresourceRange.levelCount = (useStaging == 1) ? texture.mipLevels : 1;
             // The view will be based on the texture's image
             view.image = texture.image;
-            Util.CheckResult(vkCreateImageView(Device, &view, null, out texture.view));
+            Util.CheckResult(vkCreateImageView(device, &view, null, out texture.view));
         }
 
         // Free all Vulkan resources used a texture object
         void destroyTextureImage(Texture texture)
         {
-            vkDestroyImageView(Device, texture.view, null);
-            vkDestroyImage(Device, texture.image, null);
-            vkDestroySampler(Device, texture.sampler, null);
-            vkFreeMemory(Device, texture.DeviceMemory, null);
+            vkDestroyImageView(device, texture.view, null);
+            vkDestroyImage(device, texture.image, null);
+            vkDestroySampler(device, texture.sampler, null);
+            vkFreeMemory(device, texture.DeviceMemory, null);
         }
 
         void loadTextures()
@@ -536,48 +536,48 @@ namespace Vk.Samples
 
         protected override void buildCommandBuffers()
         {
-            VkCommandBufferBeginInfo cmdBufInfo = Initializers.CommandBufferBeginInfo();
+            VkCommandBufferBeginInfo cmdBufInfo = Initializers.commandBufferBeginInfo();
 
             FixedArray2<VkClearValue> clearValues = new FixedArray2<VkClearValue>();
             clearValues.First.color = defaultClearColor;
             clearValues.Second.depthStencil = new VkClearDepthStencilValue() { depth = 1.0f, stencil = 0 };
 
             VkRenderPassBeginInfo renderPassBeginInfo = Initializers.renderPassBeginInfo();
-            renderPassBeginInfo.renderPass = RenderPass;
+            renderPassBeginInfo.renderPass = renderPass;
             renderPassBeginInfo.renderArea.offset.x = 0;
             renderPassBeginInfo.renderArea.offset.y = 0;
-            renderPassBeginInfo.renderArea.extent.width = Width;
-            renderPassBeginInfo.renderArea.extent.height = Height;
+            renderPassBeginInfo.renderArea.extent.width = width;
+            renderPassBeginInfo.renderArea.extent.height = height;
             renderPassBeginInfo.clearValueCount = 2;
             renderPassBeginInfo.pClearValues = (VkClearValue*)Unsafe.AsPointer(ref clearValues);
 
-            for (int i = 0; i < DrawCmdBuffers.Count; ++i)
+            for (int i = 0; i < drawCmdBuffers.Count; ++i)
             {
                 // Set target frame buffer
-                renderPassBeginInfo.framebuffer = Framebuffers[i];
+                renderPassBeginInfo.framebuffer = frameBuffers[i];
 
-                Util.CheckResult(vkBeginCommandBuffer(DrawCmdBuffers[i], &cmdBufInfo));
+                Util.CheckResult(vkBeginCommandBuffer(drawCmdBuffers[i], &cmdBufInfo));
 
-                vkCmdBeginRenderPass(DrawCmdBuffers[i], &renderPassBeginInfo, VkSubpassContents.Inline);
+                vkCmdBeginRenderPass(drawCmdBuffers[i], &renderPassBeginInfo, VkSubpassContents.Inline);
 
-                VkViewport viewport = Initializers.viewport((float)Width, (float)Height, 0.0f, 1.0f);
-                vkCmdSetViewport(DrawCmdBuffers[i], 0, 1, &viewport);
+                VkViewport viewport = Initializers.viewport((float)width, (float)height, 0.0f, 1.0f);
+                vkCmdSetViewport(drawCmdBuffers[i], 0, 1, &viewport);
 
-                VkRect2D scissor = Initializers.rect2D(Width, Height, 0, 0);
-                vkCmdSetScissor(DrawCmdBuffers[i], 0, 1, &scissor);
+                VkRect2D scissor = Initializers.rect2D(width, height, 0, 0);
+                vkCmdSetScissor(drawCmdBuffers[i], 0, 1, &scissor);
 
-                vkCmdBindDescriptorSets(DrawCmdBuffers[i], VkPipelineBindPoint.Graphics, pipelineLayout, 0, 1, ref descriptorSet, 0, null);
-                vkCmdBindPipeline(DrawCmdBuffers[i], VkPipelineBindPoint.Graphics, pipelines_solid);
+                vkCmdBindDescriptorSets(drawCmdBuffers[i], VkPipelineBindPoint.Graphics, pipelineLayout, 0, 1, ref descriptorSet, 0, null);
+                vkCmdBindPipeline(drawCmdBuffers[i], VkPipelineBindPoint.Graphics, pipelines_solid);
 
                 ulong offsets = 0;
-                vkCmdBindVertexBuffers(DrawCmdBuffers[i], VERTEX_BUFFER_BIND_ID, 1, ref vertexBuffer.buffer, &offsets);
-                vkCmdBindIndexBuffer(DrawCmdBuffers[i], indexBuffer.buffer, 0, VkIndexType.Uint32);
+                vkCmdBindVertexBuffers(drawCmdBuffers[i], VERTEX_BUFFER_BIND_ID, 1, ref vertexBuffer.buffer, &offsets);
+                vkCmdBindIndexBuffer(drawCmdBuffers[i], indexBuffer.buffer, 0, VkIndexType.Uint32);
 
-                vkCmdDrawIndexed(DrawCmdBuffers[i], indexCount, 1, 0, 0, 0);
+                vkCmdDrawIndexed(drawCmdBuffers[i], indexCount, 1, 0, 0, 0);
 
-                vkCmdEndRenderPass(DrawCmdBuffers[i]);
+                vkCmdEndRenderPass(drawCmdBuffers[i]);
 
-                Util.CheckResult(vkEndCommandBuffer(DrawCmdBuffers[i]));
+                Util.CheckResult(vkEndCommandBuffer(drawCmdBuffers[i]));
             }
         }
 
@@ -586,11 +586,11 @@ namespace Vk.Samples
             base.prepareFrame();
 
             // Command buffer to be sumitted to the queue
-            SubmitInfo.commandBufferCount = 1;
-            SubmitInfo.pCommandBuffers = (VkCommandBuffer*)DrawCmdBuffers.GetAddress(currentBuffer);
+            submitInfo.commandBufferCount = 1;
+            submitInfo.pCommandBuffers = (VkCommandBuffer*)drawCmdBuffers.GetAddress(currentBuffer);
 
             // Submit to queue
-            Util.CheckResult(vkQueueSubmit(Queue, 1, ref SubmitInfo, NullHandle));
+            Util.CheckResult(vkQueueSubmit(queue, 1, ref submitInfo, NullHandle));
 
             submitFrame();
         }
@@ -613,14 +613,14 @@ namespace Vk.Samples
             // Create buffers
             // For the sake of simplicity we won't stage the vertex data to the gpu memory
             // Vertex buffer
-            Util.CheckResult(VulkanDevice.createBuffer(
+            Util.CheckResult(vulkanDevice.createBuffer(
                 VkBufferUsageFlags.VertexBuffer,
                 VkMemoryPropertyFlags.HostVisible | VkMemoryPropertyFlags.HostCoherent,
                 vertexBuffer,
                 (ulong)(vertices.Count * sizeof(Vertex)),
                 vertices.Data.ToPointer()));
             // Index buffer
-            Util.CheckResult(VulkanDevice.createBuffer(
+            Util.CheckResult(vulkanDevice.createBuffer(
                 VkBufferUsageFlags.IndexBuffer,
                 VkMemoryPropertyFlags.HostCoherent | VkMemoryPropertyFlags.HostCoherent,
                 indexBuffer,
@@ -684,7 +684,7 @@ namespace Vk.Samples
                     (VkDescriptorPoolSize*)Unsafe.AsPointer(ref poolSizes),
                     2);
 
-            Util.CheckResult(vkCreateDescriptorPool(Device, &descriptorPoolInfo, null, out descriptorPool));
+            Util.CheckResult(vkCreateDescriptorPool(device, &descriptorPoolInfo, null, out descriptorPool));
         }
 
         void setupDescriptorSetLayout()
@@ -707,7 +707,7 @@ namespace Vk.Samples
                     (VkDescriptorSetLayoutBinding*)Unsafe.AsPointer(ref setLayoutBindings),
                     setLayoutBindings.Count);
 
-            Util.CheckResult(vkCreateDescriptorSetLayout(Device, &descriptorLayout, null, out descriptorSetLayout));
+            Util.CheckResult(vkCreateDescriptorSetLayout(device, &descriptorLayout, null, out descriptorSetLayout));
 
             var layout = descriptorSetLayout;
             VkPipelineLayoutCreateInfo pPipelineLayoutCreateInfo =
@@ -715,7 +715,7 @@ namespace Vk.Samples
                     &layout,
                     1);
 
-            Util.CheckResult(vkCreatePipelineLayout(Device, &pPipelineLayoutCreateInfo, null, out pipelineLayout));
+            Util.CheckResult(vkCreatePipelineLayout(device, &pPipelineLayoutCreateInfo, null, out pipelineLayout));
         }
 
         void setupDescriptorSet()
@@ -727,7 +727,7 @@ namespace Vk.Samples
                     &layout,
                     1);
 
-            Util.CheckResult(vkAllocateDescriptorSets(Device, &allocInfo, out descriptorSet));
+            Util.CheckResult(vkAllocateDescriptorSets(device, &allocInfo, out descriptorSet));
 
             // Setup a descriptor image info for the current texture to be used as a combined image sampler
             VkDescriptorImageInfo textureDescriptor;
@@ -752,7 +752,7 @@ namespace Vk.Samples
                         &textureDescriptor)								// Pointer to the descriptor image for our texture
             );
 
-            vkUpdateDescriptorSets(Device, writeDescriptorSets.Count, ref writeDescriptorSets.First, 0, null);
+            vkUpdateDescriptorSets(device, writeDescriptorSets.Count, ref writeDescriptorSets.First, 0, null);
         }
 
         void preparePipelines()
@@ -812,7 +812,7 @@ namespace Vk.Samples
             VkGraphicsPipelineCreateInfo pipelineCreateInfo =
                 Initializers.pipelineCreateInfo(
                     pipelineLayout,
-                    RenderPass,
+                    renderPass,
                     0);
 
             var vertexInputState = vertices.inputState;
@@ -827,7 +827,7 @@ namespace Vk.Samples
             pipelineCreateInfo.stageCount = shaderStages.Count;
             pipelineCreateInfo.pStages = (VkPipelineShaderStageCreateInfo*)Unsafe.AsPointer(ref shaderStages);
 
-            Util.CheckResult(vkCreateGraphicsPipelines(Device, PipelineCache, 1, &pipelineCreateInfo, null, out pipelines_solid));
+            Util.CheckResult(vkCreateGraphicsPipelines(device, pipelineCache, 1, &pipelineCreateInfo, null, out pipelines_solid));
         }
 
         // Prepare and initialize uniform buffer containing shader uniforms
@@ -835,7 +835,7 @@ namespace Vk.Samples
         {
             var localUboVS = uboVS;
             // Vertex shader uniform buffer block
-            Util.CheckResult(VulkanDevice.createBuffer(
+            Util.CheckResult(vulkanDevice.createBuffer(
                 VkBufferUsageFlags.UniformBuffer,
                 VkMemoryPropertyFlags.HostVisible|  VkMemoryPropertyFlags.HostCoherent,
                 uniformBufferVS,
@@ -848,7 +848,7 @@ namespace Vk.Samples
         void updateUniformBuffers()
         {
             // Vertex shader
-            uboVS.projection = Matrix4x4.CreatePerspectiveFieldOfView(Util.DegreesToRadians(60f), Width / (float)Height, 0.1f, 256.0f);
+            uboVS.projection = Matrix4x4.CreatePerspectiveFieldOfView(Util.DegreesToRadians(60f), width / (float)height, 0.1f, 256.0f);
             Matrix4x4 viewMatrix = Matrix4x4.CreateTranslation(new Vector3(0f, 0f, zoom));
 
             uboVS.model = viewMatrix * Matrix4x4.CreateTranslation(cameraPos);

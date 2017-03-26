@@ -47,7 +47,7 @@ namespace Vk.Samples
             return commandBufferAllocateInfo;
         }
 
-        public static VkCommandBufferBeginInfo CommandBufferBeginInfo()
+        public static VkCommandBufferBeginInfo commandBufferBeginInfo()
         {
             VkCommandBufferBeginInfo cmdBufferBeginInfo = new VkCommandBufferBeginInfo();
             cmdBufferBeginInfo.sType = VkStructureType.CommandBufferBeginInfo;

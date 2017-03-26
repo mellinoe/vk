@@ -33,6 +33,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pushconstants", "samples\pu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "specializationconstants", "samples\specializationconstants\specializationconstants.csproj", "{C763044A-51A6-4742-9FEA-E5DF0C017DF4}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dynamicuniformbuffer", "samples\dynamicuniformbuffer\dynamicuniformbuffer.csproj", "{78F1011F-9C5A-4250-A790-13627CC1A87E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -199,6 +201,18 @@ Global
 		{C763044A-51A6-4742-9FEA-E5DF0C017DF4}.Release|x64.Build.0 = Release|Any CPU
 		{C763044A-51A6-4742-9FEA-E5DF0C017DF4}.Release|x86.ActiveCfg = Release|Any CPU
 		{C763044A-51A6-4742-9FEA-E5DF0C017DF4}.Release|x86.Build.0 = Release|Any CPU
+		{78F1011F-9C5A-4250-A790-13627CC1A87E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78F1011F-9C5A-4250-A790-13627CC1A87E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78F1011F-9C5A-4250-A790-13627CC1A87E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{78F1011F-9C5A-4250-A790-13627CC1A87E}.Debug|x64.Build.0 = Debug|Any CPU
+		{78F1011F-9C5A-4250-A790-13627CC1A87E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{78F1011F-9C5A-4250-A790-13627CC1A87E}.Debug|x86.Build.0 = Debug|Any CPU
+		{78F1011F-9C5A-4250-A790-13627CC1A87E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78F1011F-9C5A-4250-A790-13627CC1A87E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{78F1011F-9C5A-4250-A790-13627CC1A87E}.Release|x64.ActiveCfg = Release|Any CPU
+		{78F1011F-9C5A-4250-A790-13627CC1A87E}.Release|x64.Build.0 = Release|Any CPU
+		{78F1011F-9C5A-4250-A790-13627CC1A87E}.Release|x86.ActiveCfg = Release|Any CPU
+		{78F1011F-9C5A-4250-A790-13627CC1A87E}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -214,5 +228,6 @@ Global
 		{EFC89518-820B-4714-A9DD-53586BF1C056} = {725886A0-1FD5-47DF-9295-2F6F658042AA}
 		{C894311F-9A61-41B9-B118-B3DFBA430477} = {2B0FDFF4-F2C0-4A0C-AA8B-1BFACE57E32C}
 		{C763044A-51A6-4742-9FEA-E5DF0C017DF4} = {2B0FDFF4-F2C0-4A0C-AA8B-1BFACE57E32C}
+		{78F1011F-9C5A-4250-A790-13627CC1A87E} = {2B0FDFF4-F2C0-4A0C-AA8B-1BFACE57E32C}
 	EndGlobalSection
 EndGlobal

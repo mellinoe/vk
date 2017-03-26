@@ -84,16 +84,16 @@ namespace Vk.Samples
             // Note : Inherited destructor cleans up resources stored in base class
 
             // Clean up texture resources
-            vkDestroyImageView(Device, cubeMap.view, null);
-            vkDestroyImage(Device, cubeMap.image, null);
-            vkDestroySampler(Device, cubeMap.sampler, null);
-            vkFreeMemory(Device, cubeMap.DeviceMemory, null);
+            vkDestroyImageView(device, cubeMap.view, null);
+            vkDestroyImage(device, cubeMap.image, null);
+            vkDestroySampler(device, cubeMap.sampler, null);
+            vkFreeMemory(device, cubeMap.DeviceMemory, null);
 
-            vkDestroyPipeline(Device, pipelines_skybox, null);
-            vkDestroyPipeline(Device, pipelines_reflect, null);
+            vkDestroyPipeline(device, pipelines_skybox, null);
+            vkDestroyPipeline(device, pipelines_reflect, null);
 
-            vkDestroyPipelineLayout(Device, pipelineLayout, null);
-            vkDestroyDescriptorSetLayout(Device, descriptorSetLayout, null);
+            vkDestroyPipelineLayout(device, pipelineLayout, null);
+            vkDestroyDescriptorSetLayout(device, descriptorSetLayout, null);
 
             foreach (var model in models_objects)
             {
@@ -130,26 +130,26 @@ namespace Vk.Samples
             bufferCreateInfo.usage = VkBufferUsageFlags.TransferSrc;
             bufferCreateInfo.sharingMode = VkSharingMode.Exclusive;
 
-            Util.CheckResult(vkCreateBuffer(Device, &bufferCreateInfo, null, &stagingBuffer));
+            Util.CheckResult(vkCreateBuffer(device, &bufferCreateInfo, null, &stagingBuffer));
 
             // Get memory requirements for the staging buffer (alignment, memory type bits)
-            vkGetBufferMemoryRequirements(Device, stagingBuffer, &memReqs);
+            vkGetBufferMemoryRequirements(device, stagingBuffer, &memReqs);
             memAllocInfo.allocationSize = memReqs.size;
             // Get memory type index for a host visible buffer
-            memAllocInfo.memoryTypeIndex = VulkanDevice.GetMemoryType(memReqs.memoryTypeBits, VkMemoryPropertyFlags.HostVisible | VkMemoryPropertyFlags.HostCoherent);
-            Util.CheckResult(vkAllocateMemory(Device, &memAllocInfo, null, &stagingMemory));
-            Util.CheckResult(vkBindBufferMemory(Device, stagingBuffer, stagingMemory, 0));
+            memAllocInfo.memoryTypeIndex = vulkanDevice.GetMemoryType(memReqs.memoryTypeBits, VkMemoryPropertyFlags.HostVisible | VkMemoryPropertyFlags.HostCoherent);
+            Util.CheckResult(vkAllocateMemory(device, &memAllocInfo, null, &stagingMemory));
+            Util.CheckResult(vkBindBufferMemory(device, stagingBuffer, stagingMemory, 0));
 
             // Copy texture data into staging buffer
             byte* data;
-            Util.CheckResult(vkMapMemory(Device, stagingMemory, 0, memReqs.size, 0, (void**)&data));
+            Util.CheckResult(vkMapMemory(device, stagingMemory, 0, memReqs.size, 0, (void**)&data));
             byte[] allTextureData = texCube.GetAllTextureData();
             fixed (byte* texCubeDataPtr = &allTextureData[0])
             {
                 Unsafe.CopyBlock(data, texCubeDataPtr, (uint)allTextureData.Length);
             }
 
-            vkUnmapMemory(Device, stagingMemory);
+            vkUnmapMemory(device, stagingMemory);
 
             // Create optimal tiled target image
             VkImageCreateInfo imageCreateInfo = Initializers.imageCreateInfo();
@@ -168,15 +168,15 @@ namespace Vk.Samples
             // This flag is required for cube map images
             imageCreateInfo.flags = VkImageCreateFlags.CubeCompatible;
 
-            Util.CheckResult(vkCreateImage(Device, &imageCreateInfo, null, out cubeMap.image));
+            Util.CheckResult(vkCreateImage(device, &imageCreateInfo, null, out cubeMap.image));
 
-            vkGetImageMemoryRequirements(Device, cubeMap.image, &memReqs);
+            vkGetImageMemoryRequirements(device, cubeMap.image, &memReqs);
 
             memAllocInfo.allocationSize = memReqs.size;
-            memAllocInfo.memoryTypeIndex = VulkanDevice.GetMemoryType(memReqs.memoryTypeBits, VkMemoryPropertyFlags.DeviceLocal);
+            memAllocInfo.memoryTypeIndex = vulkanDevice.GetMemoryType(memReqs.memoryTypeBits, VkMemoryPropertyFlags.DeviceLocal);
 
-            Util.CheckResult(vkAllocateMemory(Device, &memAllocInfo, null, out cubeMap.DeviceMemory));
-            Util.CheckResult(vkBindImageMemory(Device, cubeMap.image, cubeMap.DeviceMemory, 0));
+            Util.CheckResult(vkAllocateMemory(device, &memAllocInfo, null, out cubeMap.DeviceMemory));
+            Util.CheckResult(vkBindImageMemory(device, cubeMap.image, cubeMap.DeviceMemory, 0));
 
             VkCommandBuffer copyCmd = createCommandBuffer(VkCommandBufferLevel.Primary, true);
 
@@ -240,7 +240,7 @@ namespace Vk.Samples
                 cubeMap.imageLayout,
                 subresourceRange);
 
-            flushCommandBuffer(copyCmd, Queue, true);
+            flushCommandBuffer(copyCmd, queue, true);
 
             // Create sampler
             VkSamplerCreateInfo sampler = Initializers.samplerCreateInfo();
@@ -256,12 +256,12 @@ namespace Vk.Samples
             sampler.maxLod = cubeMap.mipLevels;
             sampler.borderColor = VkBorderColor.FloatOpaqueWhite;
             sampler.maxAnisotropy = 1.0f;
-            if (VulkanDevice.Features.samplerAnisotropy == 1)
+            if (vulkanDevice.Features.samplerAnisotropy == 1)
             {
-                sampler.maxAnisotropy = VulkanDevice.Properties.limits.maxSamplerAnisotropy;
+                sampler.maxAnisotropy = vulkanDevice.properties.limits.maxSamplerAnisotropy;
                 sampler.anisotropyEnable = True;
             }
-            Util.CheckResult(vkCreateSampler(Device, &sampler, null, out cubeMap.sampler));
+            Util.CheckResult(vkCreateSampler(device, &sampler, null, out cubeMap.sampler));
 
             // Create image view
             VkImageViewCreateInfo view = Initializers.imageViewCreateInfo();
@@ -275,11 +275,11 @@ namespace Vk.Samples
             // Set number of mip levels
             view.subresourceRange.levelCount = cubeMap.mipLevels;
             view.image = cubeMap.image;
-            Util.CheckResult(vkCreateImageView(Device, &view, null, out cubeMap.view));
+            Util.CheckResult(vkCreateImageView(device, &view, null, out cubeMap.view));
 
             // Clean up staging resources
-            vkFreeMemory(Device, stagingMemory, null);
-            vkDestroyBuffer(Device, stagingBuffer, null);
+            vkFreeMemory(device, stagingMemory, null);
+            vkDestroyBuffer(device, stagingBuffer, null);
         }
 
         void loadTextures()
@@ -324,72 +324,72 @@ namespace Vk.Samples
 
         protected override void buildCommandBuffers()
         {
-            VkCommandBufferBeginInfo cmdBufInfo = Initializers.CommandBufferBeginInfo();
+            VkCommandBufferBeginInfo cmdBufInfo = Initializers.commandBufferBeginInfo();
 
             FixedArray2<VkClearValue> clearValues = new FixedArray2<VkClearValue>();
             clearValues.First.color = defaultClearColor;
             clearValues.Second.depthStencil = new VkClearDepthStencilValue { depth = 1.0f, stencil = 0 };
 
             VkRenderPassBeginInfo renderPassBeginInfo = Initializers.renderPassBeginInfo();
-            renderPassBeginInfo.renderPass = RenderPass;
+            renderPassBeginInfo.renderPass = renderPass;
             renderPassBeginInfo.renderArea.offset.x = 0;
             renderPassBeginInfo.renderArea.offset.y = 0;
-            renderPassBeginInfo.renderArea.extent.width = Width;
-            renderPassBeginInfo.renderArea.extent.height = Height;
+            renderPassBeginInfo.renderArea.extent.width = width;
+            renderPassBeginInfo.renderArea.extent.height = height;
             renderPassBeginInfo.clearValueCount = 2;
             renderPassBeginInfo.pClearValues = &clearValues.First;
 
-            for (int i = 0; i < DrawCmdBuffers.Count; ++i)
+            for (int i = 0; i < drawCmdBuffers.Count; ++i)
             {
                 // Set target frame buffer
-                renderPassBeginInfo.framebuffer = Framebuffers[i];
+                renderPassBeginInfo.framebuffer = frameBuffers[i];
 
-                Util.CheckResult(vkBeginCommandBuffer(DrawCmdBuffers[i], &cmdBufInfo));
+                Util.CheckResult(vkBeginCommandBuffer(drawCmdBuffers[i], &cmdBufInfo));
 
-                vkCmdBeginRenderPass(DrawCmdBuffers[i], &renderPassBeginInfo, VkSubpassContents.Inline);
+                vkCmdBeginRenderPass(drawCmdBuffers[i], &renderPassBeginInfo, VkSubpassContents.Inline);
 
-                VkViewport viewport = Initializers.viewport((float)Width, (float)Height, 0.0f, 1.0f);
-                vkCmdSetViewport(DrawCmdBuffers[i], 0, 1, &viewport);
+                VkViewport viewport = Initializers.viewport((float)width, (float)height, 0.0f, 1.0f);
+                vkCmdSetViewport(drawCmdBuffers[i], 0, 1, &viewport);
 
-                VkRect2D scissor = Initializers.rect2D(Width, Height, 0, 0);
-                vkCmdSetScissor(DrawCmdBuffers[i], 0, 1, &scissor);
+                VkRect2D scissor = Initializers.rect2D(width, height, 0, 0);
+                vkCmdSetScissor(drawCmdBuffers[i], 0, 1, &scissor);
 
                 ulong offsets = 0;
 
                 // Skybox
                 if (displaySkybox)
                 {
-                    vkCmdBindDescriptorSets(DrawCmdBuffers[i], VkPipelineBindPoint.Graphics, pipelineLayout, 0, 1, ref descriptorSets_skybox, 0, null);
-                    vkCmdBindVertexBuffers(DrawCmdBuffers[i], VERTEX_BUFFER_BIND_ID, 1, ref models_skybox.vertices.buffer, ref offsets);
-                    vkCmdBindIndexBuffer(DrawCmdBuffers[i], models_skybox.indices.buffer, 0, VkIndexType.Uint32);
-                    vkCmdBindPipeline(DrawCmdBuffers[i], VkPipelineBindPoint.Graphics, pipelines_skybox);
-                    vkCmdDrawIndexed(DrawCmdBuffers[i], models_skybox.indexCount, 1, 0, 0, 0);
+                    vkCmdBindDescriptorSets(drawCmdBuffers[i], VkPipelineBindPoint.Graphics, pipelineLayout, 0, 1, ref descriptorSets_skybox, 0, null);
+                    vkCmdBindVertexBuffers(drawCmdBuffers[i], VERTEX_BUFFER_BIND_ID, 1, ref models_skybox.vertices.buffer, ref offsets);
+                    vkCmdBindIndexBuffer(drawCmdBuffers[i], models_skybox.indices.buffer, 0, VkIndexType.Uint32);
+                    vkCmdBindPipeline(drawCmdBuffers[i], VkPipelineBindPoint.Graphics, pipelines_skybox);
+                    vkCmdDrawIndexed(drawCmdBuffers[i], models_skybox.indexCount, 1, 0, 0, 0);
                 }
 
                 // 3D object
-                vkCmdBindDescriptorSets(DrawCmdBuffers[i], VkPipelineBindPoint.Graphics, pipelineLayout, 0, 1, ref descriptorSets_object, 0, null);
+                vkCmdBindDescriptorSets(drawCmdBuffers[i], VkPipelineBindPoint.Graphics, pipelineLayout, 0, 1, ref descriptorSets_object, 0, null);
                 var vbuffer = models_objects[(int)models_objectIndex].vertices.buffer;
-                vkCmdBindVertexBuffers(DrawCmdBuffers[i], VERTEX_BUFFER_BIND_ID, 1, &vbuffer, ref offsets);
-                vkCmdBindIndexBuffer(DrawCmdBuffers[i], models_objects[(int)models_objectIndex].indices.buffer, 0, VkIndexType.Uint32);
-                vkCmdBindPipeline(DrawCmdBuffers[i], VkPipelineBindPoint.Graphics, pipelines_reflect);
-                vkCmdDrawIndexed(DrawCmdBuffers[i], models_objects[(int)models_objectIndex].indexCount, 1, 0, 0, 0);
+                vkCmdBindVertexBuffers(drawCmdBuffers[i], VERTEX_BUFFER_BIND_ID, 1, &vbuffer, ref offsets);
+                vkCmdBindIndexBuffer(drawCmdBuffers[i], models_objects[(int)models_objectIndex].indices.buffer, 0, VkIndexType.Uint32);
+                vkCmdBindPipeline(drawCmdBuffers[i], VkPipelineBindPoint.Graphics, pipelines_reflect);
+                vkCmdDrawIndexed(drawCmdBuffers[i], models_objects[(int)models_objectIndex].indexCount, 1, 0, 0, 0);
 
-                vkCmdEndRenderPass(DrawCmdBuffers[i]);
+                vkCmdEndRenderPass(drawCmdBuffers[i]);
 
-                Util.CheckResult(vkEndCommandBuffer(DrawCmdBuffers[i]));
+                Util.CheckResult(vkEndCommandBuffer(drawCmdBuffers[i]));
             }
         }
 
         void loadMeshes()
         {
             // Skybox
-            models_skybox.loadFromFile(getAssetPath() + "models/cube.obj", vertexLayout, 0.05f, VulkanDevice, Queue);
+            models_skybox.loadFromFile(getAssetPath() + "models/cube.obj", vertexLayout, 0.05f, vulkanDevice, queue);
             // Objects
             List<string> filenames = new List<string> { "sphere.obj", "teapot.dae", "torusknot.obj" };
             foreach (string file in filenames)
             {
                 vksModel model = new vksModel();
-                model.loadFromFile(getAssetPath() + "models/" + file, vertexLayout, 0.05f, VulkanDevice, Queue);
+                model.loadFromFile(getAssetPath() + "models/" + file, vertexLayout, 0.05f, vulkanDevice, queue);
                 models_objects.Add(model);
             }
         }
@@ -448,7 +448,7 @@ namespace Vk.Samples
                     &poolSizes.First,
                     2);
 
-            Util.CheckResult(vkCreateDescriptorPool(Device, &descriptorPoolInfo, null, out descriptorPool));
+            Util.CheckResult(vkCreateDescriptorPool(device, &descriptorPoolInfo, null, out descriptorPool));
         }
 
         void setupDescriptorSetLayout()
@@ -470,7 +470,7 @@ namespace Vk.Samples
                     &setLayoutBindings.First,
                     setLayoutBindings.Count);
 
-            Util.CheckResult(vkCreateDescriptorSetLayout(Device, &descriptorLayout, null, out descriptorSetLayout));
+            Util.CheckResult(vkCreateDescriptorSetLayout(device, &descriptorLayout, null, out descriptorSetLayout));
 
             var dsl = descriptorSetLayout;
             VkPipelineLayoutCreateInfo pPipelineLayoutCreateInfo =
@@ -478,7 +478,7 @@ namespace Vk.Samples
                     &dsl,
                     1);
 
-            Util.CheckResult(vkCreatePipelineLayout(Device, &pPipelineLayoutCreateInfo, null, out pipelineLayout));
+            Util.CheckResult(vkCreatePipelineLayout(device, &pPipelineLayoutCreateInfo, null, out pipelineLayout));
         }
 
         void setupDescriptorSets()
@@ -498,7 +498,7 @@ namespace Vk.Samples
                     1);
 
             // 3D object descriptor set
-            Util.CheckResult(vkAllocateDescriptorSets(Device, &allocInfo, out descriptorSets_object));
+            Util.CheckResult(vkAllocateDescriptorSets(device, &allocInfo, out descriptorSets_object));
 
             var bufferInfo = uniformBuffers_object.descriptor;
             FixedArray2<VkWriteDescriptorSet> writeDescriptorSets = new FixedArray2<VkWriteDescriptorSet>
@@ -516,10 +516,10 @@ namespace Vk.Samples
                     1,
                     &textureDescriptor));
 
-            vkUpdateDescriptorSets(Device, writeDescriptorSets.Count, ref writeDescriptorSets.First, 0, null);
+            vkUpdateDescriptorSets(device, writeDescriptorSets.Count, ref writeDescriptorSets.First, 0, null);
 
             // Sky box descriptor set
-            Util.CheckResult(vkAllocateDescriptorSets(Device, &allocInfo, out descriptorSets_skybox));
+            Util.CheckResult(vkAllocateDescriptorSets(device, &allocInfo, out descriptorSets_skybox));
 
             var descriptor = uniformBuffers_skybox.descriptor;
             writeDescriptorSets = new FixedArray2<VkWriteDescriptorSet>
@@ -537,7 +537,7 @@ namespace Vk.Samples
                     1,
                     &textureDescriptor));
 
-            vkUpdateDescriptorSets(Device, writeDescriptorSets.Count, ref writeDescriptorSets.First, 0, null);
+            vkUpdateDescriptorSets(device, writeDescriptorSets.Count, ref writeDescriptorSets.First, 0, null);
         }
 
         void preparePipelines()
@@ -596,7 +596,7 @@ namespace Vk.Samples
             VkGraphicsPipelineCreateInfo pipelineCreateInfo =
                 Initializers.pipelineCreateInfo(
                     pipelineLayout,
-                    RenderPass,
+                    renderPass,
                     0);
 
             var inputState = vertices.inputState;
@@ -611,7 +611,7 @@ namespace Vk.Samples
             pipelineCreateInfo.stageCount = shaderStages.Count;
             pipelineCreateInfo.pStages = &shaderStages.First;
 
-            Util.CheckResult(vkCreateGraphicsPipelines(Device, PipelineCache, 1, &pipelineCreateInfo, null, out pipelines_skybox));
+            Util.CheckResult(vkCreateGraphicsPipelines(device, pipelineCache, 1, &pipelineCreateInfo, null, out pipelines_skybox));
 
             // Cube map reflect pipeline
             shaderStages.First = loadShader(getAssetPath() + "shaders/cubemap/reflect.vert.spv", VkShaderStageFlags.Vertex);
@@ -621,21 +621,21 @@ namespace Vk.Samples
             depthStencilState.depthTestEnable = True;
             // Flip cull mode
             rasterizationState.cullMode = VkCullModeFlags.Front;
-            Util.CheckResult(vkCreateGraphicsPipelines(Device, PipelineCache, 1, &pipelineCreateInfo, null, out pipelines_reflect));
+            Util.CheckResult(vkCreateGraphicsPipelines(device, pipelineCache, 1, &pipelineCreateInfo, null, out pipelines_reflect));
         }
 
         // Prepare and initialize uniform buffer containing shader uniforms
         void prepareUniformBuffers()
         {
             // Objact vertex shader uniform buffer
-            Util.CheckResult(VulkanDevice.createBuffer(
+            Util.CheckResult(vulkanDevice.createBuffer(
                 VkBufferUsageFlags.UniformBuffer,
                 VkMemoryPropertyFlags.HostVisible | VkMemoryPropertyFlags.HostCoherent,
                 uniformBuffers_object,
                 (ulong)sizeof(UboVS)));
 
             // Skybox vertex shader uniform buffer
-            Util.CheckResult(VulkanDevice.createBuffer(
+            Util.CheckResult(vulkanDevice.createBuffer(
                 VkBufferUsageFlags.UniformBuffer,
                 VkMemoryPropertyFlags.HostVisible | VkMemoryPropertyFlags.HostCoherent,
                 uniformBuffers_skybox,
@@ -651,7 +651,7 @@ namespace Vk.Samples
         void updateUniformBuffers()
         {
             // 3D object
-            uboVS.projection = Matrix4x4.CreatePerspectiveFieldOfView(Util.DegreesToRadians(60f), Width / (float)Height, 0.001f, 256.0f);
+            uboVS.projection = Matrix4x4.CreatePerspectiveFieldOfView(Util.DegreesToRadians(60f), width / (float)height, 0.001f, 256.0f);
             Matrix4x4 viewMatrix = Matrix4x4.CreateTranslation(new Vector3(0, 0, zoom));
 
             uboVS.model = viewMatrix * Matrix4x4.CreateTranslation(cameraPos);
@@ -664,7 +664,7 @@ namespace Vk.Samples
 
             // Skybox
             viewMatrix = Matrix4x4.Identity;
-            uboVS.projection = Matrix4x4.CreatePerspectiveFieldOfView(Util.DegreesToRadians(60f), Width / (float)Height, 0.001f, 256.0f);
+            uboVS.projection = Matrix4x4.CreatePerspectiveFieldOfView(Util.DegreesToRadians(60f), width / (float)height, 0.001f, 256.0f);
 
             uboVS.model = Matrix4x4.Identity;
             uboVS.model = viewMatrix;
@@ -680,9 +680,9 @@ namespace Vk.Samples
         {
             prepareFrame();
 
-            SubmitInfo.commandBufferCount = 1;
-            SubmitInfo.pCommandBuffers = (VkCommandBuffer*)DrawCmdBuffers.GetAddress(currentBuffer);
-            Util.CheckResult(vkQueueSubmit(Queue, 1, ref SubmitInfo, NullHandle));
+            submitInfo.commandBufferCount = 1;
+            submitInfo.pCommandBuffers = (VkCommandBuffer*)drawCmdBuffers.GetAddress(currentBuffer);
+            Util.CheckResult(vkQueueSubmit(queue, 1, ref submitInfo, NullHandle));
 
             submitFrame();
         }
