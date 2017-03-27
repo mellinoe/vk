@@ -63,7 +63,7 @@ namespace Vk.Samples
         {
             zoom = -10.5f;
             rotation = new Vector3(-25.0f, 15.0f, 0.0f);
-            Title = "Vulkan Example - Pipeline state objects";
+            title = "Vulkan Example - Pipeline state objects";
         }
 
         // C++ destructor

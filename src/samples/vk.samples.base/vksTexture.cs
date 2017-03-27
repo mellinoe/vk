@@ -26,7 +26,7 @@ namespace Vk.Samples
         public VkImageView view;
         public VkImage image;
         public VkSampler sampler;
-        public VkDeviceMemory DeviceMemory;
+        public VkDeviceMemory deviceMemory;
         public uint width;
         public uint height;
         public uint mipLevels;
@@ -106,7 +106,7 @@ namespace Vk.Samples
 
                 memAllocInfo.allocationSize = memReqs.size;
                 // Get memory type index for a host visible buffer
-                memAllocInfo.memoryTypeIndex = device.GetMemoryType(memReqs.memoryTypeBits, VkMemoryPropertyFlags.HostVisible | VkMemoryPropertyFlags.HostCoherent);
+                memAllocInfo.memoryTypeIndex = device.getMemoryType(memReqs.memoryTypeBits, VkMemoryPropertyFlags.HostVisible | VkMemoryPropertyFlags.HostCoherent);
 
                 Util.CheckResult(vkAllocateMemory(device.LogicalDevice, &memAllocInfo, null, &stagingMemory));
                 Util.CheckResult(vkBindBufferMemory(device.LogicalDevice, stagingBuffer, stagingMemory, 0));
@@ -165,9 +165,9 @@ namespace Vk.Samples
 
                 memAllocInfo.allocationSize = memReqs.size;
 
-                memAllocInfo.memoryTypeIndex = device.GetMemoryType(memReqs.memoryTypeBits, VkMemoryPropertyFlags.DeviceLocal);
-                Util.CheckResult(vkAllocateMemory(device.LogicalDevice, &memAllocInfo, null, out DeviceMemory));
-                Util.CheckResult(vkBindImageMemory(device.LogicalDevice, image, DeviceMemory, 0));
+                memAllocInfo.memoryTypeIndex = device.getMemoryType(memReqs.memoryTypeBits, VkMemoryPropertyFlags.DeviceLocal);
+                Util.CheckResult(vkAllocateMemory(device.LogicalDevice, &memAllocInfo, null, out deviceMemory));
+                Util.CheckResult(vkBindImageMemory(device.LogicalDevice, image, deviceMemory, 0));
 
                 VkImageSubresourceRange subresourceRange = new VkImageSubresourceRange();
                 subresourceRange.aspectMask = VkImageAspectFlags.Color;

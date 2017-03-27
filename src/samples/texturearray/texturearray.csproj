@@ -1,0 +1,38 @@
+﻿<Project Sdk="Microsoft.NET.Sdk" DefaultTargets="Build;Publish">
+  <PropertyGroup>
+    <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == '' And '$(OS)' == 'Windows_NT'">win7-x64</RuntimeIdentifier>
+    <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == '' And '$(OS)' == 'Unix'">ubuntu.16.04-x64</RuntimeIdentifier>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>netcoreapp1.1</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>$(MSBuildProjectName)</AssemblyName>
+    <RootNamespace>Vk.Samples</RootNamespace>
+    <NuGetTargetMoniker>.NETCoreApp,Version=v1.1</NuGetTargetMoniker>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="..\..\..\data\shaders\dynamicuniformbuffer\base.vert.spv">
+      <Link>data\shaders\dynamicuniformbuffer\base.vert.spv</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\data\shaders\dynamicuniformbuffer\base.frag.spv">
+      <Link>data\shaders\dynamicuniformbuffer\base.frag.spv</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../vk/vk.csproj" />
+    <ProjectReference Include="../vk.samples.base/vk.samples.base.csproj" />
+    <ProjectReference Include="..\..\..\ext\veldrid.collections\src\Veldrid.Collections\Veldrid.Collections.csproj" />
+    <PackageReference Include="Microsoft.NETCore.App" Version="1.1.0" />
+    <PackageReference Include="Microsoft.NETCore.DotNetHostPolicy" Version="1.1.0" />
+    <PackageReference Include="Microsoft.NETCore.Runtime.CoreCLR" Version="1.1.0" />
+    <PackageReference Include="System.CommandLine" Version="0.1.0-e160908-1" />
+    <PackageReference Include="System.Xml.XmlDocument" Version="4.3.0" />
+    <PackageReference Include="OpenTK.NETCore" Version="1.1.2287.6424" />
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.3.0" />
+  </ItemGroup>
+</Project>

@@ -35,6 +35,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "specializationconstants", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dynamicuniformbuffer", "samples\dynamicuniformbuffer\dynamicuniformbuffer.csproj", "{78F1011F-9C5A-4250-A790-13627CC1A87E}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "texturearray", "samples\texturearray\texturearray.csproj", "{CFC6EB32-C246-48C2-B78D-E8730270D899}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -213,6 +215,18 @@ Global
 		{78F1011F-9C5A-4250-A790-13627CC1A87E}.Release|x64.Build.0 = Release|Any CPU
 		{78F1011F-9C5A-4250-A790-13627CC1A87E}.Release|x86.ActiveCfg = Release|Any CPU
 		{78F1011F-9C5A-4250-A790-13627CC1A87E}.Release|x86.Build.0 = Release|Any CPU
+		{CFC6EB32-C246-48C2-B78D-E8730270D899}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFC6EB32-C246-48C2-B78D-E8730270D899}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFC6EB32-C246-48C2-B78D-E8730270D899}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{CFC6EB32-C246-48C2-B78D-E8730270D899}.Debug|x64.Build.0 = Debug|Any CPU
+		{CFC6EB32-C246-48C2-B78D-E8730270D899}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{CFC6EB32-C246-48C2-B78D-E8730270D899}.Debug|x86.Build.0 = Debug|Any CPU
+		{CFC6EB32-C246-48C2-B78D-E8730270D899}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFC6EB32-C246-48C2-B78D-E8730270D899}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CFC6EB32-C246-48C2-B78D-E8730270D899}.Release|x64.ActiveCfg = Release|Any CPU
+		{CFC6EB32-C246-48C2-B78D-E8730270D899}.Release|x64.Build.0 = Release|Any CPU
+		{CFC6EB32-C246-48C2-B78D-E8730270D899}.Release|x86.ActiveCfg = Release|Any CPU
+		{CFC6EB32-C246-48C2-B78D-E8730270D899}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -229,5 +243,6 @@ Global
 		{C894311F-9A61-41B9-B118-B3DFBA430477} = {2B0FDFF4-F2C0-4A0C-AA8B-1BFACE57E32C}
 		{C763044A-51A6-4742-9FEA-E5DF0C017DF4} = {2B0FDFF4-F2C0-4A0C-AA8B-1BFACE57E32C}
 		{78F1011F-9C5A-4250-A790-13627CC1A87E} = {2B0FDFF4-F2C0-4A0C-AA8B-1BFACE57E32C}
+		{CFC6EB32-C246-48C2-B78D-E8730270D899} = {2B0FDFF4-F2C0-4A0C-AA8B-1BFACE57E32C}
 	EndGlobalSection
 EndGlobal

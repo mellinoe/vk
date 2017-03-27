@@ -271,7 +271,7 @@ namespace Vk.Samples
             vkGetBufferMemoryRequirements(_logicalDevice, buffer.buffer, &memReqs);
             memAlloc.allocationSize = memReqs.size;
             // Find a memory type index that fits the properties of the buffer
-            memAlloc.memoryTypeIndex = GetMemoryType(memReqs.memoryTypeBits, memoryPropertyFlags);
+            memAlloc.memoryTypeIndex = getMemoryType(memReqs.memoryTypeBits, memoryPropertyFlags);
             Util.CheckResult(vkAllocateMemory(_logicalDevice, &memAlloc, null, out buffer.memory));
 
             buffer.alignment = memReqs.alignment;
@@ -322,7 +322,7 @@ namespace Vk.Samples
             vkGetBufferMemoryRequirements(LogicalDevice, *buffer, &memReqs);
             memAlloc.allocationSize = memReqs.size;
             // Find a memory type index that fits the properties of the buffer
-            memAlloc.memoryTypeIndex = GetMemoryType(memReqs.memoryTypeBits, memoryPropertyFlags);
+            memAlloc.memoryTypeIndex = getMemoryType(memReqs.memoryTypeBits, memoryPropertyFlags);
             Util.CheckResult(vkAllocateMemory(LogicalDevice, &memAlloc, null, memory));
 
             // If a pointer to the buffer data has been passed, map the buffer and copy over the data
@@ -432,7 +432,7 @@ namespace Vk.Samples
         *
         * @throw Throws an exception if memTypeFound is null and no memory type could be found that supports the requested properties
         */
-        public uint GetMemoryType(uint typeBits, VkMemoryPropertyFlags properties, uint* memTypeFound = null)
+        public uint getMemoryType(uint typeBits, VkMemoryPropertyFlags properties, uint* memTypeFound = null)
         {
             for (uint i = 0; i < MemoryProperties.memoryTypeCount; i++)
             {

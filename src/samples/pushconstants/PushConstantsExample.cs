@@ -67,7 +67,7 @@ namespace Vk.Samples
             timerSpeed *= 0.5f;
             rotation = new Vector3(-32.5f, 45.0f, 0.0f);
             // enableTextOverlay = true;
-            Title = "Vulkan Example - Push constants";
+            title = "Vulkan Example - Push constants";
         }
 
         public void Dispose()

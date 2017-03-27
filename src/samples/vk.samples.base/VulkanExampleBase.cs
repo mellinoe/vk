@@ -28,7 +28,7 @@ namespace Vk.Samples
 {
     public unsafe class VulkanExampleBase
     {
-        public FixedUtf8String Title { get; set; } = "Vulkan Example";
+        public FixedUtf8String title { get; set; } = "Vulkan Example";
         public FixedUtf8String Name { get; set; } = "VulkanExample";
         public Settings Settings { get; } = new Settings();
         public IntPtr WindowInstance { get; protected set; }
@@ -629,7 +629,7 @@ namespace Vk.Samples
             Util.CheckResult(vkCreateImage(device, &image, null, out DepthStencil.Image));
             vkGetImageMemoryRequirements(device, DepthStencil.Image, out VkMemoryRequirements memReqs);
             mem_alloc.allocationSize = memReqs.size;
-            mem_alloc.memoryTypeIndex = vulkanDevice.GetMemoryType(memReqs.memoryTypeBits, VkMemoryPropertyFlags.DeviceLocal);
+            mem_alloc.memoryTypeIndex = vulkanDevice.getMemoryType(memReqs.memoryTypeBits, VkMemoryPropertyFlags.DeviceLocal);
             Util.CheckResult(vkAllocateMemory(device, &mem_alloc, null, out DepthStencil.Mem));
             Util.CheckResult(vkBindImageMemory(device, DepthStencil.Image, DepthStencil.Mem, 0));
 
@@ -702,7 +702,7 @@ namespace Vk.Samples
             int firstNull = device.IndexOf('\0');
             device = device.Remove(firstNull);
             string windowTitle;
-            windowTitle = Title + " - " + device;
+            windowTitle = title + " - " + device;
             if (!enableTextOverlay)
             {
                 windowTitle += " - " + _frameTimeAverager.CurrentAverageFramesPerSecond.ToString("000.0 fps / ") + _frameTimeAverager.CurrentAverageFrameTime.ToString("#00.00 ms");

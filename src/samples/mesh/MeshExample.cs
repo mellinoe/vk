@@ -88,7 +88,7 @@ namespace Vk.Samples
             rotationSpeed = 0.5f;
             rotation = new Vector3(-0.5f, -112.75f, 0.0f);
             cameraPos = new Vector3(0.1f, 1.1f, 0.0f);
-            Title = "Vulkan Example - Model rendering";
+            title = "Vulkan Example - Model rendering";
         }
 
         public void Dispose()

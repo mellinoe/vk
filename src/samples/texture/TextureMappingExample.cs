@@ -86,7 +86,7 @@ namespace Vk.Samples
         {
             zoom = -2.5f;
             rotation = new Vector3(0.0f, 15.0f, 0.0f);
-            Title = "Vulkan Example - Texture loading";
+            title = "Vulkan Example - Texture loading";
             // enableTextOverlay = true;
         }
 
@@ -234,7 +234,7 @@ namespace Vk.Samples
 
                 memAllocInfo.allocationSize = memReqs.size;
                 // Get memory type index for a host visible buffer
-                memAllocInfo.memoryTypeIndex = vulkanDevice.GetMemoryType(memReqs.memoryTypeBits, VkMemoryPropertyFlags.HostVisible | VkMemoryPropertyFlags.HostCoherent);
+                memAllocInfo.memoryTypeIndex = vulkanDevice.getMemoryType(memReqs.memoryTypeBits, VkMemoryPropertyFlags.HostVisible | VkMemoryPropertyFlags.HostCoherent);
 
                 Util.CheckResult(vkAllocateMemory(device, &memAllocInfo, null, &stagingMemory));
                 Util.CheckResult(vkBindBufferMemory(device, stagingBuffer, stagingMemory, 0));
@@ -289,7 +289,7 @@ namespace Vk.Samples
                 vkGetImageMemoryRequirements(device, texture.image, &memReqs);
 
                 memAllocInfo.allocationSize = memReqs.size;
-                memAllocInfo.memoryTypeIndex = vulkanDevice.GetMemoryType(memReqs.memoryTypeBits, VkMemoryPropertyFlags.DeviceLocal);
+                memAllocInfo.memoryTypeIndex = vulkanDevice.getMemoryType(memReqs.memoryTypeBits, VkMemoryPropertyFlags.DeviceLocal);
 
                 Util.CheckResult(vkAllocateMemory(device, &memAllocInfo, null, out texture.DeviceMemory));
                 Util.CheckResult(vkBindImageMemory(device, texture.image, texture.DeviceMemory, 0));

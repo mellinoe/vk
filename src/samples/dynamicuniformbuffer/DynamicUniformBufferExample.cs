@@ -106,7 +106,7 @@ namespace Vk.Samples
 
         public DynamicUniformBufferExample()
         {
-            Title = "Vulkan Example - Dynamic uniform buffers";
+            title = "Vulkan Example - Dynamic uniform buffers";
             // enableTextOverlay = true;
             camera.type = Camera.CameraType.lookat;
             camera.setPosition(new Vector3(0.0f, 0.0f, -30.0f));

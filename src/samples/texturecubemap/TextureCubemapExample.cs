@@ -75,7 +75,7 @@ namespace Vk.Samples
             rotationSpeed = 0.25f;
             rotation = new Vector3(-7.25f, -120.0f, 0.0f);
             // enableTextOverlay = true;
-            Title = "Vulkan Example - Cube map";
+            title = "Vulkan Example - Cube map";
         }
 
         public void Dispose()
@@ -87,7 +87,7 @@ namespace Vk.Samples
             vkDestroyImageView(device, cubeMap.view, null);
             vkDestroyImage(device, cubeMap.image, null);
             vkDestroySampler(device, cubeMap.sampler, null);
-            vkFreeMemory(device, cubeMap.DeviceMemory, null);
+            vkFreeMemory(device, cubeMap.deviceMemory, null);
 
             vkDestroyPipeline(device, pipelines_skybox, null);
             vkDestroyPipeline(device, pipelines_reflect, null);
@@ -136,7 +136,7 @@ namespace Vk.Samples
             vkGetBufferMemoryRequirements(device, stagingBuffer, &memReqs);
             memAllocInfo.allocationSize = memReqs.size;
             // Get memory type index for a host visible buffer
-            memAllocInfo.memoryTypeIndex = vulkanDevice.GetMemoryType(memReqs.memoryTypeBits, VkMemoryPropertyFlags.HostVisible | VkMemoryPropertyFlags.HostCoherent);
+            memAllocInfo.memoryTypeIndex = vulkanDevice.getMemoryType(memReqs.memoryTypeBits, VkMemoryPropertyFlags.HostVisible | VkMemoryPropertyFlags.HostCoherent);
             Util.CheckResult(vkAllocateMemory(device, &memAllocInfo, null, &stagingMemory));
             Util.CheckResult(vkBindBufferMemory(device, stagingBuffer, stagingMemory, 0));
 
@@ -173,10 +173,10 @@ namespace Vk.Samples
             vkGetImageMemoryRequirements(device, cubeMap.image, &memReqs);
 
             memAllocInfo.allocationSize = memReqs.size;
-            memAllocInfo.memoryTypeIndex = vulkanDevice.GetMemoryType(memReqs.memoryTypeBits, VkMemoryPropertyFlags.DeviceLocal);
+            memAllocInfo.memoryTypeIndex = vulkanDevice.getMemoryType(memReqs.memoryTypeBits, VkMemoryPropertyFlags.DeviceLocal);
 
-            Util.CheckResult(vkAllocateMemory(device, &memAllocInfo, null, out cubeMap.DeviceMemory));
-            Util.CheckResult(vkBindImageMemory(device, cubeMap.image, cubeMap.DeviceMemory, 0));
+            Util.CheckResult(vkAllocateMemory(device, &memAllocInfo, null, out cubeMap.deviceMemory));
+            Util.CheckResult(vkBindImageMemory(device, cubeMap.image, cubeMap.deviceMemory, 0));
 
             VkCommandBuffer copyCmd = createCommandBuffer(VkCommandBufferLevel.Primary, true);
 

@@ -61,7 +61,7 @@ namespace Vk.Samples
 
         public SpecializationConstantsExample()
         {
-            Title = "Vulkan Example - Specialization constants";
+            title = "Vulkan Example - Specialization constants";
             // enableTextOverlay = true;
             camera.type = Camera.CameraType.lookat;
             camera.setPerspective(60.0f, ((float)width / 3.0f) / (float)height, 0.1f, 512.0f);
