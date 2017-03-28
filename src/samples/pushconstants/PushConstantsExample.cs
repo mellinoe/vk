@@ -86,10 +86,10 @@ namespace Vk.Samples
 
         void reBuildCommandBuffers()
         {
-            if (!CheckCommandBuffers())
+            if (!checkCommandBuffers())
             {
-                DestroyCommandBuffers();
-                CreateCommandBuffers();
+                destroyCommandBuffers();
+                createCommandBuffers();
             }
             buildCommandBuffers();
         }

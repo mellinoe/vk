@@ -256,7 +256,7 @@ namespace Vk.Samples
             sampler.maxLod = cubeMap.mipLevels;
             sampler.borderColor = VkBorderColor.FloatOpaqueWhite;
             sampler.maxAnisotropy = 1.0f;
-            if (vulkanDevice.Features.samplerAnisotropy == 1)
+            if (vulkanDevice.features.samplerAnisotropy == 1)
             {
                 sampler.maxAnisotropy = vulkanDevice.properties.limits.maxSamplerAnisotropy;
                 sampler.anisotropyEnable = True;
@@ -314,10 +314,10 @@ namespace Vk.Samples
 
         void ReBuildCommandBuffers()
         {
-            if (!CheckCommandBuffers())
+            if (!checkCommandBuffers())
             {
-                DestroyCommandBuffers();
-                CreateCommandBuffers();
+                destroyCommandBuffers();
+                createCommandBuffers();
             }
             buildCommandBuffers();
         }

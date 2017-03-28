@@ -106,7 +106,7 @@ namespace Vk.Samples
 
             destroyModel(device);
 
-            textures_colorMap.Destroy();
+            textures_colorMap.destroy();
             uniformBuffers_scene.destroy();
         }
 
@@ -115,18 +115,18 @@ namespace Vk.Samples
             // Fill mode non solid is required for wireframe display
             if (DeviceFeatures.fillModeNonSolid == 1)
             {
-                var features = EnabledFeatures;
+                var features = enabledFeatures;
                 features.fillModeNonSolid = True;
-                EnabledFeatures = features;
+                enabledFeatures = features;
             };
         }
 
         void reBuildCommandBuffers()
         {
-            if (!CheckCommandBuffers())
+            if (!checkCommandBuffers())
             {
-                DestroyCommandBuffers();
-                CreateCommandBuffers();
+                destroyCommandBuffers();
+                createCommandBuffers();
             }
             buildCommandBuffers();
         }

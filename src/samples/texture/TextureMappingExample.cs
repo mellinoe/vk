@@ -196,7 +196,7 @@ namespace Vk.Samples
             texture.mipLevels = tex2D.Header.NumberOfMipmapLevels;
 
             // Get Device properites for the requested texture format
-            vkGetPhysicalDeviceFormatProperties(PhysicalDevice, format, &formatProperties);
+            vkGetPhysicalDeviceFormatProperties(physicalDevice, format, &formatProperties);
 
             // Only use linear tiling if requested (and supported by the Device)
             // Support for linear tiling is mostly limited, so prefer to use
@@ -459,7 +459,7 @@ namespace Vk.Samples
             sampler.maxLod = (useStaging == 1) ? (float)texture.mipLevels : 0.0f;
             // Enable anisotropic filtering
             // This feature is optional, so we must check if it's supported on the Device
-            if (vulkanDevice.Features.samplerAnisotropy == 1)
+            if (vulkanDevice.features.samplerAnisotropy == 1)
             {
                 // Use max. level of anisotropy for this example
                 sampler.maxAnisotropy = vulkanDevice.properties.limits.maxSamplerAnisotropy;

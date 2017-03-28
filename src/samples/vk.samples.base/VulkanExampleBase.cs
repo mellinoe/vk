@@ -33,16 +33,16 @@ namespace Vk.Samples
         public Settings Settings { get; } = new Settings();
         public IntPtr WindowInstance { get; protected set; }
         public VkInstance Instance { get; protected set; }
-        public VkPhysicalDevice PhysicalDevice { get; protected set; }
+        public VkPhysicalDevice physicalDevice { get; protected set; }
         public vksVulkanDevice vulkanDevice { get; protected set; }
-        public VkPhysicalDeviceFeatures EnabledFeatures { get; protected set; }
+        public VkPhysicalDeviceFeatures enabledFeatures { get; protected set; }
         public NativeList<IntPtr> EnabledExtensions { get; } = new NativeList<IntPtr>();
         public VkDevice device { get; protected set; }
         public VkQueue queue { get; protected set; }
         public VkFormat DepthFormat { get; protected set; }
         public VulkanSwapchain Swapchain { get; } = new VulkanSwapchain();
         public IntPtr Window { get; protected set; }
-        public VkCommandPool CmdPool => _cmdPool;
+        public VkCommandPool cmdPool => _cmdPool;
         public uint width { get; protected set; } = 1280;
         public uint height { get; protected set; } = 720;
         public NativeList<VkCommandBuffer> drawCmdBuffers { get; protected set; } = new NativeList<VkCommandBuffer>();
@@ -54,8 +54,8 @@ namespace Vk.Samples
         public VkPhysicalDeviceFeatures DeviceFeatures { get; protected set; }
         public OpenTK.NativeWindow NativeWindow { get; private set; }
 
-        public NativeList<Semaphores> Semaphores = new NativeList<Semaphores>(1, 1);
-        public Semaphores* GetSemaphoresPtr() => (Semaphores*)Semaphores.GetAddress(0);
+        public NativeList<Semaphores> semaphores = new NativeList<Semaphores>(1, 1);
+        public Semaphores* GetSemaphoresPtr() => (Semaphores*)semaphores.GetAddress(0);
         public DepthStencil DepthStencil;
         public VkSubmitInfo submitInfo;
         public NativeList<VkPipelineStageFlags> submitPipelineStages = CreateSubmitPipelineStages();
@@ -136,21 +136,21 @@ namespace Vk.Samples
             uint selectedDevice = 0;
             // TODO: Implement arg parsing, etc.
 
-            PhysicalDevice = ((VkPhysicalDevice*)physicalDevices)[selectedDevice];
+            physicalDevice = ((VkPhysicalDevice*)physicalDevices)[selectedDevice];
 
             // Store properties (including limits) and features of the phyiscal Device
             // So examples can check against them and see if a feature is actually supported
             VkPhysicalDeviceProperties deviceProperties;
-            vkGetPhysicalDeviceProperties(PhysicalDevice, &deviceProperties);
+            vkGetPhysicalDeviceProperties(physicalDevice, &deviceProperties);
             DeviceProperties = deviceProperties;
 
             VkPhysicalDeviceFeatures deviceFeatures;
-            vkGetPhysicalDeviceFeatures(PhysicalDevice, &deviceFeatures);
+            vkGetPhysicalDeviceFeatures(physicalDevice, &deviceFeatures);
             DeviceFeatures = deviceFeatures;
 
             // Gather physical Device memory properties
             VkPhysicalDeviceMemoryProperties deviceMemoryProperties;
-            vkGetPhysicalDeviceMemoryProperties(PhysicalDevice, &deviceMemoryProperties);
+            vkGetPhysicalDeviceMemoryProperties(physicalDevice, &deviceMemoryProperties);
             DeviceMemoryProperties = deviceMemoryProperties;
 
             // Derived examples can override this to set actual features (based on above readings) to enable for logical device creation
@@ -159,8 +159,8 @@ namespace Vk.Samples
             // Vulkan Device creation
             // This is handled by a separate class that gets a logical Device representation
             // and encapsulates functions related to a Device
-            vulkanDevice = new vksVulkanDevice(PhysicalDevice);
-            VkResult res = vulkanDevice.CreateLogicalDevice(EnabledFeatures, EnabledExtensions);
+            vulkanDevice = new vksVulkanDevice(physicalDevice);
+            VkResult res = vulkanDevice.CreateLogicalDevice(enabledFeatures, EnabledExtensions);
             if (res != VkResult.Success)
             {
                 throw new InvalidOperationException("Could not create Vulkan Device.");
@@ -174,14 +174,14 @@ namespace Vk.Samples
 
             // Find a suitable depth format
             VkFormat depthFormat;
-            uint validDepthFormat = Tools.getSupportedDepthFormat(PhysicalDevice, &depthFormat);
+            uint validDepthFormat = Tools.getSupportedDepthFormat(physicalDevice, &depthFormat);
             Debug.Assert(validDepthFormat == True);
             DepthFormat = depthFormat;
 
-            Swapchain.Connect(Instance, PhysicalDevice, device);
+            Swapchain.Connect(Instance, physicalDevice, device);
 
             // Create synchronization objects
-            VkSemaphoreCreateInfo semaphoreCreateInfo = Initializers.SemaphoreCreateInfo();
+            VkSemaphoreCreateInfo semaphoreCreateInfo = Initializers.semaphoreCreateInfo();
             // Create a semaphore used to synchronize image presentation
             // Ensures that the image is displayed before we start submitting new commands to the queu
             Util.CheckResult(vkCreateSemaphore(device, &semaphoreCreateInfo, null, &GetSemaphoresPtr()->PresentComplete));
@@ -366,7 +366,7 @@ namespace Vk.Samples
 
             CreateCommandPool();
             SetupSwapChain();
-            CreateCommandBuffers();
+            createCommandBuffers();
             SetupDepthStencil();
             SetupRenderPass();
             CreatePipelineCache();
@@ -397,7 +397,7 @@ namespace Vk.Samples
         protected void prepareFrame()
         {
             // Acquire the next image from the swap chaing
-            Util.CheckResult(Swapchain.AcquireNextImage(Semaphores[0].PresentComplete, ref currentBuffer));
+            Util.CheckResult(Swapchain.AcquireNextImage(semaphores[0].PresentComplete, ref currentBuffer));
         }
 
         protected virtual void SetupRenderPass()
@@ -556,7 +556,7 @@ namespace Vk.Samples
             }
             */
 
-            Util.CheckResult(Swapchain.QueuePresent(queue, currentBuffer, submitTextOverlay ? Semaphores[0].TextOverlayComplete : Semaphores[0].RenderComplete));
+            Util.CheckResult(Swapchain.QueuePresent(queue, currentBuffer, submitTextOverlay ? semaphores[0].TextOverlayComplete : semaphores[0].RenderComplete));
 
             Util.CheckResult(vkQueueWaitIdle(queue));
         }
@@ -569,19 +569,19 @@ namespace Vk.Samples
             Util.CheckResult(vkCreateCommandPool(device, &cmdPoolInfo, null, out _cmdPool));
         }
 
-        protected void CreateCommandBuffers()
+        protected void createCommandBuffers()
         {
             // Create one command buffer for each swap chain image and reuse for rendering
             drawCmdBuffers.Resize(Swapchain.ImageCount);
             drawCmdBuffers.Count = Swapchain.ImageCount;
 
             VkCommandBufferAllocateInfo cmdBufAllocateInfo =
-                Initializers.CommandBufferAllocateInfo(CmdPool, VkCommandBufferLevel.Primary, drawCmdBuffers.Count);
+                Initializers.CommandBufferAllocateInfo(cmdPool, VkCommandBufferLevel.Primary, drawCmdBuffers.Count);
 
             Util.CheckResult(vkAllocateCommandBuffers(device, ref cmdBufAllocateInfo, (VkCommandBuffer*)drawCmdBuffers.Data));
         }
 
-        protected bool CheckCommandBuffers()
+        protected bool checkCommandBuffers()
         {
             foreach (var cmdBuffer in drawCmdBuffers)
             {
@@ -593,9 +593,9 @@ namespace Vk.Samples
             return true;
         }
 
-        protected void DestroyCommandBuffers()
+        protected void destroyCommandBuffers()
         {
-            vkFreeCommandBuffers(device, CmdPool, drawCmdBuffers.Count, drawCmdBuffers.Data);
+            vkFreeCommandBuffers(device, cmdPool, drawCmdBuffers.Count, drawCmdBuffers.Data);
         }
 
         protected virtual void SetupDepthStencil()
@@ -743,8 +743,8 @@ namespace Vk.Samples
 
             // Command buffers need to be recreated as they may store
             // references to the recreated frame buffer
-            DestroyCommandBuffers();
-            CreateCommandBuffers();
+            destroyCommandBuffers();
+            createCommandBuffers();
             buildCommandBuffers();
 
             vkDeviceWaitIdle(device);
@@ -779,7 +779,7 @@ namespace Vk.Samples
         {
             VkCommandBuffer cmdBuffer;
 
-            VkCommandBufferAllocateInfo cmdBufAllocateInfo = Initializers.CommandBufferAllocateInfo(CmdPool, level, 1);
+            VkCommandBufferAllocateInfo cmdBufAllocateInfo = Initializers.CommandBufferAllocateInfo(cmdPool, level, 1);
 
             Util.CheckResult(vkAllocateCommandBuffers(device, &cmdBufAllocateInfo, out cmdBuffer));
 
@@ -811,7 +811,7 @@ namespace Vk.Samples
 
             if (free)
             {
-                vkFreeCommandBuffers(device, CmdPool, 1, &commandBuffer);
+                vkFreeCommandBuffers(device, cmdPool, 1, &commandBuffer);
             }
         }
 

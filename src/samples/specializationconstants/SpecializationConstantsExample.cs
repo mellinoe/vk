@@ -79,7 +79,7 @@ namespace Vk.Samples
             vkDestroyDescriptorSetLayout(device, descriptorSetLayout, null);
 
             models_cube.destroy();
-            textures_colormap.Destroy();
+            textures_colormap.destroy();
             uniformBuffer.destroy();
         }
 

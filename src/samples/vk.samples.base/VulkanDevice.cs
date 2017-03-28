@@ -27,7 +27,7 @@ namespace Vk.Samples
 
         public VkPhysicalDevice PhysicalDevice { get; private set; }
         public VkPhysicalDeviceProperties properties { get; private set; }
-        public VkPhysicalDeviceFeatures Features { get; private set; }
+        public VkPhysicalDeviceFeatures features { get; private set; }
         public VkPhysicalDeviceMemoryProperties MemoryProperties { get; private set; }
         public NativeList<VkQueueFamilyProperties> QueueFamilyProperties { get; } = new NativeList<VkQueueFamilyProperties>();
         public List<string> SuppertedExcentions { get; } = new List<string>();
@@ -51,7 +51,7 @@ namespace Vk.Samples
             // Features should be checked by the examples before using them
             VkPhysicalDeviceFeatures features;
             vkGetPhysicalDeviceFeatures(physicalDevice, out features);
-            Features = features;
+            this.features = features;
             // Memory properties are used regularly for creating all kinds of buffers
             VkPhysicalDeviceMemoryProperties memoryProperties;
             vkGetPhysicalDeviceMemoryProperties(physicalDevice, out memoryProperties);

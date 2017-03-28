@@ -20,7 +20,7 @@ namespace Vk.Samples
 {
     public unsafe static class Initializers
     {
-        public static VkSemaphoreCreateInfo SemaphoreCreateInfo()
+        public static VkSemaphoreCreateInfo semaphoreCreateInfo()
         {
             VkSemaphoreCreateInfo semaphoreCreateInfo = new VkSemaphoreCreateInfo();
             semaphoreCreateInfo.sType = VkStructureType.SemaphoreCreateInfo;
@@ -378,6 +378,12 @@ namespace Vk.Samples
             setLayoutBinding.binding = binding;
             setLayoutBinding.descriptorCount = descriptorCount;
             return setLayoutBinding;
+        }
+
+        public static VkFramebufferCreateInfo framebufferCreateInfo()
+        {
+            VkFramebufferCreateInfo framebufferCreateInfo = VkFramebufferCreateInfo.New();
+            return framebufferCreateInfo;
         }
 
         public static VkDescriptorSetLayoutCreateInfo descriptorSetLayoutCreateInfo(

@@ -334,6 +334,6 @@ namespace Vk.Samples
             descriptor.imageLayout = imageLayout;
         }
 
-        public void Destroy() { }
+        public void destroy() { }
     }
 }

@@ -329,7 +329,7 @@ namespace Vk.Samples
         private VkCommandBuffer getCommandBuffer(bool begin)
         {
             VkCommandBufferAllocateInfo cmdBufAllocateInfo = VkCommandBufferAllocateInfo.New();
-            cmdBufAllocateInfo.commandPool = CmdPool;
+            cmdBufAllocateInfo.commandPool = cmdPool;
             cmdBufAllocateInfo.level = VkCommandBufferLevel.Primary;
             cmdBufAllocateInfo.commandBufferCount = 1;
 
@@ -367,7 +367,7 @@ namespace Vk.Samples
             Util.CheckResult(vkWaitForFences(device, 1, ref fence, True, DEFAULT_FENCE_TIMEOUT));
 
             vkDestroyFence(device, fence, null);
-            vkFreeCommandBuffers(device, CmdPool, 1, &commandBuffer);
+            vkFreeCommandBuffers(device, cmdPool, 1, &commandBuffer);
         }
 
         public void PrepareUniformBuffers()

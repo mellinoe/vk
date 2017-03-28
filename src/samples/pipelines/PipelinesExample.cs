@@ -91,7 +91,7 @@ namespace Vk.Samples
             // Fill mode non solid is required for wireframe display
             if (DeviceFeatures.fillModeNonSolid != 0)
             {
-                var features = EnabledFeatures;
+                var features = enabledFeatures;
                 features.fillModeNonSolid = True;
                 // Wide lines must be present for line Width > 1.0f
                 if (DeviceFeatures.wideLines != 0)
@@ -99,7 +99,7 @@ namespace Vk.Samples
                     features.wideLines = True;
                 }
 
-                EnabledFeatures = features;
+                enabledFeatures = features;
             }
         }
 
