@@ -68,6 +68,7 @@ namespace Vk.Samples
             this.device = device;
             width = tex2D.Header.PixelWidth;
             height = tex2D.Header.PixelHeight;
+            if (height == 0) height = width;
             mipLevels = tex2D.Header.NumberOfMipmapLevels;
 
             // Get device properites for the requested texture format

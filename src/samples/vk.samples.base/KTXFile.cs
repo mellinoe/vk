@@ -188,7 +188,8 @@ namespace Vk.Samples
         public readonly uint GlInternalFormat;
         public readonly uint GlBaseInternalFormat;
         public readonly uint PixelWidth;
-        public readonly uint PixelHeight;
+        private readonly uint _pixelHeight;
+        public uint PixelHeight => Math.Max(1, _pixelHeight);
         public readonly uint PixelDepth;
         public readonly uint NumberOfArrayElements;
         public readonly uint NumberOfFaces;
@@ -228,8 +229,8 @@ namespace Vk.Samples
         {
             SizeInBytes = sizeInBytes;
             Data = data;
-            Width = width;
-            Height = height;
+            Width = Math.Max(1, width);
+            Height = Math.Max(1, height);
         }
     }
 }
