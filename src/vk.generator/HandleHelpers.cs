@@ -20,9 +20,10 @@ namespace Vk.Generator
 
                 cw.WriteLine($"public {handle.Name}(IntPtr existingHandle) {{ Handle = existingHandle; }}");
                 cw.WriteLine($"public static implicit operator {handle.Name}(IntPtr handle) => new {handle.Name}(handle);");
-                cw.WriteLine($"public static implicit operator IntPtr({handle.Name} handle) => handle.Handle;");
-                //cw.WriteLine($"public static bool operator ==({handle.Name} left, IntPtr right) => left.Handle == right;");
-                //cw.WriteLine($"public static bool operator !=({handle.Name} left, IntPtr right) => left.Handle != right;");
+                cw.WriteLine($"public static bool operator ==({handle.Name} left, IntPtr right) => left.Handle == right;");
+                cw.WriteLine($"public static bool operator !=({handle.Name} left, IntPtr right) => left.Handle != right;");
+                cw.WriteLine($"public override bool Equals(object o) => o is IntPtr p && Handle.Equals(p);");
+                cw.WriteLine($"public override int GetHashCode() => Handle.GetHashCode();");
             }
         }
     }
