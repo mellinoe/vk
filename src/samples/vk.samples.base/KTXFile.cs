@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace Vk.Samples
@@ -178,6 +179,7 @@ namespace Vk.Samples
         }
     }
 
+    [StructLayout(LayoutKind.Sequential)]
     public unsafe struct KtxHeader
     {
         public fixed byte Identifier[12];
