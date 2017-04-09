@@ -1,10 +1,10 @@
 ﻿// This code has been adapted from the "Vulkan" C++ example repository, by Sascha Willems: https://github.com/SaschaWillems/Vulkan
 // It is a direct translation from the original C++ code and style, with as little transformation as possible.
 
-// Original file: specializationconstants/specializationconstants.cpp
+// Original file: offscreen/offscreen.cpp
 
 /*
-* Vulkan Example - Texture arrays and instanced rendering
+* Vulkan Example - Offscreen rendering using a separate framebuffer
 *
 * Copyright (C) 2016 by Sascha Willems - www.saschawillems.de
 *
