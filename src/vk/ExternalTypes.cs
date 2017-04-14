@@ -57,7 +57,10 @@ namespace Vulkan
     namespace Xlib
     {
         public struct Display { }
-        public struct Window { }
+        public struct Window
+        {
+            public IntPtr Value;
+        }
         public struct VisualID
         {
             public ulong ID;

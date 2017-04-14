@@ -55,11 +55,6 @@ namespace Vk.Samples
 
         public static void Main()
         {
-            using (var fs = File.OpenRead(Path.Combine(AppContext.BaseDirectory, "metalplate01_bc2_unorm.ktx")))
-            {
-                KtxFile file = KtxFile.Load(fs, true);
-            }
-
             TriangleExample example = new TriangleExample();
             example.zoom = -2.5f;
             example.InitVulkan();
@@ -930,7 +925,7 @@ namespace Vk.Samples
             // Set Pipeline stage for this shader
             shaderStages[0].stage = VkShaderStageFlags.Vertex;
             // Load binary SPIR-V shader
-            shaderStages[0].module = LoadSPIRVShader(Path.Combine(AppContext.BaseDirectory, "shaders/triangle.vert.spv"));
+            shaderStages[0].module = LoadSPIRVShader(Path.Combine(AppContext.BaseDirectory, "Shaders/triangle.vert.spv"));
             // Main entry point for the shader
             byte[] mainBytes = Encoding.UTF8.GetBytes("main");
             fixed (byte* mainBytesPtr = mainBytes)
@@ -943,7 +938,7 @@ namespace Vk.Samples
                 // Set Pipeline stage for this shader
                 shaderStages[1].stage = VkShaderStageFlags.Fragment;
                 // Load binary SPIR-V shader
-                shaderStages[1].module = LoadSPIRVShader(Path.Combine(AppContext.BaseDirectory, "shaders/triangle.frag.spv"));
+                shaderStages[1].module = LoadSPIRVShader(Path.Combine(AppContext.BaseDirectory, "Shaders/triangle.frag.spv"));
                 // Main entry point for the shader
                 shaderStages[1].pName = mainBytesPtr;
                 Debug.Assert(shaderStages[1].module != NullHandle);

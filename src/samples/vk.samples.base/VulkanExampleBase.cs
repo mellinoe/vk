@@ -23,6 +23,7 @@ using OpenTK.Input;
 using System.Numerics;
 using System.IO;
 using Veldrid.Collections;
+using Veldrid.Sdl2;
 
 namespace Vk.Samples
 {
@@ -52,7 +53,7 @@ namespace Vk.Samples
         public VkPhysicalDeviceMemoryProperties DeviceMemoryProperties { get; set; }
         public VkPhysicalDeviceProperties DeviceProperties { get; protected set; }
         public VkPhysicalDeviceFeatures DeviceFeatures { get; protected set; }
-        public OpenTK.NativeWindow NativeWindow { get; private set; }
+        public Sdl2Window NativeWindow { get; private set; }
 
         public NativeList<Semaphores> semaphores = new NativeList<Semaphores>(1, 1);
         public Semaphores* GetSemaphoresPtr() => (Semaphores*)semaphores.GetAddress(0);
@@ -105,7 +106,7 @@ namespace Vk.Samples
         public void InitVulkan()
         {
             VkResult err;
-            err = CreateInstance(true);
+            err = CreateInstance(false);
             if (err != VkResult.Success)
             {
                 throw new InvalidOperationException("Could not create Vulkan instance.");
@@ -229,7 +230,7 @@ namespace Vk.Samples
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
-                instanceExtensions.Add(Strings.VK_KHR_XCB_SURFACE_EXTENSION_NAME);
+                instanceExtensions.Add(Strings.VK_KHR_XLIB_SURFACE_EXTENSION_NAME);
             }
             else
             {
@@ -267,17 +268,17 @@ namespace Vk.Samples
         public IntPtr SetupWin32Window()
         {
             WindowInstance = Process.GetCurrentProcess().SafeHandle.DangerousGetHandle();
-            NativeWindow = new OpenTK.NativeWindow(1280, 720, Name, OpenTK.GameWindowFlags.Default, GraphicsMode.Default, OpenTK.DisplayDevice.Default);
+            NativeWindow = new Sdl2Window(Name, 50, 50, 1280, 720, (SDL_WindowFlags)0, false);
             NativeWindow.X = 50;
             NativeWindow.Y = 50;
             NativeWindow.Visible = true;
-            NativeWindow.Resize += OnNativeWindowResized;
-            NativeWindow.MouseWheel += OnMouseWheel;
-            NativeWindow.MouseMove += OnMouseMove;
-            NativeWindow.MouseDown += OnMouseDown;
-            NativeWindow.KeyDown += OnKeyDown;
-            Window = NativeWindow.WindowInfo.Handle;
-            return NativeWindow.WindowInfo.Handle;
+            // NativeWindow.Resize += OnNativeWindowResized;
+            // NativeWindow.MouseWheel += OnMouseWheel;
+            // NativeWindow.MouseMove += OnMouseMove;
+            // NativeWindow.MouseDown += OnMouseDown;
+            // NativeWindow.KeyDown += OnKeyDown;
+            Window = NativeWindow.Handle;
+            return NativeWindow.Handle;
         }
 
         private void OnKeyDown(object sender, KeyboardKeyEventArgs e)
@@ -300,7 +301,7 @@ namespace Vk.Samples
 
         private void OnMouseMove(object sender, MouseMoveEventArgs e)
         {
-            if (e.Mouse.RightButton == ButtonState.Pressed)
+            if (e.Mouse.RightButton == OpenTK.Input.ButtonState.Pressed)
             {
                 int posx = e.X;
                 int posy = e.Y;
@@ -309,7 +310,7 @@ namespace Vk.Samples
                 mousePos = new Vector2(posx, posy);
                 viewUpdated = true;
             }
-            if (e.Mouse.LeftButton == ButtonState.Pressed)
+            if (e.Mouse.LeftButton == OpenTK.Input.ButtonState.Pressed)
             {
                 int posx = e.X;
                 int posy = e.Y;
@@ -319,7 +320,7 @@ namespace Vk.Samples
                 mousePos = new Vector2(posx, posy);
                 viewUpdated = true;
             }
-            if (e.Mouse.MiddleButton == ButtonState.Pressed)
+            if (e.Mouse.MiddleButton == OpenTK.Input.ButtonState.Pressed)
             {
                 int posx = e.X;
                 int posy = e.Y;
@@ -347,14 +348,7 @@ namespace Vk.Samples
 
         public void InitSwapchain()
         {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                Swapchain.InitSurface(WindowInstance, Window);
-            }
-            else
-            {
-                throw new NotImplementedException();
-            }
+            Swapchain.InitSurface(NativeWindow.SdlWindowHandle);
         }
 
         public virtual void Prepare()
@@ -650,7 +644,7 @@ namespace Vk.Samples
                     viewChanged();
                 }
 
-                NativeWindow.ProcessEvents();
+                NativeWindow.GetInputSnapshot();
 
                 render();
                 frameCounter++;

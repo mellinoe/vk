@@ -15,6 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="../../vk/vk.csproj" />
     <ProjectReference Include="../../../ext/assimp-net/AssimpNet/AssimpNet.csproj" />
+    <ProjectReference Include="../../../ext/veldrid.sdl2/src/Veldrid.Sdl2/Veldrid.Sdl2.csproj" />
     <ProjectReference Include="..\..\..\ext\veldrid.collections\src\Veldrid.Collections\Veldrid.Collections.csproj" />
     <PackageReference Include="Microsoft.NETCore.App" Version="1.1.0" />
     <PackageReference Include="Microsoft.NETCore.DotNetHostPolicy" Version="1.1.0" />
@@ -23,5 +24,6 @@
     <PackageReference Include="System.Xml.XmlDocument" Version="4.3.0" />
     <PackageReference Include="OpenTK.NETCore" Version="1.1.2287.6424" />
     <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.3.0" />
+    <PackageReference Include="System.Drawing.Primitives" Version="4.3.0" />
   </ItemGroup>
 </Project>

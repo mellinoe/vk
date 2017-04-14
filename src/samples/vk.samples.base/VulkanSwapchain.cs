@@ -16,7 +16,9 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using Veldrid.Collections;
 using Vulkan;
+using Veldrid.Sdl2;
 using static Vulkan.VulkanNative;
+using static Veldrid.Sdl2.Sdl2Native;
 
 namespace Vk.Samples
 {
@@ -41,16 +43,44 @@ namespace Vk.Samples
             Device = device;
         }
 
-        public void InitSurface(IntPtr platformHandle, IntPtr platformWindow)
+        public unsafe void InitSurface(IntPtr sdlWindow)
         {
+            SDL_version version;
+            SDL_GetVersion(&version);
+            SDL_SysWMinfo sysWmInfo;
+            sysWmInfo.version = version;
+            int result = SDL_GetWMWindowInfo(sdlWindow, &sysWmInfo);
+            if (result == 0)
+            {
+                throw new InvalidOperationException("Couldn't retrieve SDL window info.");
+            }
             VkResult err;
-            // Create the os-specific Surface
-            VkWin32SurfaceCreateInfoKHR surfaceCreateInfo = VkWin32SurfaceCreateInfoKHR.New();
-            surfaceCreateInfo.hinstance = platformHandle;
-            surfaceCreateInfo.hwnd = platformWindow;
-            VkSurfaceKHR surface;
-            err = vkCreateWin32SurfaceKHR(Instance, &surfaceCreateInfo, null, &surface);
-            Surface = surface;
+            if (sysWmInfo.subsystem == SysWMType.Windows)
+            {
+                Win32WindowInfo win32Info = Unsafe.Read<Win32WindowInfo>(&sysWmInfo.info);
+                // Create the os-specific Surface
+                VkWin32SurfaceCreateInfoKHR surfaceCreateInfo = VkWin32SurfaceCreateInfoKHR.New();
+                var processHandle = Process.GetCurrentProcess().SafeHandle.DangerousGetHandle();
+                surfaceCreateInfo.hinstance = processHandle;
+                surfaceCreateInfo.hwnd = win32Info.window;
+                VkSurfaceKHR surface;
+                err = vkCreateWin32SurfaceKHR(Instance, &surfaceCreateInfo, null, &surface);
+                Surface = surface;
+            }
+            else if (sysWmInfo.subsystem == SysWMType.X11)
+            {
+                X11WindowInfo x11Info = Unsafe.Read<X11WindowInfo>(&sysWmInfo.info);
+                VkXlibSurfaceCreateInfoKHR surfaceCreateInfo = VkXlibSurfaceCreateInfoKHR.New();
+                surfaceCreateInfo.dpy = (Vulkan.Xlib.Display*)x11Info.display;
+                surfaceCreateInfo.window = new Vulkan.Xlib.Window { Value = x11Info.window };
+                VkSurfaceKHR surface;
+                err = vkCreateXlibSurfaceKHR(Instance, &surfaceCreateInfo, null, out surface);
+                Surface = surface;
+            }
+            else
+            {
+                throw new NotImplementedException($"SDL backend not implemented: {sysWmInfo.subsystem}.");
+            }
 
             // Get available queue family properties
             uint queueCount;

@@ -4,3 +4,6 @@
 [submodule "ext/veldrid.collections"]
 	path = ext/veldrid.collections
 	url = https://github.com/mellinoe/veldrid.collections
+[submodule "ext/veldrid.sdl2"]
+	path = ext/veldrid.sdl2
+	url = https://github.com/mellinoe/veldrid.sdl2
