@@ -19,11 +19,11 @@ using System.Runtime.InteropServices;
 using System.Text;
 using Vulkan;
 using static Vulkan.VulkanNative;
-using OpenTK.Input;
 using System.Numerics;
 using System.IO;
 using Veldrid.Collections;
 using Veldrid.Sdl2;
+using Veldrid.Platform;
 
 namespace Vk.Samples
 {
@@ -268,22 +268,22 @@ namespace Vk.Samples
         public IntPtr SetupWin32Window()
         {
             WindowInstance = Process.GetCurrentProcess().SafeHandle.DangerousGetHandle();
-            NativeWindow = new Sdl2Window(Name, 50, 50, 1280, 720, (SDL_WindowFlags)0, false);
+            NativeWindow = new Sdl2Window(Name, 50, 50, 1280, 720, SDL_WindowFlags.Resizable, false);
             NativeWindow.X = 50;
             NativeWindow.Y = 50;
             NativeWindow.Visible = true;
-            // NativeWindow.Resize += OnNativeWindowResized;
-            // NativeWindow.MouseWheel += OnMouseWheel;
-            // NativeWindow.MouseMove += OnMouseMove;
-            // NativeWindow.MouseDown += OnMouseDown;
-            // NativeWindow.KeyDown += OnKeyDown;
+            NativeWindow.Resized += OnNativeWindowResized;
+            NativeWindow.MouseWheel += OnMouseWheel;
+            NativeWindow.MouseMove += OnMouseMove;
+            NativeWindow.MouseDown += OnMouseDown;
+            NativeWindow.KeyDown += OnKeyDown;
             Window = NativeWindow.Handle;
             return NativeWindow.Handle;
         }
 
-        private void OnKeyDown(object sender, KeyboardKeyEventArgs e)
+        private void OnKeyDown(KeyEvent e)
         {
-            if (e.Key == Key.F4 && e.Alt || e.Key == Key.Escape)
+            if (e.Key == Key.F4 && (e.Modifiers & ModifierKeys.Alt) != 0  || e.Key == Key.Escape)
             {
                 NativeWindow.Close();
             }
@@ -291,39 +291,39 @@ namespace Vk.Samples
             keyPressed(e.Key);
         }
 
-        private void OnMouseDown(object sender, MouseButtonEventArgs e)
+        private void OnMouseDown(Veldrid.Platform.MouseButtonEvent e)
         {
-            if (e.IsPressed)
+            if (e.Down)
             {
-                mousePos = new Vector2(e.X, e.Y);
+                mousePos = new Vector2(e.MouseState.X, e.MouseState.Y);
             }
         }
 
-        private void OnMouseMove(object sender, MouseMoveEventArgs e)
+        private void OnMouseMove(MouseMoveEventArgs e)
         {
-            if (e.Mouse.RightButton == OpenTK.Input.ButtonState.Pressed)
+            if (e.State.IsButtonDown(Veldrid.Platform.MouseButton.Right))
             {
-                int posx = e.X;
-                int posy = e.Y;
+                int posx = (int)e.MousePosition.X;
+                int posy = (int)e.MousePosition.Y;
                 zoom += (mousePos.Y - posy) * .005f * zoomSpeed;
                 camera.translate(new Vector3(-0.0f, 0.0f, (mousePos.Y - posy) * .005f * zoomSpeed));
                 mousePos = new Vector2(posx, posy);
                 viewUpdated = true;
             }
-            if (e.Mouse.LeftButton == OpenTK.Input.ButtonState.Pressed)
+            if (e.State.IsButtonDown(Veldrid.Platform.MouseButton.Left))
             {
-                int posx = e.X;
-                int posy = e.Y;
+                int posx = (int)e.MousePosition.X;
+                int posy = (int)e.MousePosition.Y;
                 rotation.X += (mousePos.Y - posy) * 1.25f * rotationSpeed;
                 rotation.Y -= (mousePos.X - posx) * 1.25f * rotationSpeed;
                 camera.rotate(new Vector3((mousePos.Y - posy) * camera.rotationSpeed, -(mousePos.X - posx) * camera.rotationSpeed, 0.0f));
                 mousePos = new Vector2(posx, posy);
                 viewUpdated = true;
             }
-            if (e.Mouse.MiddleButton == OpenTK.Input.ButtonState.Pressed)
+            if (e.State.IsButtonDown(Veldrid.Platform.MouseButton.Middle))
             {
-                int posx = e.X;
-                int posy = e.Y;
+                int posx = (int)e.MousePosition.X;
+                int posy = (int)e.MousePosition.Y;
                 cameraPos.X -= (mousePos.X - posx) * 0.01f;
                 cameraPos.Y -= (mousePos.Y - posy) * 0.01f;
                 camera.translate(new Vector3(-(mousePos.X - posx) * 0.01f, -(mousePos.Y - posy) * 0.01f, 0.0f));
@@ -333,15 +333,15 @@ namespace Vk.Samples
             }
         }
 
-        private void OnMouseWheel(object sender, MouseWheelEventArgs e)
+        private void OnMouseWheel(MouseWheelEventArgs e)
         {
-            var wheelDelta = e.DeltaPrecise;
+            var wheelDelta = e.WheelDelta;
             zoom += wheelDelta * 0.005f * zoomSpeed;
             camera.translate(new Vector3(0.0f, 0.0f, wheelDelta * 0.005f * zoomSpeed));
             viewUpdated = true;
         }
 
-        private void OnNativeWindowResized(object sender, EventArgs e)
+        private void OnNativeWindowResized()
         {
             windowResize();
         }

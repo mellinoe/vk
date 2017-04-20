@@ -10,10 +10,9 @@ using System.Diagnostics;
 using System.Text;
 
 using static Veldrid.Sdl2.Sdl2Native;
-using Veldrid.Platform;
 using System.Drawing;
 
-namespace Vk.Samples
+namespace Veldrid.Platform
 {
     public unsafe class Sdl2Window
     {
@@ -28,6 +27,11 @@ namespace Vk.Samples
         private bool _shouldClose;
         public bool LimitPollRate { get; set; }
         public float PollIntervalInMs { get; set; }
+
+        // Current input states
+        private int _currentMouseX;
+        private int _currentMouseY;
+        private bool[] _currentMouseButtonStates = new bool[13];
 
         public Sdl2Window(string title, int x, int y, int width, int height, SDL_WindowFlags flags, bool threadedProcessing)
         {
@@ -153,6 +157,12 @@ namespace Vk.Samples
         public event Action Closed;
         public event Action FocusLost;
         public event Action FocusGained;
+        public event Action<MouseWheelEventArgs> MouseWheel;
+        public event Action<MouseMoveEventArgs> MouseMove;
+        public event Action<MouseButtonEvent> MouseDown;
+        public event Action<MouseButtonEvent> MouseUp;
+        public event Action<KeyEvent> KeyDown;
+        public event Action<KeyEvent> KeyUp;
 
         public Point ClientToScreen(Point p)
         {
@@ -223,6 +233,7 @@ namespace Vk.Samples
             }
             else
             {
+                ProcessEvents();
                 _privateSnapshot.CopyTo(_publicSnapshot);
                 _privateSnapshot.Clear();
             }
@@ -344,7 +355,8 @@ namespace Vk.Samples
         private void HandleTextInputEvent(SDL_TextInputEvent textInputEvent)
         {
             uint byteCount = 0;
-            while (byteCount < SDL_TextInputEvent.MaxTextSize && textInputEvent.text[byteCount++] != 0) // Loop until the null terminator is found or the max size is reached.
+            // Loop until the null terminator is found or the max size is reached.
+            while (byteCount < SDL_TextInputEvent.MaxTextSize && textInputEvent.text[byteCount++] != 0)
             { }
 
             if (byteCount > 1)
@@ -364,14 +376,25 @@ namespace Vk.Samples
         private void HandleMouseWheelEvent(SDL_MouseWheelEvent mouseWheelEvent)
         {
             _privateSnapshot.WheelDelta += mouseWheelEvent.y;
+            MouseWheel?.Invoke(new MouseWheelEventArgs(GetCurrentMouseState(), (float)mouseWheelEvent.y));
         }
 
         private void HandleMouseButtonEvent(SDL_MouseButtonEvent mouseButtonEvent)
         {
             MouseButton button = MapMouseButton(mouseButtonEvent.button);
             bool down = mouseButtonEvent.state == 1;
+            _currentMouseButtonStates[(int)button] = down;
             _privateSnapshot.MouseDown[(int)button] = down;
-            _privateSnapshot.MouseEventsList.Add(new MouseEvent(button, down));
+            MouseButtonEvent mouseEvent = new MouseButtonEvent(GetCurrentMouseState(), button, down);
+            _privateSnapshot.MouseEventsList.Add(mouseEvent);
+            if (down)
+            {
+                MouseDown?.Invoke(mouseEvent);
+            }
+            else
+            {
+                MouseUp?.Invoke(mouseEvent);
+            }
         }
 
         private MouseButton MapMouseButton(SDL_MouseButton button)
@@ -396,12 +419,24 @@ namespace Vk.Samples
         private void HandleMouseMotionEvent(SDL_MouseMotionEvent mouseMotionEvent)
         {
             Vector2 mousePos = new Vector2(mouseMotionEvent.x, mouseMotionEvent.y);
+            _currentMouseX = (int)mousePos.X;
+            _currentMouseY = (int)mousePos.Y;
             _privateSnapshot.MousePosition = mousePos;
+            MouseMove?.Invoke(new MouseMoveEventArgs(GetCurrentMouseState(), mousePos));
         }
 
         private void HandleKeyboardEvent(SDL_KeyboardEvent keyboardEvent)
         {
-            _privateSnapshot.KeyEventsList.Add(new KeyEvent(MapKey(keyboardEvent.keysym), keyboardEvent.state == 1, MapModifierKeys(keyboardEvent.keysym.mod)));
+            KeyEvent keyEvent = new KeyEvent(MapKey(keyboardEvent.keysym), keyboardEvent.state == 1, MapModifierKeys(keyboardEvent.keysym.mod));
+            _privateSnapshot.KeyEventsList.Add(keyEvent);
+            if (keyboardEvent.state == 1)
+            {
+                KeyDown?.Invoke(keyEvent);
+            }
+            else
+            {
+                KeyUp?.Invoke(keyEvent);
+            }
         }
 
         private Key MapKey(SDL_Keysym keysym)
@@ -697,6 +732,19 @@ namespace Vk.Samples
             }
         }
 
+        private MouseState GetCurrentMouseState()
+        {
+            return new MouseState(
+                _currentMouseX, _currentMouseY,
+                _currentMouseButtonStates[0], _currentMouseButtonStates[1],
+                _currentMouseButtonStates[2], _currentMouseButtonStates[3],
+                _currentMouseButtonStates[4], _currentMouseButtonStates[5],
+                _currentMouseButtonStates[6], _currentMouseButtonStates[7],
+                _currentMouseButtonStates[8], _currentMouseButtonStates[9],
+                _currentMouseButtonStates[10], _currentMouseButtonStates[11],
+                _currentMouseButtonStates[12]);
+        }
+
         public Point ScreenToClient(Point p)
         {
             Point position = GetWindowPosition();
@@ -747,12 +795,12 @@ namespace Vk.Samples
         private class SimpleInputSnapshot : InputSnapshot
         {
             public List<KeyEvent> KeyEventsList { get; private set; } = new List<KeyEvent>();
-            public List<MouseEvent> MouseEventsList { get; private set; } = new List<MouseEvent>();
+            public List<MouseButtonEvent> MouseEventsList { get; private set; } = new List<MouseButtonEvent>();
             public List<char> KeyCharPressesList { get; private set; } = new List<char>();
 
             public IReadOnlyList<KeyEvent> KeyEvents => KeyEventsList;
 
-            public IReadOnlyList<MouseEvent> MouseEvents => MouseEventsList;
+            public IReadOnlyList<MouseButtonEvent> MouseEvents => MouseEventsList;
 
             public IReadOnlyList<char> KeyCharPresses => KeyCharPressesList;
 
@@ -801,6 +849,106 @@ namespace Vk.Samples
             public string Title { get; set; }
             public SDL_WindowFlags WindowFlags { get; set; }
             public ManualResetEvent ResetEvent { get; set; }
+        }
+    }
+
+    public struct MouseState
+    {
+        public readonly int X;
+        public readonly int Y;
+
+        private bool _mouseDown0;
+        private bool _mouseDown1;
+        private bool _mouseDown2;
+        private bool _mouseDown3;
+        private bool _mouseDown4;
+        private bool _mouseDown5;
+        private bool _mouseDown6;
+        private bool _mouseDown7;
+        private bool _mouseDown8;
+        private bool _mouseDown9;
+        private bool _mouseDown10;
+        private bool _mouseDown11;
+        private bool _mouseDown12;
+
+        public MouseState(
+            int x, int y,
+            bool mouse0, bool mouse1, bool mouse2, bool mouse3, bool mouse4, bool mouse5, bool mouse6,
+            bool mouse7, bool mouse8, bool mouse9, bool mouse10, bool mouse11, bool mouse12)
+        {
+            X = x;
+            Y = y;
+            _mouseDown0 = mouse0;
+            _mouseDown1 = mouse1;
+            _mouseDown2 = mouse2;
+            _mouseDown3 = mouse3;
+            _mouseDown4 = mouse4;
+            _mouseDown5 = mouse5;
+            _mouseDown6 = mouse6;
+            _mouseDown7 = mouse7;
+            _mouseDown8 = mouse8;
+            _mouseDown9 = mouse9;
+            _mouseDown10 = mouse10;
+            _mouseDown11 = mouse11;
+            _mouseDown12 = mouse12;
+        }
+
+        public bool IsButtonDown(MouseButton button)
+        {
+            uint index = (uint)button;
+            switch (index)
+            {
+                case 0:
+                    return _mouseDown0;
+                case 1:
+                    return _mouseDown1;
+                case 2:
+                    return _mouseDown2;
+                case 3:
+                    return _mouseDown3;
+                case 4:
+                    return _mouseDown4;
+                case 5:
+                    return _mouseDown5;
+                case 6:
+                    return _mouseDown6;
+                case 7:
+                    return _mouseDown7;
+                case 8:
+                    return _mouseDown8;
+                case 9:
+                    return _mouseDown9;
+                case 10:
+                    return _mouseDown10;
+                case 11:
+                    return _mouseDown11;
+                case 12:
+                    return _mouseDown12;
+            }
+
+            throw new ArgumentOutOfRangeException(nameof(button));
+        }
+    }
+
+    public struct MouseWheelEventArgs
+    {
+        public MouseState State { get; }
+        public float WheelDelta { get; }
+        public MouseWheelEventArgs(MouseState mouseState, float wheelDelta)
+        {
+            State = mouseState;
+            WheelDelta = wheelDelta;
+        }
+    }
+
+    public struct MouseMoveEventArgs
+    {
+        public MouseState State { get; }
+        public Vector2 MousePosition { get; }
+        public MouseMoveEventArgs(MouseState mouseState, Vector2 mousePosition)
+        {
+            State = mouseState;
+            MousePosition = mousePosition;
         }
     }
 }

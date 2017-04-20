@@ -1,12 +1,14 @@
 ﻿namespace Veldrid.Platform
 {
-    public struct MouseEvent
+    public struct MouseButtonEvent
     {
+        public MouseState MouseState { get; }
         public MouseButton MouseButton { get; }
         public bool Down { get; }
 
-        public MouseEvent(MouseButton button, bool down)
+        public MouseButtonEvent(MouseState mouseState, MouseButton button, bool down)
         {
+            MouseState = mouseState;
             MouseButton = button;
             Down = down;
         }
