@@ -19,6 +19,7 @@ namespace Vk.Generator
                 cw.WriteLine("public readonly IntPtr Handle;");
 
                 cw.WriteLine($"public {handle.Name}(IntPtr existingHandle) {{ Handle = existingHandle; }}");
+                cw.WriteLine($"public static {handle.Name} Null => new {handle.Name}(IntPtr.Zero);");
                 cw.WriteLine($"public static implicit operator {handle.Name}(IntPtr handle) => new {handle.Name}(handle);");
                 cw.WriteLine($"public static bool operator ==({handle.Name} left, IntPtr right) => left.Handle == right;");
                 cw.WriteLine($"public static bool operator !=({handle.Name} left, IntPtr right) => left.Handle != right;");

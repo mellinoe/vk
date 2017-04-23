@@ -21,7 +21,7 @@ using static Vulkan.RawConstants;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
 using System.IO;
-using OpenTK.Input;
+using Veldrid.Platform;
 
 namespace Vk.Samples
 {

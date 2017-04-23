@@ -268,7 +268,7 @@ namespace Vk.Samples
         public IntPtr SetupWin32Window()
         {
             WindowInstance = Process.GetCurrentProcess().SafeHandle.DangerousGetHandle();
-            NativeWindow = new Sdl2Window(Name, 50, 50, 1280, 720, SDL_WindowFlags.Resizable, false);
+            NativeWindow = new Sdl2Window(Name, 50, 50, 1280, 720, SDL_WindowFlags.Resizable, threadedProcessing: false);
             NativeWindow.X = 50;
             NativeWindow.Y = 50;
             NativeWindow.Visible = true;
@@ -283,7 +283,7 @@ namespace Vk.Samples
 
         private void OnKeyDown(KeyEvent e)
         {
-            if (e.Key == Key.F4 && (e.Modifiers & ModifierKeys.Alt) != 0  || e.Key == Key.Escape)
+            if (e.Key == Key.F4 && (e.Modifiers & ModifierKeys.Alt) != 0 || e.Key == Key.Escape)
             {
                 NativeWindow.Close();
             }
