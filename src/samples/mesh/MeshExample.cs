@@ -17,8 +17,8 @@ using System.Numerics;
 using System.Runtime.CompilerServices;
 using Veldrid.Collections;
 using Vulkan;
+using Veldrid.Sdl2;
 using static Vulkan.VulkanNative;
-using Veldrid.Platform;
 
 namespace Vk.Samples
 {

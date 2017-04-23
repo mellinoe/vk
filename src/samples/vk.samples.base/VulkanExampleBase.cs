@@ -23,7 +23,6 @@ using System.Numerics;
 using System.IO;
 using Veldrid.Collections;
 using Veldrid.Sdl2;
-using Veldrid.Platform;
 
 namespace Vk.Samples
 {
@@ -291,7 +290,7 @@ namespace Vk.Samples
             keyPressed(e.Key);
         }
 
-        private void OnMouseDown(Veldrid.Platform.MouseButtonEvent e)
+        private void OnMouseDown(MouseButtonEvent e)
         {
             if (e.Down)
             {
@@ -301,7 +300,7 @@ namespace Vk.Samples
 
         private void OnMouseMove(MouseMoveEventArgs e)
         {
-            if (e.State.IsButtonDown(Veldrid.Platform.MouseButton.Right))
+            if (e.State.IsButtonDown(MouseButton.Right))
             {
                 int posx = (int)e.MousePosition.X;
                 int posy = (int)e.MousePosition.Y;
@@ -310,7 +309,7 @@ namespace Vk.Samples
                 mousePos = new Vector2(posx, posy);
                 viewUpdated = true;
             }
-            if (e.State.IsButtonDown(Veldrid.Platform.MouseButton.Left))
+            if (e.State.IsButtonDown(MouseButton.Left))
             {
                 int posx = (int)e.MousePosition.X;
                 int posy = (int)e.MousePosition.Y;
@@ -320,7 +319,7 @@ namespace Vk.Samples
                 mousePos = new Vector2(posx, posy);
                 viewUpdated = true;
             }
-            if (e.State.IsButtonDown(Veldrid.Platform.MouseButton.Middle))
+            if (e.State.IsButtonDown(MouseButton.Middle))
             {
                 int posx = (int)e.MousePosition.X;
                 int posy = (int)e.MousePosition.Y;

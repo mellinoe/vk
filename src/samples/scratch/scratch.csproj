@@ -23,4 +23,5 @@
     <PackageReference Include="OpenTK.NETCore" Version="1.1.2287.6424" />
     <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.3.0" />
   </ItemGroup>
+  <Import Project="..\..\..\ext\veldrid.sdl2\src\Veldrid.Sdl2\Veldrid.Sdl2.Imports.msbuild" />
 </Project>

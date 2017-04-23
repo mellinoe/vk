@@ -18,7 +18,7 @@ using Veldrid.Collections;
 using System.Numerics;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using Veldrid.Platform;
+using Veldrid.Sdl2;
 
 namespace Vk.Samples
 {

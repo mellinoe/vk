@@ -16,7 +16,7 @@ using System.IO;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using Veldrid.Collections;
-using Veldrid.Platform;
+using Veldrid.Sdl2;
 using Vulkan;
 using static Vulkan.VulkanNative;
 
