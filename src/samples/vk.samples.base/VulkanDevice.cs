@@ -29,7 +29,7 @@ namespace Vk.Samples
         public VkPhysicalDeviceProperties properties { get; private set; }
         public VkPhysicalDeviceFeatures features { get; private set; }
         public VkPhysicalDeviceMemoryProperties MemoryProperties { get; private set; }
-        public NativeList<VkQueueFamilyProperties> QueueFamilyProperties { get; } = new NativeList<VkQueueFamilyProperties>();
+        public RawList<VkQueueFamilyProperties> QueueFamilyProperties { get; } = new RawList<VkQueueFamilyProperties>();
         public List<string> SuppertedExcentions { get; } = new List<string>();
         public VkDevice LogicalDevice => _logicalDevice;
         public VkCommandPool CommandPool { get; private set; }
@@ -64,12 +64,13 @@ namespace Vk.Samples
             vkGetPhysicalDeviceQueueFamilyProperties(
                 physicalDevice,
                 &queueFamilyCount,
-                (VkQueueFamilyProperties*)QueueFamilyProperties.Data.ToPointer());
+                out QueueFamilyProperties.Items[0]);
+            //(VkQueueFamilyProperties*)QueueFamilyProperties.Data.ToPointer());
             QueueFamilyProperties.Count = queueFamilyCount;
 
             // Get list of supported extensions
             uint extCount = 0;
-            vkEnumerateDeviceExtensionProperties(physicalDevice, (byte*)null, ref extCount, null);
+            vkEnumerateDeviceExtensionProperties(physicalDevice, (byte*)null, ref extCount, IntPtr.Zero);
             if (extCount > 0)
             {
                 VkExtensionProperties* extensions = stackalloc VkExtensionProperties[(int)extCount];

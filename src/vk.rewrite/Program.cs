@@ -116,6 +116,15 @@ namespace Vk.Rewrite
                     il.Emit(OpCodes.Ldloc, variableDef);
                     stringParams.Add(variableDef);
                 }
+                else if (method.Parameters[i].ParameterType.IsByReference)
+                {
+                    var pinnedVariable = new VariableDefinition(new PinnedType(method.Parameters[i].ParameterType));
+                    il.Body.Variables.Add(pinnedVariable);
+                    int index = il.Body.Variables.Count - 1;
+                    il.Emit(OpCodes.Stloc, index);
+                    il.Emit(OpCodes.Ldloc, index);
+                    // OpenTK uses Conv_I here, but it doesn't seem necessary on CoreCLR.
+                }
             }
 
             string functionPtrName = method.Name + "_ptr";

@@ -11,12 +11,12 @@
 * This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
 */
 
-using OpenTK.Input;
 using System;
 using System.IO;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using Veldrid.Collections;
+using Veldrid.Platform;
 using Vulkan;
 using static Vulkan.VulkanNative;
 

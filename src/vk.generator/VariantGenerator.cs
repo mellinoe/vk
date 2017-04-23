@@ -63,9 +63,9 @@ namespace Vk.Generator
                 {
                     yield return RefVariant(pd);
                     yield return IntPtrVariant(pd);
-                    if (pd.Name.EndsWith("Infos"))
+                    if (pd.Name.EndsWith("s"))
                     {
-                        yield return ArrayVariant(pd, 1);
+                            yield return ArrayVariant(pd, 1);
                     }
                 }
             }
