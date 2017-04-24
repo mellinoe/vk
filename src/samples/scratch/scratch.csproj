@@ -13,6 +13,18 @@
     <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Shaders\shader.frag.spv" />
+    <None Remove="Shaders\shader.vert.spv" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Shaders\shader.frag.spv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Shaders\shader.vert.spv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="../../vk/vk.csproj" />
     <ProjectReference Include="..\..\..\ext\veldrid.collections\src\Veldrid.Collections\Veldrid.Collections.csproj" />
     <PackageReference Include="Microsoft.NETCore.App" Version="1.1.0" />

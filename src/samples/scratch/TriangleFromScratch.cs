@@ -11,6 +11,7 @@ using Vulkan;
 using static Veldrid.Sdl2.Sdl2Native;
 using static Vulkan.VulkanNative;
 using System.Linq;
+using System.IO;
 
 namespace Vk.Samples
 {
@@ -50,6 +51,7 @@ namespace Vk.Samples
             CreateLogicalDevice();
             CreateSwapchain();
             CreateImageViews();
+            CreateGraphicsPipeline();
         }
 
         private void CreateInstance()
@@ -317,6 +319,75 @@ namespace Vk.Samples
                 ivci.subresourceRange.layerCount = 1;
                 vkCreateImageView(_device, ref ivci, null, out VkImageView imageView);
                 _scImageViews[i] = imageView;
+            }
+        }
+
+        private void CreateGraphicsPipeline()
+        {
+            byte[] vertBytes = File.ReadAllBytes(Path.Combine(AppContext.BaseDirectory, "shader.vert.spv"));
+            byte[] fragBytes = File.ReadAllBytes(Path.Combine(AppContext.BaseDirectory, "shader.frag.spv"));
+
+            VkShaderModule vertexShader = CreateShader(vertBytes);
+            VkShaderModule fragmentShader = CreateShader(fragBytes);
+
+            VkPipelineShaderStageCreateInfo vertCreateInfo = VkPipelineShaderStageCreateInfo.New();
+            vertCreateInfo.stage = VkShaderStageFlags.Vertex;
+            vertCreateInfo.module = vertexShader;
+            vertCreateInfo.pName = Strings.main;
+
+            VkPipelineShaderStageCreateInfo fragCreateInfo = VkPipelineShaderStageCreateInfo.New();
+            fragCreateInfo.stage = VkShaderStageFlags.Fragment;
+            fragCreateInfo.module = fragmentShader;
+            fragCreateInfo.pName = Strings.main;
+
+            FixedArray2<VkPipelineShaderStageCreateInfo> shaderStageCreateInfos
+                = new FixedArray2<VkPipelineShaderStageCreateInfo>(vertCreateInfo, fragCreateInfo);
+
+            VkPipelineVertexInputStateCreateInfo vertexInputStateCreateInfo = VkPipelineVertexInputStateCreateInfo.New();
+            // Nothing: default values for everything.
+
+            VkPipelineInputAssemblyStateCreateInfo inputAssemblyCI = VkPipelineInputAssemblyStateCreateInfo.New();
+            inputAssemblyCI.primitiveRestartEnable = false;
+            inputAssemblyCI.topology = VkPrimitiveTopology.TriangleList;
+
+            VkViewport viewport = new VkViewport();
+            viewport.x = 0;
+            viewport.y = 0;
+            viewport.width = _swapchainExtent.width;
+            viewport.height = _swapchainExtent.height;
+            viewport.minDepth = 0f;
+            viewport.maxDepth = 1f;
+
+            VkRect2D scissorRect = new VkRect2D() { extent = _swapchainExtent };
+
+            VkPipelineViewportStateCreateInfo viewportStateCI = VkPipelineViewportStateCreateInfo.New();
+            viewportStateCI.viewportCount = 1;
+            viewportStateCI.pViewports = &viewport;
+            viewportStateCI.scissorCount = 1;
+            viewportStateCI.pScissors = &scissorRect;
+
+            VkPipelineRasterizationStateCreateInfo rasterizerStateCI = VkPipelineRasterizationStateCreateInfo.New();
+            rasterizerStateCI.cullMode = VkCullModeFlags.Back;
+            rasterizerStateCI.polygonMode = VkPolygonMode.Fill;
+            rasterizerStateCI.lineWidth = 1f;
+            rasterizerStateCI.frontFace = VkFrontFace.Clockwise;
+
+            VkPipelineMultisampleStateCreateInfo multisampleStateCI = VkPipelineMultisampleStateCreateInfo.New();
+            multisampleStateCI.rasterizationSamples = VkSampleCountFlags._1;
+            multisampleStateCI.minSampleShading = 1f;
+
+
+        }
+
+        private VkShaderModule CreateShader(byte[] bytecode)
+        {
+            VkShaderModuleCreateInfo smci = VkShaderModuleCreateInfo.New();
+            fixed (byte* byteCodePtr = bytecode)
+            {
+                smci.pCode = (uint*)byteCodePtr;
+                smci.codeSize = new UIntPtr((uint)bytecode.Length);
+                vkCreateShaderModule(_device, ref smci, null, out VkShaderModule module);
+                return module;
             }
         }
 
