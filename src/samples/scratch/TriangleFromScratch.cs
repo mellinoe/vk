@@ -27,13 +27,19 @@ namespace Vk.Samples
         private VkQueue _graphicsQueue;
         private VkQueue _presentQueue;
         private VkSurfaceKHR _surface;
+        private VkPipelineLayout _pipelineLayout;
+        private VkRenderPass _renderPass;
+        private VkPipeline _graphicsPipeline;
+        private VkCommandPool _commandPool;
+        private RawList<VkCommandBuffer> _commandBuffers = new RawList<VkCommandBuffer>();
 
         // Swapchain stuff
         private RawList<VkImage> _scImages = new RawList<VkImage>();
         private RawList<VkImageView> _scImageViews = new RawList<VkImageView>();
+        private RawList<VkFramebuffer> _scFramebuffers = new RawList<VkFramebuffer>();
         private VkSwapchainKHR _swapchain;
-        private VkFormat _swapchainImageFormat;
-        private VkExtent2D _swapchainExtent;
+        private VkFormat _scImageFormat;
+        private VkExtent2D _scExtent;
 
         private Sdl2Window _window;
 
@@ -51,7 +57,11 @@ namespace Vk.Samples
             CreateLogicalDevice();
             CreateSwapchain();
             CreateImageViews();
+            CreateRenderPass();
             CreateGraphicsPipeline();
+            CreateFramebuffers();
+            CreateCommandPool();
+            CreateCommandBuffers();
         }
 
         private void CreateInstance()
@@ -300,8 +310,8 @@ namespace Vk.Samples
             _scImages.Count = scImageCount;
             vkGetSwapchainImagesKHR(_device, _swapchain, ref scImageCount, out _scImages.Items[0]);
 
-            _swapchainImageFormat = surfaceFormat.format;
-            _swapchainExtent = sci.imageExtent;
+            _scImageFormat = surfaceFormat.format;
+            _scExtent = sci.imageExtent;
         }
 
         private void CreateImageViews()
@@ -311,7 +321,7 @@ namespace Vk.Samples
             {
                 VkImageViewCreateInfo ivci = VkImageViewCreateInfo.New();
                 ivci.viewType = VkImageViewType._2d;
-                ivci.format = _swapchainImageFormat;
+                ivci.format = _scImageFormat;
                 ivci.subresourceRange.aspectMask = VkImageAspectFlags.Color;
                 ivci.subresourceRange.baseMipLevel = 0;
                 ivci.subresourceRange.levelCount = 1;
@@ -322,10 +332,40 @@ namespace Vk.Samples
             }
         }
 
+        private void CreateRenderPass()
+        {
+            VkAttachmentDescription colorAttachment = new VkAttachmentDescription();
+            colorAttachment.format = _scImageFormat;
+            colorAttachment.samples = VkSampleCountFlags._1;
+            colorAttachment.loadOp = VkAttachmentLoadOp.Clear;
+            colorAttachment.storeOp = VkAttachmentStoreOp.Store;
+            colorAttachment.stencilLoadOp = VkAttachmentLoadOp.DontCare;
+            colorAttachment.stencilStoreOp = VkAttachmentStoreOp.DontCare;
+            colorAttachment.initialLayout = VkImageLayout.Undefined;
+            colorAttachment.finalLayout = VkImageLayout.PresentSrc;
+
+            VkAttachmentReference colorAttachmentRef = new VkAttachmentReference();
+            colorAttachmentRef.attachment = 0;
+            colorAttachmentRef.layout = VkImageLayout.ColorAttachmentOptimal;
+
+            VkSubpassDescription subpass = new VkSubpassDescription();
+            subpass.pipelineBindPoint = VkPipelineBindPoint.Graphics;
+            subpass.colorAttachmentCount = 1;
+            subpass.pColorAttachments = &colorAttachmentRef;
+
+            VkRenderPassCreateInfo renderPassCI = VkRenderPassCreateInfo.New();
+            renderPassCI.attachmentCount = 1;
+            renderPassCI.pAttachments = &colorAttachment;
+            renderPassCI.subpassCount = 1;
+            renderPassCI.pSubpasses = &subpass;
+
+            vkCreateRenderPass(_device, ref renderPassCI, null, out _renderPass);
+        }
+
         private void CreateGraphicsPipeline()
         {
-            byte[] vertBytes = File.ReadAllBytes(Path.Combine(AppContext.BaseDirectory, "shader.vert.spv"));
-            byte[] fragBytes = File.ReadAllBytes(Path.Combine(AppContext.BaseDirectory, "shader.frag.spv"));
+            byte[] vertBytes = File.ReadAllBytes(Path.Combine(AppContext.BaseDirectory, "Shaders", "shader.vert.spv"));
+            byte[] fragBytes = File.ReadAllBytes(Path.Combine(AppContext.BaseDirectory, "Shaders", "shader.frag.spv"));
 
             VkShaderModule vertexShader = CreateShader(vertBytes);
             VkShaderModule fragmentShader = CreateShader(fragBytes);
@@ -353,12 +393,12 @@ namespace Vk.Samples
             VkViewport viewport = new VkViewport();
             viewport.x = 0;
             viewport.y = 0;
-            viewport.width = _swapchainExtent.width;
-            viewport.height = _swapchainExtent.height;
+            viewport.width = _scExtent.width;
+            viewport.height = _scExtent.height;
             viewport.minDepth = 0f;
             viewport.maxDepth = 1f;
 
-            VkRect2D scissorRect = new VkRect2D() { extent = _swapchainExtent };
+            VkRect2D scissorRect = new VkRect2D() { extent = _scExtent };
 
             VkPipelineViewportStateCreateInfo viewportStateCI = VkPipelineViewportStateCreateInfo.New();
             viewportStateCI.viewportCount = 1;
@@ -376,7 +416,96 @@ namespace Vk.Samples
             multisampleStateCI.rasterizationSamples = VkSampleCountFlags._1;
             multisampleStateCI.minSampleShading = 1f;
 
+            VkPipelineColorBlendAttachmentState colorBlendAttachementState = new VkPipelineColorBlendAttachmentState();
+            colorBlendAttachementState.colorWriteMask = VkColorComponentFlags.R | VkColorComponentFlags.G | VkColorComponentFlags.B | VkColorComponentFlags.A;
+            colorBlendAttachementState.blendEnable = false;
 
+            VkPipelineColorBlendStateCreateInfo colorBlendStateCI = VkPipelineColorBlendStateCreateInfo.New();
+            colorBlendStateCI.attachmentCount = 1;
+            colorBlendStateCI.pAttachments = &colorBlendAttachementState;
+
+            VkPipelineLayoutCreateInfo pipelineLayoutCI = VkPipelineLayoutCreateInfo.New();
+            vkCreatePipelineLayout(_device, ref pipelineLayoutCI, null, out _pipelineLayout);
+
+            VkGraphicsPipelineCreateInfo graphicsPipelineCI = VkGraphicsPipelineCreateInfo.New();
+            graphicsPipelineCI.stageCount = shaderStageCreateInfos.Count;
+            graphicsPipelineCI.pStages = &shaderStageCreateInfos.First;
+
+            graphicsPipelineCI.pVertexInputState = &vertexInputStateCreateInfo;
+            graphicsPipelineCI.pInputAssemblyState = &inputAssemblyCI;
+            graphicsPipelineCI.pViewportState = &viewportStateCI;
+            graphicsPipelineCI.pRasterizationState = &rasterizerStateCI;
+            graphicsPipelineCI.pMultisampleState = &multisampleStateCI;
+            graphicsPipelineCI.pColorBlendState = &colorBlendStateCI;
+
+            graphicsPipelineCI.layout = _pipelineLayout;
+
+            graphicsPipelineCI.renderPass = _renderPass;
+            graphicsPipelineCI.subpass = 0;
+
+            vkCreateGraphicsPipelines(_device, VkPipelineCache.Null, 1, ref graphicsPipelineCI, null, out _graphicsPipeline);
+        }
+
+        private void CreateFramebuffers()
+        {
+            _scFramebuffers.Resize(_scImageViews.Count);
+            for (uint i = 0; i < _scImageViews.Count; i++)
+            {
+                VkImageView attachment = _scImageViews[i];
+                VkFramebufferCreateInfo framebufferCI = VkFramebufferCreateInfo.New();
+                framebufferCI.renderPass = _renderPass;
+                framebufferCI.attachmentCount = 1;
+                framebufferCI.pAttachments = &attachment;
+                framebufferCI.width = _scExtent.width;
+                framebufferCI.height = _scExtent.height;
+                framebufferCI.layers = 1;
+
+                vkCreateFramebuffer(_device, ref framebufferCI, null, out _scFramebuffers[i]);
+            }
+        }
+
+        private void CreateCommandPool()
+        {
+            VkCommandPoolCreateInfo commandPoolCI = VkCommandPoolCreateInfo.New();
+            commandPoolCI.queueFamilyIndex = _graphicsQueueIndex;
+            vkCreateCommandPool(_device, ref commandPoolCI, null, out _commandPool);
+        }
+
+        private void CreateCommandBuffers()
+        {
+            _commandBuffers.Resize(_scFramebuffers.Count);
+            VkCommandBufferAllocateInfo commandBufferAI = VkCommandBufferAllocateInfo.New();
+            commandBufferAI.commandPool = _commandPool;
+            commandBufferAI.level = VkCommandBufferLevel.Primary;
+            commandBufferAI.commandBufferCount = _commandBuffers.Count;
+            vkAllocateCommandBuffers(_device, ref commandBufferAI, out _commandBuffers[0]);
+
+            for (uint i= 0; i < _commandBuffers.Count; i++)
+            {
+                VkCommandBuffer cb = _commandBuffers[i];
+
+                VkCommandBufferBeginInfo beginInfo = VkCommandBufferBeginInfo.New();
+                beginInfo.flags = VkCommandBufferUsageFlags.SimultaneousUse;
+                vkBeginCommandBuffer(cb, ref beginInfo);
+
+                VkRenderPassBeginInfo rpbi = VkRenderPassBeginInfo.New();
+                rpbi.renderPass = _renderPass;
+                rpbi.framebuffer = _scFramebuffers[i];
+                rpbi.renderArea.extent = _scExtent;
+
+                VkClearValue clearValue = new VkClearValue() { color = new VkClearColorValue() };
+                rpbi.clearValueCount = 1;
+                rpbi.pClearValues = &clearValue;
+
+                vkCmdBeginRenderPass(cb, ref rpbi, VkSubpassContents.Inline);
+
+                vkCmdBindPipeline(cb, VkPipelineBindPoint.Graphics, _graphicsPipeline);
+                vkCmdDraw(cb, 3, 1, 0, 0);
+
+                vkCmdEndRenderPass(cb);
+
+                vkEndCommandBuffer(cb);
+            }
         }
 
         private VkShaderModule CreateShader(byte[] bytecode)
