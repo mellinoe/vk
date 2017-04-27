@@ -108,7 +108,7 @@ namespace Vk.Samples
             err = CreateInstance(false);
             if (err != VkResult.Success)
             {
-                throw new InvalidOperationException("Could not create Vulkan instance.");
+                throw new InvalidOperationException("Could not create Vulkan instance. Error: " + err);
             }
 
             if (Settings.Validation)

@@ -32,6 +32,8 @@ namespace Vk.Samples
         private VkPipeline _graphicsPipeline;
         private VkCommandPool _commandPool;
         private RawList<VkCommandBuffer> _commandBuffers = new RawList<VkCommandBuffer>();
+        private VkSemaphore _imageAvailableSemaphore;
+        private VkSemaphore _renderCompleteSemaphore;
 
         // Swapchain stuff
         private RawList<VkImage> _scImages = new RawList<VkImage>();
@@ -62,6 +64,49 @@ namespace Vk.Samples
             CreateFramebuffers();
             CreateCommandPool();
             CreateCommandBuffers();
+            CreateSemaphores();
+
+            RunMainLoop();
+        }
+
+        private void RunMainLoop()
+        {
+            while (_window.Exists)
+            {
+                _window.GetInputSnapshot();
+                DrawFrame();
+            }
+        }
+
+        private void DrawFrame()
+        {
+            uint imageIndex = 0;
+            vkAcquireNextImageKHR(_device, _swapchain, ulong.MaxValue, _imageAvailableSemaphore, VkFence.Null, ref imageIndex);
+
+            VkSubmitInfo submitInfo = VkSubmitInfo.New();
+            VkSemaphore waitSemaphore = _imageAvailableSemaphore;
+            VkPipelineStageFlags waitStages = VkPipelineStageFlags.ColorAttachmentOutput;
+            submitInfo.waitSemaphoreCount = 1;
+            submitInfo.pWaitSemaphores = &waitSemaphore;
+            submitInfo.pWaitDstStageMask = &waitStages;
+            VkCommandBuffer cb = _commandBuffers[imageIndex];
+            submitInfo.commandBufferCount = 1;
+            submitInfo.pCommandBuffers = &cb;
+            VkSemaphore signalSemaphore = _renderCompleteSemaphore;
+            submitInfo.signalSemaphoreCount = 1;
+            submitInfo.pSignalSemaphores = &signalSemaphore;
+            vkQueueSubmit(_graphicsQueue, 1, ref submitInfo, VkFence.Null);
+
+            VkPresentInfoKHR presentInfo = VkPresentInfoKHR.New();
+            presentInfo.waitSemaphoreCount = 1;
+            presentInfo.pWaitSemaphores = &signalSemaphore;
+
+            VkSwapchainKHR swapchain = _swapchain;
+            presentInfo.swapchainCount = 1;
+            presentInfo.pSwapchains = &swapchain;
+            presentInfo.pImageIndices = &imageIndex;
+
+            vkQueuePresentKHR(_presentQueue, ref presentInfo);
         }
 
         private void CreateInstance()
@@ -90,7 +135,7 @@ namespace Vk.Samples
                 throw new PlatformNotSupportedException();
             }
 
-            bool debug = true;
+            bool debug = false;
             if (debug)
             {
                 instanceExtensions.Add(Strings.VK_EXT_DEBUG_REPORT_EXTENSION_NAME);
@@ -170,7 +215,9 @@ namespace Vk.Samples
             }
 
             vkGetDeviceQueue(_device, _graphicsQueueIndex, 0, out _graphicsQueue);
-            vkGetDeviceQueue(_device, _presentQueueIndex, 0, out _presentQueue);
+            VkQueue q;
+            vkGetDeviceQueue(_device, _presentQueueIndex, 0, out q);
+            _presentQueue = q;
         }
 
         private void GetQueueFamilyIndices()
@@ -180,17 +227,27 @@ namespace Vk.Samples
             VkQueueFamilyProperties[] qfp = new VkQueueFamilyProperties[queueFamilyCount];
             vkGetPhysicalDeviceQueueFamilyProperties(_physicalDevice, ref queueFamilyCount, out qfp[0]);
 
+            bool foundGraphics = false;
+            bool foundPresent = false;
+
             for (uint i = 0; i < qfp.Length; i++)
             {
                 if ((qfp[i].queueFlags & VkQueueFlags.Graphics) != 0)
                 {
                     _graphicsQueueIndex = i;
+                    foundGraphics = true;
                 }
 
                 vkGetPhysicalDeviceSurfaceSupportKHR(_physicalDevice, i, _surface, out VkBool32 presentSupported);
                 if (presentSupported)
                 {
                     _presentQueueIndex = i;
+                    foundPresent = true;
+                }
+
+                if (foundGraphics && foundPresent)
+                {
+                    break;
                 }
             }
         }
@@ -327,7 +384,9 @@ namespace Vk.Samples
                 ivci.subresourceRange.levelCount = 1;
                 ivci.subresourceRange.baseArrayLayer = 0;
                 ivci.subresourceRange.layerCount = 1;
-                vkCreateImageView(_device, ref ivci, null, out VkImageView imageView);
+                ivci.image = _scImages[i];
+                VkImageView imageView;
+                vkCreateImageView(_device, ref ivci, null, &imageView);
                 _scImageViews[i] = imageView;
             }
         }
@@ -358,6 +417,17 @@ namespace Vk.Samples
             renderPassCI.pAttachments = &colorAttachment;
             renderPassCI.subpassCount = 1;
             renderPassCI.pSubpasses = &subpass;
+
+            VkSubpassDependency dependency = new VkSubpassDependency();
+            dependency.srcSubpass = SubpassExternal;
+            dependency.dstSubpass = 0;
+            dependency.srcStageMask = VkPipelineStageFlags.ColorAttachmentOutput;
+            dependency.srcAccessMask = 0;
+            dependency.dstStageMask = VkPipelineStageFlags.ColorAttachmentOutput;
+            dependency.dstAccessMask = VkAccessFlags.ColorAttachmentRead | VkAccessFlags.ColorAttachmentWrite;
+
+            renderPassCI.dependencyCount = 1;
+            renderPassCI.pDependencies = &dependency;
 
             vkCreateRenderPass(_device, ref renderPassCI, null, out _renderPass);
         }
@@ -480,7 +550,7 @@ namespace Vk.Samples
             commandBufferAI.commandBufferCount = _commandBuffers.Count;
             vkAllocateCommandBuffers(_device, ref commandBufferAI, out _commandBuffers[0]);
 
-            for (uint i= 0; i < _commandBuffers.Count; i++)
+            for (uint i = 0; i < _commandBuffers.Count; i++)
             {
                 VkCommandBuffer cb = _commandBuffers[i];
 
@@ -506,6 +576,13 @@ namespace Vk.Samples
 
                 vkEndCommandBuffer(cb);
             }
+        }
+
+        private void CreateSemaphores()
+        {
+            VkSemaphoreCreateInfo semaphoreCI = VkSemaphoreCreateInfo.New();
+            vkCreateSemaphore(_device, ref semaphoreCI, null, out _imageAvailableSemaphore);
+            vkCreateSemaphore(_device, ref semaphoreCI, null, out _renderCompleteSemaphore);
         }
 
         private VkShaderModule CreateShader(byte[] bytecode)
