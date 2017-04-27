@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Runtime.CompilerServices;
@@ -15,7 +14,9 @@ using System.IO;
 
 namespace Vk.Samples
 {
-    public unsafe class TriangleFromScratch
+    // Code sample following vulkan-tutorial.com. 
+    // This one is written by hand, and uses more idiomatic C# than the other samples.
+    public unsafe class VulkanTutorial
     {
         private VkInstance _instance;
         private VkPhysicalDevice _physicalDevice;
@@ -47,7 +48,7 @@ namespace Vk.Samples
 
         public static void Main()
         {
-            new TriangleFromScratch().RunSample();
+            new VulkanTutorial().RunSample();
         }
 
         private void RunSample()
@@ -81,7 +82,15 @@ namespace Vk.Samples
         private void DrawFrame()
         {
             uint imageIndex = 0;
-            vkAcquireNextImageKHR(_device, _swapchain, ulong.MaxValue, _imageAvailableSemaphore, VkFence.Null, ref imageIndex);
+            VkResult result = vkAcquireNextImageKHR(_device, _swapchain, ulong.MaxValue, _imageAvailableSemaphore, VkFence.Null, ref imageIndex);
+            if (result == VkResult.ErrorOutOfDate || result == VkResult.Suboptimal)
+            {
+                RecreateSwapChain();
+            }
+            else if (result != VkResult.Success)
+            {
+                throw new InvalidOperationException("Acquiring next image failed: " + result);
+            }
 
             VkSubmitInfo submitInfo = VkSubmitInfo.New();
             VkSemaphore waitSemaphore = _imageAvailableSemaphore;
@@ -135,7 +144,7 @@ namespace Vk.Samples
                 throw new PlatformNotSupportedException();
             }
 
-            bool debug = false;
+            bool debug = true;
             if (debug)
             {
                 instanceExtensions.Add(Strings.VK_EXT_DEBUG_REPORT_EXTENSION_NAME);
@@ -254,8 +263,9 @@ namespace Vk.Samples
 
         private void CreatePlatformWindow()
         {
-            _window = new Sdl2Window("Triangle From Scratch", 100, 100, 1280, 760, SDL_WindowFlags.Resizable, false);
+            _window = new Sdl2Window("Triangle From Scratch", 100, 100, 1280, 760, SDL_WindowFlags.Resizable, true);
             _window.Visible = true;
+            _window.Resized += RecreateSwapChain;
         }
 
         private void CreateSurface()
@@ -359,7 +369,14 @@ namespace Vk.Samples
             sci.compositeAlpha = VkCompositeAlphaFlagsKHR.Opaque;
             sci.clipped = true;
 
+            VkSwapchainKHR oldSwapchain = _swapchain;
+            sci.oldSwapchain = oldSwapchain;
+
             vkCreateSwapchainKHR(_device, ref sci, null, out _swapchain);
+            if (oldSwapchain != NullHandle)
+            {
+                vkDestroySwapchainKHR(_device, oldSwapchain, null);
+            }
 
             // Get the images
             uint scImageCount = 0;
@@ -543,6 +560,11 @@ namespace Vk.Samples
 
         private void CreateCommandBuffers()
         {
+            if (_commandBuffers.Count > 0)
+            {
+                vkFreeCommandBuffers(_device, _commandPool, _scFramebuffers.Count, ref _commandBuffers[0]);
+            }
+
             _commandBuffers.Resize(_scFramebuffers.Count);
             VkCommandBufferAllocateInfo commandBufferAI = VkCommandBufferAllocateInfo.New();
             commandBufferAI.commandPool = _commandPool;
@@ -584,6 +606,19 @@ namespace Vk.Samples
             vkCreateSemaphore(_device, ref semaphoreCI, null, out _imageAvailableSemaphore);
             vkCreateSemaphore(_device, ref semaphoreCI, null, out _renderCompleteSemaphore);
         }
+
+        private void RecreateSwapChain()
+        {
+            vkDeviceWaitIdle(_device);
+
+            CreateSwapchain();
+            CreateImageViews();
+            CreateRenderPass();
+            CreateGraphicsPipeline();
+            CreateFramebuffers();
+            CreateCommandBuffers();
+        }
+
 
         private VkShaderModule CreateShader(byte[] bytecode)
         {
