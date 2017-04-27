@@ -263,7 +263,7 @@ namespace Vk.Samples
 
         private void CreatePlatformWindow()
         {
-            _window = new Sdl2Window("Triangle From Scratch", 100, 100, 1280, 760, SDL_WindowFlags.Resizable, true);
+            _window = new Sdl2Window("Triangle From Scratch", 100, 100, 1280, 760, SDL_WindowFlags.Resizable, false);
             _window.Visible = true;
             _window.Resized += RecreateSwapChain;
         }
