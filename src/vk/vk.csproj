@@ -7,9 +7,8 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <ProjectGuid>{D8573039-9FE1-4554-A659-4E77CFBA83C1}</ProjectGuid>
     <GeneratedCodeFolder>$(MSBuildThisFileDirectory)Generated</GeneratedCodeFolder>
-    <GeneratedCalliCodeFolder>$(MSBuildThisFileDirectory)Generated.calli</GeneratedCalliCodeFolder>
     <DisableCalli>false</DisableCalli>
-    <DefineConstants Condition="'$(DisableCalli)' != 'true'">$(DefineConstants);CALLI_STUBS</DefineConstants>
+    <DefineConstants>$(DefineConstants);CALLI_STUBS</DefineConstants>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
@@ -21,12 +20,6 @@
     <Compile Include="$(GeneratedCodeFolder)\Structures.gen.cs" />
     <Compile Include="$(GeneratedCodeFolder)\Unions.gen.cs" />
     <Compile Include="$(GeneratedCodeFolder)\Constants.gen.cs" />
-    <Compile Include="$(GeneratedCalliCodeFolder)\Commands.gen.cs" />
-    <Compile Include="$(GeneratedCalliCodeFolder)\Enums.gen.cs" />
-    <Compile Include="$(GeneratedCalliCodeFolder)\Handles.gen.cs" />
-    <Compile Include="$(GeneratedCalliCodeFolder)\Structures.gen.cs" />
-    <Compile Include="$(GeneratedCalliCodeFolder)\Unions.gen.cs" />
-    <Compile Include="$(GeneratedCalliCodeFolder)\Constants.gen.cs" />
     <Compile Include="BindingsHelpers.cs" />
     <Compile Include="CalliRewriteAttribute.cs" />
     <Compile Include="Commands.cs" />
