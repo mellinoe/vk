@@ -11,6 +11,7 @@ using static Veldrid.Sdl2.Sdl2Native;
 using static Vulkan.VulkanNative;
 using System.Linq;
 using System.IO;
+using System.Numerics;
 
 namespace Vk.Samples
 {
@@ -35,6 +36,10 @@ namespace Vk.Samples
         private RawList<VkCommandBuffer> _commandBuffers = new RawList<VkCommandBuffer>();
         private VkSemaphore _imageAvailableSemaphore;
         private VkSemaphore _renderCompleteSemaphore;
+        private VkBuffer _vertexBuffer;
+        private VkDeviceMemory _vertexBufferMemory;
+        private VkDeviceMemory _indexBufferMemory;
+        private VkBuffer _indexBuffer;
 
         // Swapchain stuff
         private RawList<VkImage> _scImages = new RawList<VkImage>();
@@ -45,6 +50,19 @@ namespace Vk.Samples
         private VkExtent2D _scExtent;
 
         private Sdl2Window _window;
+
+        private RawList<Vertex> _vertices = new RawList<Vertex>
+        {
+            new Vertex { Position = new Vector2(-0.5f, -0.5f), Color = new Vector3(1f, 0f, 0f) },
+            new Vertex { Position = new Vector2(0.5f, -0.5f), Color = new Vector3(0f, 1f, 0f) },
+            new Vertex { Position = new Vector2(0.5f, 0.5f), Color = new Vector3(0f, 0f, 1f) },
+            new Vertex { Position = new Vector2(-0.5f, 0.5f), Color = new Vector3(1f, 1f, 1f) },
+        };
+
+        private ushort[] _indices =
+        {
+            0, 1, 2, 0, 2, 3,
+        };
 
         public static void Main()
         {
@@ -64,6 +82,8 @@ namespace Vk.Samples
             CreateGraphicsPipeline();
             CreateFramebuffers();
             CreateCommandPool();
+            CreateVertexBuffer();
+            CreateIndexBuffer();
             CreateCommandBuffers();
             CreateSemaphores();
 
@@ -470,8 +490,13 @@ namespace Vk.Samples
             FixedArray2<VkPipelineShaderStageCreateInfo> shaderStageCreateInfos
                 = new FixedArray2<VkPipelineShaderStageCreateInfo>(vertCreateInfo, fragCreateInfo);
 
-            VkPipelineVertexInputStateCreateInfo vertexInputStateCreateInfo = VkPipelineVertexInputStateCreateInfo.New();
-            // Nothing: default values for everything.
+            VkPipelineVertexInputStateCreateInfo vertexInputStateCI = VkPipelineVertexInputStateCreateInfo.New();
+            var vertexBindingDesc = Vertex.GetBindingDescription();
+            var attributeDescr = Vertex.GetAttributeDescriptions();
+            vertexInputStateCI.vertexBindingDescriptionCount = 1;
+            vertexInputStateCI.pVertexBindingDescriptions = &vertexBindingDesc;
+            vertexInputStateCI.vertexAttributeDescriptionCount = 2;
+            vertexInputStateCI.pVertexAttributeDescriptions = &attributeDescr.First;
 
             VkPipelineInputAssemblyStateCreateInfo inputAssemblyCI = VkPipelineInputAssemblyStateCreateInfo.New();
             inputAssemblyCI.primitiveRestartEnable = false;
@@ -518,13 +543,12 @@ namespace Vk.Samples
             graphicsPipelineCI.stageCount = shaderStageCreateInfos.Count;
             graphicsPipelineCI.pStages = &shaderStageCreateInfos.First;
 
-            graphicsPipelineCI.pVertexInputState = &vertexInputStateCreateInfo;
+            graphicsPipelineCI.pVertexInputState = &vertexInputStateCI;
             graphicsPipelineCI.pInputAssemblyState = &inputAssemblyCI;
             graphicsPipelineCI.pViewportState = &viewportStateCI;
             graphicsPipelineCI.pRasterizationState = &rasterizerStateCI;
             graphicsPipelineCI.pMultisampleState = &multisampleStateCI;
             graphicsPipelineCI.pColorBlendState = &colorBlendStateCI;
-
             graphicsPipelineCI.layout = _pipelineLayout;
 
             graphicsPipelineCI.renderPass = _renderPass;
@@ -592,7 +616,12 @@ namespace Vk.Samples
                 vkCmdBeginRenderPass(cb, ref rpbi, VkSubpassContents.Inline);
 
                 vkCmdBindPipeline(cb, VkPipelineBindPoint.Graphics, _graphicsPipeline);
-                vkCmdDraw(cb, 3, 1, 0, 0);
+
+                ulong offset = 0;
+                vkCmdBindVertexBuffers(cb, 0, 1, ref _vertexBuffer, ref offset);
+                vkCmdBindIndexBuffer(cb, _indexBuffer, 0, VkIndexType.Uint16);
+
+                vkCmdDrawIndexed(cb, (uint)_indices.Length, 1, 0, 0, 0);
 
                 vkCmdEndRenderPass(cb);
 
@@ -605,6 +634,111 @@ namespace Vk.Samples
             VkSemaphoreCreateInfo semaphoreCI = VkSemaphoreCreateInfo.New();
             vkCreateSemaphore(_device, ref semaphoreCI, null, out _imageAvailableSemaphore);
             vkCreateSemaphore(_device, ref semaphoreCI, null, out _renderCompleteSemaphore);
+        }
+
+        private void CreateVertexBuffer()
+        {
+            ulong vertexBufferSize = (uint)Unsafe.SizeOf<Vertex>() * _vertices.Count;
+            CreateBuffer(
+                vertexBufferSize,
+                VkBufferUsageFlags.TransferSrc,
+                VkMemoryPropertyFlags.HostVisible | VkMemoryPropertyFlags.HostCoherent,
+                out VkBuffer stagingBuffer,
+                out VkDeviceMemory stagingMemory);
+            UploadBufferData(stagingMemory, _vertices.Items);
+            CreateBuffer(
+                vertexBufferSize,
+                VkBufferUsageFlags.VertexBuffer | VkBufferUsageFlags.TransferDst,
+                VkMemoryPropertyFlags.DeviceLocal,
+                out _vertexBuffer,
+                out _vertexBufferMemory);
+            CopyBuffer(stagingBuffer, _vertexBuffer, vertexBufferSize);
+        }
+
+        private void CreateIndexBuffer()
+        {
+            ulong indexBufferSize = (ulong)(sizeof(ushort) * _indices.Length);
+            CreateBuffer(
+                indexBufferSize,
+                VkBufferUsageFlags.TransferSrc,
+                VkMemoryPropertyFlags.HostVisible | VkMemoryPropertyFlags.HostCoherent,
+                out VkBuffer stagingBuffer,
+                out VkDeviceMemory stagingMemory);
+            UploadBufferData(stagingMemory, _indices);
+            CreateBuffer(
+                indexBufferSize,
+                VkBufferUsageFlags.IndexBuffer | VkBufferUsageFlags.TransferDst,
+                VkMemoryPropertyFlags.DeviceLocal,
+                out _indexBuffer,
+                out _indexBufferMemory);
+            CopyBuffer(stagingBuffer, _indexBuffer, indexBufferSize);
+        }
+
+        private void CreateBuffer(ulong size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, out VkBuffer buffer, out VkDeviceMemory memory)
+        {
+            VkBufferCreateInfo bufferCI = VkBufferCreateInfo.New();
+            bufferCI.size = size;
+            bufferCI.usage = usage;
+            bufferCI.sharingMode = VkSharingMode.Exclusive;
+            vkCreateBuffer(_device, ref bufferCI, null, out buffer);
+
+            vkGetBufferMemoryRequirements(_device, buffer, out VkMemoryRequirements memReqs);
+            VkMemoryAllocateInfo memAllocCI = VkMemoryAllocateInfo.New();
+            memAllocCI.allocationSize = memReqs.size;
+            memAllocCI.memoryTypeIndex = FindMemoryType(memReqs.memoryTypeBits, VkMemoryPropertyFlags.HostVisible | VkMemoryPropertyFlags.HostCoherent);
+            vkAllocateMemory(_device, ref memAllocCI, null, out memory);
+            vkBindBufferMemory(_device, buffer, memory, 0);
+        }
+
+        private void CopyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, ulong size)
+        {
+            VkCommandBufferAllocateInfo allocInfo = VkCommandBufferAllocateInfo.New();
+            allocInfo.commandBufferCount = 1;
+            allocInfo.commandPool = _commandPool;
+            allocInfo.level = VkCommandBufferLevel.Primary;
+            vkAllocateCommandBuffers(_device, ref allocInfo, out VkCommandBuffer copyCmd);
+
+            VkCommandBufferBeginInfo beginInfo = VkCommandBufferBeginInfo.New();
+            beginInfo.flags = VkCommandBufferUsageFlags.OneTimeSubmit;
+            vkBeginCommandBuffer(copyCmd, ref beginInfo);
+
+            VkBufferCopy bufferCopy = new VkBufferCopy();
+            bufferCopy.size = size;
+            vkCmdCopyBuffer(copyCmd, srcBuffer, dstBuffer, 1, ref bufferCopy);
+            vkEndCommandBuffer(copyCmd);
+
+            VkSubmitInfo submitInfo = VkSubmitInfo.New();
+            submitInfo.commandBufferCount = 1;
+            submitInfo.pCommandBuffers = &copyCmd;
+            vkQueueSubmit(_graphicsQueue, 1, ref submitInfo, VkFence.Null);
+            vkQueueWaitIdle(_graphicsQueue);
+            vkFreeCommandBuffers(_device, _commandPool, 1, ref copyCmd);
+        }
+
+        private void UploadBufferData<T>(VkDeviceMemory memory, T[] data)
+        {
+            ulong size = (ulong)(data.Length * Unsafe.SizeOf<T>());
+            void* mappedMemory;
+            vkMapMemory(_device, memory, 0, size, 0, &mappedMemory);
+            GCHandle gh = GCHandle.Alloc(data, GCHandleType.Pinned);
+            Unsafe.CopyBlock(mappedMemory, gh.AddrOfPinnedObject().ToPointer(), (uint)size);
+            gh.Free();
+            vkUnmapMemory(_device, memory);
+        }
+
+        private uint FindMemoryType(uint typeFilter, VkMemoryPropertyFlags properties)
+        {
+            vkGetPhysicalDeviceMemoryProperties(_physicalDevice, out VkPhysicalDeviceMemoryProperties memProperties);
+            for (int i = 0; i < memProperties.memoryTypeCount; i++)
+            {
+                if (((typeFilter & (1 << i)) != 0)
+                    && (memProperties.GetMemoryType((uint)i).propertyFlags & properties) == properties)
+                {
+                    return (uint)i;
+                }
+            }
+
+            throw new InvalidOperationException("No suitable memory type.");
         }
 
         private void RecreateSwapChain()
@@ -638,6 +772,45 @@ namespace Vk.Samples
             {
                 Console.WriteLine($"Vulkan call was not successful: {result}");
             }
+        }
+    }
+
+    public struct Vertex
+    {
+        public Vector2 Position;
+        public Vector3 Color;
+
+        public static VkVertexInputBindingDescription GetBindingDescription()
+        {
+            VkVertexInputBindingDescription bindingDescription = new VkVertexInputBindingDescription();
+            bindingDescription.inputRate = VkVertexInputRate.Vertex;
+            bindingDescription.stride = (uint)Unsafe.SizeOf<Vertex>();
+            bindingDescription.binding = 0;
+            return bindingDescription;
+        }
+
+        public static FixedArray2<VkVertexInputAttributeDescription> GetAttributeDescriptions()
+        {
+            FixedArray2<VkVertexInputAttributeDescription> ad;
+            ad.First.binding = 0;
+            ad.First.location = 0;
+            ad.First.format = VkFormat.R32g32Sfloat;
+            ad.First.offset = 0;
+
+            ad.Second.binding = 0;
+            ad.Second.location = 1;
+            ad.Second.format = VkFormat.R32g32b32Sfloat;
+            ad.Second.offset = (uint)Unsafe.SizeOf<Vector2>();
+
+            return ad;
+        }
+    }
+
+    public unsafe static class VkPhysicalDeviceMemoryPropertiesEx
+    {
+        public static VkMemoryType GetMemoryType(this VkPhysicalDeviceMemoryProperties memoryProperties, uint index)
+        {
+            return (&memoryProperties.memoryTypes_0)[index];
         }
     }
 }
