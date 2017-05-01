@@ -12,6 +12,8 @@ using static Vulkan.VulkanNative;
 using System.Linq;
 using System.IO;
 using System.Numerics;
+using ImageSharp;
+using ImageSharp.PixelFormats;
 
 namespace Vk.Samples
 {
@@ -40,6 +42,17 @@ namespace Vk.Samples
         private VkDeviceMemory _vertexBufferMemory;
         private VkDeviceMemory _indexBufferMemory;
         private VkBuffer _indexBuffer;
+        private VkDescriptorSetLayout _descriptoSetLayout;
+        private VkBuffer _uboStagingBuffer;
+        private VkDeviceMemory _uboStagingMemory;
+        private VkBuffer _uboBuffer;
+        private VkDeviceMemory _uboMemory;
+        private VkDescriptorPool _descriptorPool;
+        private VkDescriptorSet _descriptorSet;
+        private VkImage _textureImage;
+        private VkDeviceMemory _textureImageMemory;
+        private VkImageView _textureImageView;
+        private VkSampler _textureSampler;
 
         // Swapchain stuff
         private RawList<VkImage> _scImages = new RawList<VkImage>();
@@ -50,13 +63,14 @@ namespace Vk.Samples
         private VkExtent2D _scExtent;
 
         private Sdl2Window _window;
+        private DateTime _startTime = DateTime.UtcNow;
 
         private RawList<Vertex> _vertices = new RawList<Vertex>
         {
-            new Vertex { Position = new Vector2(-0.5f, -0.5f), Color = new Vector3(1f, 0f, 0f) },
-            new Vertex { Position = new Vector2(0.5f, -0.5f), Color = new Vector3(0f, 1f, 0f) },
-            new Vertex { Position = new Vector2(0.5f, 0.5f), Color = new Vector3(0f, 0f, 1f) },
-            new Vertex { Position = new Vector2(-0.5f, 0.5f), Color = new Vector3(1f, 1f, 1f) },
+            new Vertex { Position = new Vector2(-0.5f, -0.5f), Color = new Vector3(1f, 0f, 0f), TexCoord = new Vector2(0f, 0f) },
+            new Vertex { Position = new Vector2(0.5f, -0.5f), Color = new Vector3(0f, 1f, 0f), TexCoord = new Vector2(1f, 0f) },
+            new Vertex { Position = new Vector2(0.5f, 0.5f), Color = new Vector3(0f, 0f, 1f), TexCoord = new Vector2(1f, 1f) },
+            new Vertex { Position = new Vector2(-0.5f, 0.5f), Color = new Vector3(1f, 1f, 1f), TexCoord = new Vector2(0f, 1f) },
         };
 
         private ushort[] _indices =
@@ -79,11 +93,18 @@ namespace Vk.Samples
             CreateSwapchain();
             CreateImageViews();
             CreateRenderPass();
+            CreateDescriptorSetLayout();
             CreateGraphicsPipeline();
             CreateFramebuffers();
             CreateCommandPool();
+            CreateTextureImage();
+            CreateTextureImageView();
+            CreateTextureSampler();
             CreateVertexBuffer();
             CreateIndexBuffer();
+            CreateUniformBuffer();
+            CreateDescriptorPool();
+            CreateDescriptorSet();
             CreateCommandBuffers();
             CreateSemaphores();
 
@@ -95,8 +116,30 @@ namespace Vk.Samples
             while (_window.Exists)
             {
                 _window.GetInputSnapshot();
+                UpdateUniformBuffer();
                 DrawFrame();
             }
+        }
+
+        private void UpdateUniformBuffer()
+        {
+            DateTime currentTime = DateTime.UtcNow;
+            float time = (float)((currentTime - _startTime).TotalSeconds);
+
+            UboMatrices uboMatrices = new UboMatrices(
+                Matrix4x4.CreateRotationZ(time * DegreesToRadians(90f)),
+                Matrix4x4.CreateLookAt(new Vector3(2, 2, 2), new Vector3(), new Vector3(0, 0, 1)),
+                Matrix4x4.CreatePerspectiveFieldOfView(DegreesToRadians(45f), (float)_scExtent.width / _scExtent.height, 0.1f, 10f));
+
+            uboMatrices.Projection.M22 *= -1; // ?
+
+            UploadBufferData(_uboStagingMemory, ref uboMatrices, 1);
+            CopyBuffer(_uboStagingBuffer, _uboBuffer, (ulong)Unsafe.SizeOf<UboMatrices>());
+        }
+
+        private float DegreesToRadians(float degrees)
+        {
+            return (float)((degrees / 360f) * 2 * Math.PI);
         }
 
         private void DrawFrame()
@@ -413,18 +456,7 @@ namespace Vk.Samples
             _scImageViews.Resize(_scImages.Count);
             for (int i = 0; i < _scImages.Count; i++)
             {
-                VkImageViewCreateInfo ivci = VkImageViewCreateInfo.New();
-                ivci.viewType = VkImageViewType._2d;
-                ivci.format = _scImageFormat;
-                ivci.subresourceRange.aspectMask = VkImageAspectFlags.Color;
-                ivci.subresourceRange.baseMipLevel = 0;
-                ivci.subresourceRange.levelCount = 1;
-                ivci.subresourceRange.baseArrayLayer = 0;
-                ivci.subresourceRange.layerCount = 1;
-                ivci.image = _scImages[i];
-                VkImageView imageView;
-                vkCreateImageView(_device, ref ivci, null, &imageView);
-                _scImageViews[i] = imageView;
+                CreateImageView(_scImages[i], _scImageFormat, out _scImageViews[i]);
             }
         }
 
@@ -469,6 +501,29 @@ namespace Vk.Samples
             vkCreateRenderPass(_device, ref renderPassCI, null, out _renderPass);
         }
 
+        private void CreateDescriptorSetLayout()
+        {
+            VkDescriptorSetLayoutBinding ubBinding = new VkDescriptorSetLayoutBinding();
+            ubBinding.binding = 0;
+            ubBinding.descriptorCount = 1;
+            ubBinding.descriptorType = VkDescriptorType.UniformBuffer;
+            ubBinding.stageFlags = VkShaderStageFlags.Vertex;
+
+            VkDescriptorSetLayoutBinding samplerBinding = new VkDescriptorSetLayoutBinding();
+            samplerBinding.binding = 1;
+            samplerBinding.descriptorCount = 1;
+            samplerBinding.descriptorType = VkDescriptorType.CombinedImageSampler;
+            samplerBinding.stageFlags = VkShaderStageFlags.Fragment;
+
+            FixedArray2<VkDescriptorSetLayoutBinding> bindings
+                = new FixedArray2<VkDescriptorSetLayoutBinding>(ubBinding, samplerBinding);
+            VkDescriptorSetLayoutCreateInfo dslCI = VkDescriptorSetLayoutCreateInfo.New();
+            dslCI.bindingCount = bindings.Count;
+            dslCI.pBindings = &bindings.First;
+
+            vkCreateDescriptorSetLayout(_device, ref dslCI, null, out _descriptoSetLayout);
+        }
+
         private void CreateGraphicsPipeline()
         {
             byte[] vertBytes = File.ReadAllBytes(Path.Combine(AppContext.BaseDirectory, "Shaders", "shader.vert.spv"));
@@ -495,7 +550,7 @@ namespace Vk.Samples
             var attributeDescr = Vertex.GetAttributeDescriptions();
             vertexInputStateCI.vertexBindingDescriptionCount = 1;
             vertexInputStateCI.pVertexBindingDescriptions = &vertexBindingDesc;
-            vertexInputStateCI.vertexAttributeDescriptionCount = 2;
+            vertexInputStateCI.vertexAttributeDescriptionCount = attributeDescr.Count;
             vertexInputStateCI.pVertexAttributeDescriptions = &attributeDescr.First;
 
             VkPipelineInputAssemblyStateCreateInfo inputAssemblyCI = VkPipelineInputAssemblyStateCreateInfo.New();
@@ -522,7 +577,7 @@ namespace Vk.Samples
             rasterizerStateCI.cullMode = VkCullModeFlags.Back;
             rasterizerStateCI.polygonMode = VkPolygonMode.Fill;
             rasterizerStateCI.lineWidth = 1f;
-            rasterizerStateCI.frontFace = VkFrontFace.Clockwise;
+            rasterizerStateCI.frontFace = VkFrontFace.CounterClockwise;
 
             VkPipelineMultisampleStateCreateInfo multisampleStateCI = VkPipelineMultisampleStateCreateInfo.New();
             multisampleStateCI.rasterizationSamples = VkSampleCountFlags._1;
@@ -536,7 +591,10 @@ namespace Vk.Samples
             colorBlendStateCI.attachmentCount = 1;
             colorBlendStateCI.pAttachments = &colorBlendAttachementState;
 
+            VkDescriptorSetLayout dsl = _descriptoSetLayout;
             VkPipelineLayoutCreateInfo pipelineLayoutCI = VkPipelineLayoutCreateInfo.New();
+            pipelineLayoutCI.setLayoutCount = 1;
+            pipelineLayoutCI.pSetLayouts = &dsl;
             vkCreatePipelineLayout(_device, ref pipelineLayoutCI, null, out _pipelineLayout);
 
             VkGraphicsPipelineCreateInfo graphicsPipelineCI = VkGraphicsPipelineCreateInfo.New();
@@ -582,6 +640,130 @@ namespace Vk.Samples
             vkCreateCommandPool(_device, ref commandPoolCI, null, out _commandPool);
         }
 
+        private void CreateTextureImage()
+        {
+            Image image;
+            using (var fs = File.OpenRead(Path.Combine(AppContext.BaseDirectory, "Textures", "texture.jpg")))
+            {
+                image = Image.Load(fs);
+            }
+            ulong imageSize = (ulong)(image.Width * image.Height * Unsafe.SizeOf<Rgba32>());
+
+            CreateImage(
+                (uint)image.Width,
+                (uint)image.Height,
+                VkFormat.R8g8b8a8Unorm,
+                VkImageTiling.Linear,
+                VkImageUsageFlags.TransferSrc,
+                VkMemoryPropertyFlags.HostVisible | VkMemoryPropertyFlags.HostCoherent,
+                out VkImage stagingImage,
+                out VkDeviceMemory stagingImageMemory);
+
+            VkImageSubresource subresource = new VkImageSubresource();
+            subresource.aspectMask = VkImageAspectFlags.Color;
+            subresource.mipLevel = 0;
+            subresource.arrayLayer = 0;
+
+            vkGetImageSubresourceLayout(_device, stagingImage, ref subresource, out VkSubresourceLayout stagingImageLayout);
+            ulong rowPitch = stagingImageLayout.rowPitch;
+
+            void* mappedPtr;
+            vkMapMemory(_device, stagingImageMemory, 0, imageSize, 0, &mappedPtr);
+            fixed (void* pixelsPtr = image.Pixels)
+            {
+                if (rowPitch == (ulong)image.Width)
+                {
+                    Buffer.MemoryCopy(pixelsPtr, mappedPtr, imageSize, imageSize);
+                }
+                else
+                {
+                    for (uint y = 0; y < image.Height; y++)
+                    {
+                        byte* dstRowStart = ((byte*)mappedPtr) + (rowPitch * y);
+                        byte* srcRowStart = ((byte*)pixelsPtr) + (image.Width * y * Unsafe.SizeOf<Rgba32>());
+                        Unsafe.CopyBlock(dstRowStart, srcRowStart, (uint)(image.Width * Unsafe.SizeOf<Rgba32>()));
+                    }
+                }
+            }
+            vkUnmapMemory(_device, stagingImageMemory);
+
+            CreateImage(
+                (uint)image.Width,
+                (uint)image.Height,
+                VkFormat.R8g8b8a8Unorm,
+                VkImageTiling.Optimal,
+                VkImageUsageFlags.TransferDst | VkImageUsageFlags.Sampled,
+                VkMemoryPropertyFlags.DeviceLocal,
+                out _textureImage,
+                out _textureImageMemory);
+
+            TransitionImageLayout(stagingImage, VkFormat.R8g8b8a8Unorm, VkImageLayout.Preinitialized, VkImageLayout.TransferSrcOptimal);
+            TransitionImageLayout(_textureImage, VkFormat.R8g8b8a8Unorm, VkImageLayout.Preinitialized, VkImageLayout.TransferDstOptimal);
+            CopyImage(stagingImage, _textureImage, (uint)image.Width, (uint)image.Height);
+            TransitionImageLayout(_textureImage, VkFormat.R8g8b8a8Unorm, VkImageLayout.TransferDstOptimal, VkImageLayout.ShaderReadOnlyOptimal);
+
+            vkDestroyImage(_device, stagingImage, null);
+        }
+
+        private void CreateTextureImageView()
+        {
+            CreateImageView(_textureImage, VkFormat.R8g8b8a8Unorm, out _textureImageView);
+        }
+
+        private void CreateTextureSampler()
+        {
+            VkSamplerCreateInfo samplerCI = VkSamplerCreateInfo.New();
+            samplerCI.magFilter = VkFilter.Linear;
+            samplerCI.minFilter = VkFilter.Linear;
+            samplerCI.anisotropyEnable = true;
+            samplerCI.maxAnisotropy = 16;
+            samplerCI.borderColor = VkBorderColor.IntOpaqueBlack;
+            samplerCI.unnormalizedCoordinates = false;
+            samplerCI.compareEnable = false;
+            samplerCI.compareOp = VkCompareOp.Always;
+            samplerCI.mipmapMode = VkSamplerMipmapMode.Linear;
+            samplerCI.mipLodBias = 0f;
+            samplerCI.minLod = 0f;
+            samplerCI.maxLod = 0f;
+
+            vkCreateSampler(_device, ref samplerCI, null, out _textureSampler);
+        }
+
+        private void CreateImage(
+            uint width,
+            uint height,
+            VkFormat format,
+            VkImageTiling tiling,
+            VkImageUsageFlags usage,
+            VkMemoryPropertyFlags properties,
+            out VkImage image,
+            out VkDeviceMemory memory)
+        {
+            VkImageCreateInfo imageCI = VkImageCreateInfo.New();
+            imageCI.imageType = VkImageType._2d;
+            imageCI.extent.width = width;
+            imageCI.extent.height = height;
+            imageCI.extent.depth = 1;
+            imageCI.mipLevels = 1;
+            imageCI.arrayLayers = 1;
+            imageCI.format = format;
+            imageCI.tiling = tiling;
+            imageCI.initialLayout = VkImageLayout.Preinitialized;
+            imageCI.usage = usage;
+            imageCI.sharingMode = VkSharingMode.Exclusive;
+            imageCI.samples = VkSampleCountFlags._1;
+
+            vkCreateImage(_device, ref imageCI, null, out image);
+
+            vkGetImageMemoryRequirements(_device, image, out VkMemoryRequirements memRequirements);
+            VkMemoryAllocateInfo allocInfo = VkMemoryAllocateInfo.New();
+            allocInfo.allocationSize = memRequirements.size;
+            allocInfo.memoryTypeIndex = FindMemoryType(memRequirements.memoryTypeBits, properties);
+            vkAllocateMemory(_device, ref allocInfo, null, out memory);
+
+            vkBindImageMemory(_device, image, memory, 0);
+        }
+
         private void CreateCommandBuffers()
         {
             if (_commandBuffers.Count > 0)
@@ -616,6 +798,16 @@ namespace Vk.Samples
                 vkCmdBeginRenderPass(cb, ref rpbi, VkSubpassContents.Inline);
 
                 vkCmdBindPipeline(cb, VkPipelineBindPoint.Graphics, _graphicsPipeline);
+
+                vkCmdBindDescriptorSets(
+                    cb,
+                    VkPipelineBindPoint.Graphics,
+                    _pipelineLayout,
+                    0,
+                    1,
+                    ref _descriptorSet,
+                    0,
+                    null);
 
                 ulong offset = 0;
                 vkCmdBindVertexBuffers(cb, 0, 1, ref _vertexBuffer, ref offset);
@@ -674,6 +866,68 @@ namespace Vk.Samples
             CopyBuffer(stagingBuffer, _indexBuffer, indexBufferSize);
         }
 
+        private void CreateUniformBuffer()
+        {
+            ulong bufferSize = (ulong)Unsafe.SizeOf<UboMatrices>();
+            CreateBuffer(bufferSize, VkBufferUsageFlags.UniformBuffer | VkBufferUsageFlags.TransferSrc, VkMemoryPropertyFlags.HostVisible | VkMemoryPropertyFlags.HostCoherent, out _uboStagingBuffer, out _uboStagingMemory);
+            CreateBuffer(bufferSize, VkBufferUsageFlags.UniformBuffer | VkBufferUsageFlags.TransferDst, VkMemoryPropertyFlags.DeviceLocal, out _uboBuffer, out _uboMemory);
+        }
+
+        private void CreateDescriptorPool()
+        {
+            FixedArray2<VkDescriptorPoolSize> poolSizes;
+            poolSizes.First.type = VkDescriptorType.UniformBuffer;
+            poolSizes.First.descriptorCount = 1;
+            poolSizes.Second.type = VkDescriptorType.CombinedImageSampler;
+            poolSizes.Second.descriptorCount = 1;
+
+            VkDescriptorPoolCreateInfo descriptorPoolCI = VkDescriptorPoolCreateInfo.New();
+            descriptorPoolCI.poolSizeCount = poolSizes.Count;
+            descriptorPoolCI.pPoolSizes = &poolSizes.First;
+            descriptorPoolCI.maxSets = 1;
+            vkCreateDescriptorPool(_device, ref descriptorPoolCI, null, out _descriptorPool);
+        }
+
+        private void CreateDescriptorSet()
+        {
+            VkDescriptorSetLayout dsl = _descriptoSetLayout;
+            VkDescriptorSetAllocateInfo dsAI = VkDescriptorSetAllocateInfo.New();
+            dsAI.descriptorPool = _descriptorPool;
+            dsAI.pSetLayouts = &dsl;
+            dsAI.descriptorSetCount = 1;
+            vkAllocateDescriptorSets(_device, ref dsAI, out _descriptorSet);
+
+            VkDescriptorBufferInfo bufferInfo = new VkDescriptorBufferInfo();
+            bufferInfo.buffer = _uboBuffer;
+            bufferInfo.offset = 0;
+            bufferInfo.range = (ulong)Unsafe.SizeOf<UboMatrices>();
+
+            FixedArray2<VkWriteDescriptorSet> descriptorWrites;
+
+            descriptorWrites.First = VkWriteDescriptorSet.New();
+            descriptorWrites.First.dstSet = _descriptorSet;
+            descriptorWrites.First.dstBinding = 0;
+            descriptorWrites.First.dstArrayElement = 0;
+            descriptorWrites.First.descriptorType = VkDescriptorType.UniformBuffer;
+            descriptorWrites.First.descriptorCount = 1;
+            descriptorWrites.First.pBufferInfo = &bufferInfo;
+
+            VkDescriptorImageInfo imageInfo;
+            imageInfo.imageLayout = VkImageLayout.ShaderReadOnlyOptimal;
+            imageInfo.imageView = _textureImageView;
+            imageInfo.sampler = _textureSampler;
+
+            descriptorWrites.Second = VkWriteDescriptorSet.New();
+            descriptorWrites.Second.dstSet = _descriptorSet;
+            descriptorWrites.Second.dstBinding = 1;
+            descriptorWrites.Second.dstArrayElement = 0;
+            descriptorWrites.Second.descriptorType = VkDescriptorType.CombinedImageSampler;
+            descriptorWrites.Second.descriptorCount = 1;
+            descriptorWrites.Second.pImageInfo = &imageInfo;
+
+            vkUpdateDescriptorSets(_device, descriptorWrites.Count, &descriptorWrites.First, 0, null);
+        }
+
         private void CreateBuffer(ulong size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, out VkBuffer buffer, out VkDeviceMemory memory)
         {
             VkBufferCreateInfo bufferCI = VkBufferCreateInfo.New();
@@ -692,27 +946,13 @@ namespace Vk.Samples
 
         private void CopyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, ulong size)
         {
-            VkCommandBufferAllocateInfo allocInfo = VkCommandBufferAllocateInfo.New();
-            allocInfo.commandBufferCount = 1;
-            allocInfo.commandPool = _commandPool;
-            allocInfo.level = VkCommandBufferLevel.Primary;
-            vkAllocateCommandBuffers(_device, ref allocInfo, out VkCommandBuffer copyCmd);
-
-            VkCommandBufferBeginInfo beginInfo = VkCommandBufferBeginInfo.New();
-            beginInfo.flags = VkCommandBufferUsageFlags.OneTimeSubmit;
-            vkBeginCommandBuffer(copyCmd, ref beginInfo);
+            VkCommandBuffer copyCmd = BeginOneTimeCommands();
 
             VkBufferCopy bufferCopy = new VkBufferCopy();
             bufferCopy.size = size;
             vkCmdCopyBuffer(copyCmd, srcBuffer, dstBuffer, 1, ref bufferCopy);
-            vkEndCommandBuffer(copyCmd);
 
-            VkSubmitInfo submitInfo = VkSubmitInfo.New();
-            submitInfo.commandBufferCount = 1;
-            submitInfo.pCommandBuffers = &copyCmd;
-            vkQueueSubmit(_graphicsQueue, 1, ref submitInfo, VkFence.Null);
-            vkQueueWaitIdle(_graphicsQueue);
-            vkFreeCommandBuffers(_device, _commandPool, 1, ref copyCmd);
+            EndOneTimeCommands(copyCmd);
         }
 
         private void UploadBufferData<T>(VkDeviceMemory memory, T[] data)
@@ -725,6 +965,17 @@ namespace Vk.Samples
             gh.Free();
             vkUnmapMemory(_device, memory);
         }
+
+        private void UploadBufferData<T>(VkDeviceMemory memory, ref T data, uint count)
+        {
+            ulong size = (ulong)(count * Unsafe.SizeOf<T>());
+            void* mappedMemory;
+            vkMapMemory(_device, memory, 0, size, 0, &mappedMemory);
+            void* dataPtr = Unsafe.AsPointer(ref data);
+            Unsafe.CopyBlock(mappedMemory, dataPtr, (uint)size);
+            vkUnmapMemory(_device, memory);
+        }
+
 
         private uint FindMemoryType(uint typeFilter, VkMemoryPropertyFlags properties)
         {
@@ -753,7 +1004,6 @@ namespace Vk.Samples
             CreateCommandBuffers();
         }
 
-
         private VkShaderModule CreateShader(byte[] bytecode)
         {
             VkShaderModuleCreateInfo smci = VkShaderModuleCreateInfo.New();
@@ -764,6 +1014,100 @@ namespace Vk.Samples
                 vkCreateShaderModule(_device, ref smci, null, out VkShaderModule module);
                 return module;
             }
+        }
+
+        private VkCommandBuffer BeginOneTimeCommands()
+        {
+            VkCommandBufferAllocateInfo allocInfo = VkCommandBufferAllocateInfo.New();
+            allocInfo.commandBufferCount = 1;
+            allocInfo.commandPool = _commandPool;
+            allocInfo.level = VkCommandBufferLevel.Primary;
+
+            vkAllocateCommandBuffers(_device, ref allocInfo, out VkCommandBuffer cb);
+
+            VkCommandBufferBeginInfo beginInfo = VkCommandBufferBeginInfo.New();
+            beginInfo.flags = VkCommandBufferUsageFlags.OneTimeSubmit;
+
+            vkBeginCommandBuffer(cb, ref beginInfo);
+
+            return cb;
+        }
+
+        private void EndOneTimeCommands(VkCommandBuffer cb)
+        {
+            vkEndCommandBuffer(cb);
+
+            VkSubmitInfo submitInfo = VkSubmitInfo.New();
+            submitInfo.commandBufferCount = 1;
+            submitInfo.pCommandBuffers = &cb;
+
+            vkQueueSubmit(_graphicsQueue, 1, ref submitInfo, VkFence.Null);
+            vkQueueWaitIdle(_graphicsQueue);
+
+            vkFreeCommandBuffers(_device, _commandPool, 1, ref cb);
+        }
+
+        private void TransitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout)
+        {
+            VkCommandBuffer cb = BeginOneTimeCommands();
+
+            VkImageMemoryBarrier barrier = VkImageMemoryBarrier.New();
+            barrier.oldLayout = oldLayout;
+            barrier.newLayout = newLayout;
+            barrier.srcQueueFamilyIndex = QueueFamilyIgnored;
+            barrier.dstQueueFamilyIndex = QueueFamilyIgnored;
+            barrier.image = image;
+            barrier.subresourceRange.aspectMask = VkImageAspectFlags.Color;
+            barrier.subresourceRange.baseMipLevel = 0;
+            barrier.subresourceRange.levelCount = 1;
+            barrier.subresourceRange.baseArrayLayer = 0;
+            barrier.subresourceRange.layerCount = 1;
+
+            vkCmdPipelineBarrier(
+                cb,
+                VkPipelineStageFlags.TopOfPipe,
+                VkPipelineStageFlags.TopOfPipe,
+                VkDependencyFlags.None,
+                0, null,
+                0, null,
+                1, &barrier);
+
+            EndOneTimeCommands(cb);
+        }
+
+        private void CopyImage(VkImage srcImage, VkImage dstImage, uint width, uint height)
+        {
+            VkImageSubresourceLayers subresource = new VkImageSubresourceLayers();
+            subresource.mipLevel = 0;
+            subresource.layerCount = 1;
+            subresource.aspectMask = VkImageAspectFlags.Color;
+            subresource.baseArrayLayer = 0;
+
+            VkImageCopy region = new VkImageCopy();
+            region.dstSubresource = subresource;
+            region.srcSubresource = subresource;
+            region.extent.width = width;
+            region.extent.height = height;
+            region.extent.depth = 1;
+
+            VkCommandBuffer copyCmd = BeginOneTimeCommands();
+            vkCmdCopyImage(copyCmd, srcImage, VkImageLayout.TransferSrcOptimal, dstImage, VkImageLayout.TransferDstOptimal, 1, ref region);
+            EndOneTimeCommands(copyCmd);
+        }
+
+        private void CreateImageView(VkImage image, VkFormat format, out VkImageView imageView)
+        {
+            VkImageViewCreateInfo imageViewCI = VkImageViewCreateInfo.New();
+            imageViewCI.image = image;
+            imageViewCI.viewType = VkImageViewType._2d;
+            imageViewCI.format = format;
+            imageViewCI.subresourceRange.aspectMask = VkImageAspectFlags.Color;
+            imageViewCI.subresourceRange.baseMipLevel = 0;
+            imageViewCI.subresourceRange.levelCount = 1;
+            imageViewCI.subresourceRange.baseArrayLayer = 0;
+            imageViewCI.subresourceRange.layerCount = 1;
+
+            vkCreateImageView(_device, ref imageViewCI, null, out imageView);
         }
 
         private static void CheckResult(VkResult result)
@@ -779,6 +1123,7 @@ namespace Vk.Samples
     {
         public Vector2 Position;
         public Vector3 Color;
+        public Vector2 TexCoord;
 
         public static VkVertexInputBindingDescription GetBindingDescription()
         {
@@ -789,9 +1134,9 @@ namespace Vk.Samples
             return bindingDescription;
         }
 
-        public static FixedArray2<VkVertexInputAttributeDescription> GetAttributeDescriptions()
+        public static FixedArray3<VkVertexInputAttributeDescription> GetAttributeDescriptions()
         {
-            FixedArray2<VkVertexInputAttributeDescription> ad;
+            FixedArray3<VkVertexInputAttributeDescription> ad;
             ad.First.binding = 0;
             ad.First.location = 0;
             ad.First.format = VkFormat.R32g32Sfloat;
@@ -802,7 +1147,26 @@ namespace Vk.Samples
             ad.Second.format = VkFormat.R32g32b32Sfloat;
             ad.Second.offset = (uint)Unsafe.SizeOf<Vector2>();
 
+            ad.Third.binding = 0;
+            ad.Third.location = 2;
+            ad.Third.format = VkFormat.R32g32Sfloat;
+            ad.Third.offset = (uint)Unsafe.SizeOf<Vector2>() + (uint)Unsafe.SizeOf<Vector3>();
+
             return ad;
+        }
+    }
+
+    public struct UboMatrices
+    {
+        public Matrix4x4 Model;
+        public Matrix4x4 View;
+        public Matrix4x4 Projection;
+
+        public UboMatrices(Matrix4x4 model, Matrix4x4 view, Matrix4x4 projection)
+        {
+            Model = model;
+            View = view;
+            Projection = projection;
         }
     }
 
