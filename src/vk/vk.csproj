@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netcoreapp1.1</TargetFramework>
+    <TargetFramework>netstandard1.4</TargetFramework>
     <OutputType>Library</OutputType>
     <AssemblyName>vk</AssemblyName>
     <RootNamespace>Vulkan</RootNamespace>
@@ -10,38 +10,23 @@
     <DisableCalli>false</DisableCalli>
     <DefineConstants>$(DefineConstants);CALLI_STUBS</DefineConstants>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
-    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+
+    <!-- Package Info -->
+      <PackageId>Vk</PackageId>
+    <Description>Low-level bindings for the Vulkan graphics and compute API.</Description>
+    <PackageTags>Vulkan Graphics 3D GPU Games Khronos</PackageTags>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <Copyright>Copyright 2017 (c) Eric Mellino. All rights reserved.</Copyright>
+    <Authors>Eric Mellino</Authors>
+    <ProjectUrl>https://github.com/mellinoe/vk</ProjectUrl>
+    <RepositoryUrl>https://github.com/mellinoe/vk</RepositoryUrl>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(GeneratedCodeFolder)\Commands.gen.cs" />
-    <Compile Include="$(GeneratedCodeFolder)\Enums.gen.cs" />
-    <Compile Include="$(GeneratedCodeFolder)\Handles.gen.cs" />
-    <Compile Include="$(GeneratedCodeFolder)\Structures.gen.cs" />
-    <Compile Include="$(GeneratedCodeFolder)\Unions.gen.cs" />
-    <Compile Include="$(GeneratedCodeFolder)\Constants.gen.cs" />
-    <Compile Include="BindingsHelpers.cs" />
-    <Compile Include="CalliRewriteAttribute.cs" />
-    <Compile Include="Commands.cs" />
-    <Compile Include="Constants.cs" />
-    <Compile Include="Delegates.cs" />
-    <Compile Include="ExternalTypes.cs" />
-    <Compile Include="FunctionPointer.cs" />
-    <Compile Include="Kernel32.cs" />
-    <Compile Include="Libdl.cs" />
-    <Compile Include="VkBool32.cs" />
-    <ProjectReference Include="..\vk.generator\vk.generator.csproj">
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="..\vk.rewrite\vk.rewrite.csproj">
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
     <PackageReference Include="System.AppContext" Version="4.3.0" />
     <PackageReference Include="System.Diagnostics.Debug" Version="4.3.0" />
     <PackageReference Include="System.Runtime.Extensions" Version="4.3.0" />
     <PackageReference Include="System.Runtime.InteropServices" Version="4.3.0" />
     <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.3.0" />
-    <PackageReference Include="System.Runtime.Loader" Version="4.3.0" />
   </ItemGroup>
   <Target Name="AutoGenerateBindings" BeforeTargets="CoreCompile">
     <PropertyGroup>
