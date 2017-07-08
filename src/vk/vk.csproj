@@ -3,6 +3,7 @@
     <TargetFramework>netstandard1.4</TargetFramework>
     <OutputType>Library</OutputType>
     <AssemblyName>vk</AssemblyName>
+    <AssemblyVersion>1.0.1</AssemblyVersion>
     <RootNamespace>Vulkan</RootNamespace>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <ProjectGuid>{D8573039-9FE1-4554-A659-4E77CFBA83C1}</ProjectGuid>
@@ -12,7 +13,8 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 
     <!-- Package Info -->
-      <PackageId>Vk</PackageId>
+    <PackageId>Vk</PackageId>
+    <PackageVersion>$(AssemblyVersion)</PackageVersion>
     <Description>Low-level bindings for the Vulkan graphics and compute API.</Description>
     <PackageTags>Vulkan Graphics 3D GPU Games Khronos</PackageTags>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
