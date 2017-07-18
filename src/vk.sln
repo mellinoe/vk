@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26228.4
+VisualStudioVersion = 15.0.26430.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "vk", "vk\vk.csproj", "{D8573039-9FE1-4554-A659-4E77CFBA83C1}"
 EndProject
@@ -44,6 +44,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Veldrid.Sdl2", "..\ext\veldrid.sdl2\src\Veldrid.Sdl2\Veldrid.Sdl2.csproj", "{0BB91A37-8E71-4EFD-AAAC-8CE2421BC6B6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "tutorial", "samples\tutorial\tutorial.csproj", "{FAF59919-5A20-44D5-97F1-21E401FC6577}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NativeLibraryLoader", "..\ext\veldrid.sdl2\ext\nativelibraryloader\NativeLibraryLoader\NativeLibraryLoader.csproj", "{D5C6BC55-F21B-4643-9661-14220877D622}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -283,6 +285,18 @@ Global
 		{FAF59919-5A20-44D5-97F1-21E401FC6577}.Release|x64.Build.0 = Release|Any CPU
 		{FAF59919-5A20-44D5-97F1-21E401FC6577}.Release|x86.ActiveCfg = Release|Any CPU
 		{FAF59919-5A20-44D5-97F1-21E401FC6577}.Release|x86.Build.0 = Release|Any CPU
+		{D5C6BC55-F21B-4643-9661-14220877D622}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5C6BC55-F21B-4643-9661-14220877D622}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5C6BC55-F21B-4643-9661-14220877D622}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D5C6BC55-F21B-4643-9661-14220877D622}.Debug|x64.Build.0 = Debug|Any CPU
+		{D5C6BC55-F21B-4643-9661-14220877D622}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D5C6BC55-F21B-4643-9661-14220877D622}.Debug|x86.Build.0 = Debug|Any CPU
+		{D5C6BC55-F21B-4643-9661-14220877D622}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5C6BC55-F21B-4643-9661-14220877D622}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5C6BC55-F21B-4643-9661-14220877D622}.Release|x64.ActiveCfg = Release|Any CPU
+		{D5C6BC55-F21B-4643-9661-14220877D622}.Release|x64.Build.0 = Release|Any CPU
+		{D5C6BC55-F21B-4643-9661-14220877D622}.Release|x86.ActiveCfg = Release|Any CPU
+		{D5C6BC55-F21B-4643-9661-14220877D622}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -304,5 +318,6 @@ Global
 		{633628AC-3CEE-4BA1-879C-355E82426350} = {2B0FDFF4-F2C0-4A0C-AA8B-1BFACE57E32C}
 		{0BB91A37-8E71-4EFD-AAAC-8CE2421BC6B6} = {725886A0-1FD5-47DF-9295-2F6F658042AA}
 		{FAF59919-5A20-44D5-97F1-21E401FC6577} = {2B0FDFF4-F2C0-4A0C-AA8B-1BFACE57E32C}
+		{D5C6BC55-F21B-4643-9661-14220877D622} = {725886A0-1FD5-47DF-9295-2F6F658042AA}
 	EndGlobalSection
 EndGlobal
