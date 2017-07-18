@@ -807,7 +807,7 @@ namespace Vk.Samples
             FixedArray2<VkPipelineShaderStageCreateInfo> shaderStages = new FixedArray2<VkPipelineShaderStageCreateInfo>();
 
             shaderStages.First = loadShader(getAssetPath() + "shaders/texture/texture.vert.spv", VkShaderStageFlags.Vertex);
-            shaderStages.Second = loadShader(getAssetPath() + "shaders/texture/texture.frag.spv",  VkShaderStageFlags.Fragment);
+            shaderStages.Second = loadShader(getAssetPath() + "shaders/texture/texture.frag.spv", VkShaderStageFlags.Fragment);
 
             VkGraphicsPipelineCreateInfo pipelineCreateInfo =
                 Initializers.pipelineCreateInfo(
@@ -837,7 +837,7 @@ namespace Vk.Samples
             // Vertex shader uniform buffer block
             Util.CheckResult(vulkanDevice.createBuffer(
                 VkBufferUsageFlags.UniformBuffer,
-                VkMemoryPropertyFlags.HostVisible|  VkMemoryPropertyFlags.HostCoherent,
+                VkMemoryPropertyFlags.HostVisible | VkMemoryPropertyFlags.HostCoherent,
                 uniformBufferVS,
                 (uint)sizeof(UboVS),
                 &localUboVS));

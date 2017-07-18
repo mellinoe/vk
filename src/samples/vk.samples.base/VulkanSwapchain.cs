@@ -365,7 +365,7 @@ namespace Vk.Samples
                     colorAttachmentView.subresourceRange.levelCount = 1;
                     colorAttachmentView.subresourceRange.baseArrayLayer = 0;
                     colorAttachmentView.subresourceRange.layerCount = 1;
-                    colorAttachmentView.viewType =  VkImageViewType.Image2D;
+                    colorAttachmentView.viewType = VkImageViewType.Image2D;
                     colorAttachmentView.flags = 0;
 
                     Buffers[i].Image = Images[i];

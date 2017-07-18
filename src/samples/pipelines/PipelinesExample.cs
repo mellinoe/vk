@@ -269,7 +269,7 @@ namespace Vk.Samples
                 Initializers.pipelineViewportStateCreateInfo(1, 1, 0);
 
             VkPipelineMultisampleStateCreateInfo multisampleState =
-                Initializers.pipelineMultisampleStateCreateInfo(VkSampleCountFlags._1);
+                Initializers.pipelineMultisampleStateCreateInfo(VkSampleCountFlags.Count1);
 
             FixedArray3<VkDynamicState> dynamicStateEnables = new FixedArray3<VkDynamicState>(
                  VkDynamicState.Viewport,

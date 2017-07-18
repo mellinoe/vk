@@ -193,7 +193,7 @@ namespace Vk.Samples
             image.extent.depth = 1;
             image.mipLevels = 1;
             image.arrayLayers = 1;
-            image.samples = VK_SAMPLE_COUNT_1_BIT;
+            image.samples = VkSampleCountFlags.Count1;
             image.tiling = VK_IMAGE_TILING_OPTIMAL;
             // We will sample directly from the color attachment
             image.usage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
@@ -264,7 +264,7 @@ namespace Vk.Samples
             FixedArray2<VkAttachmentDescription> attchmentDescriptions = new FixedArray2<VkAttachmentDescription>();
             // Color attachment
             attchmentDescriptions.First.format = FB_COLOR_FORMAT;
-            attchmentDescriptions.First.samples = VK_SAMPLE_COUNT_1_BIT;
+            attchmentDescriptions.First.samples = VkSampleCountFlags.Count1;
             attchmentDescriptions.First.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
             attchmentDescriptions.First.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
             attchmentDescriptions.First.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
@@ -273,7 +273,7 @@ namespace Vk.Samples
             attchmentDescriptions.First.finalLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
             // Depth attachment
             attchmentDescriptions.Second.format = fbDepthFormat;
-            attchmentDescriptions.Second.samples = VK_SAMPLE_COUNT_1_BIT;
+            attchmentDescriptions.Second.samples = VkSampleCountFlags.Count1;
             attchmentDescriptions.Second.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
             attchmentDescriptions.Second.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
             attchmentDescriptions.Second.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
@@ -770,7 +770,7 @@ namespace Vk.Samples
 
             VkPipelineMultisampleStateCreateInfo multisampleState =
                 Initializers.pipelineMultisampleStateCreateInfo(
-                    VK_SAMPLE_COUNT_1_BIT,
+                    VkSampleCountFlags.Count1,
                     0);
 
             FixedArray2<VkDynamicState> dynamicStateEnables = new FixedArray2<VkDynamicState>(

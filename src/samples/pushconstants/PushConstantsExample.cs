@@ -332,7 +332,7 @@ namespace Vk.Samples
 
             VkPipelineMultisampleStateCreateInfo multisampleState =
                 Initializers.pipelineMultisampleStateCreateInfo(
-                    VkSampleCountFlags._1,
+                    VkSampleCountFlags.Count1,
                     0);
 
             FixedArray2<VkDynamicState> dynamicStateEnables = new FixedArray2<VkDynamicState>(

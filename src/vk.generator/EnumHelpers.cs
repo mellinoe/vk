@@ -19,25 +19,25 @@ namespace Vk.Generator
             {  "VK_STENCIL_FRONT_AND_BACK", "FrontAndBack" },
 			// VkSampleCountFlagBits
 			{  "VK_SAMPLE_COUNT_1_BIT", "Count1" },
-			{  "VK_SAMPLE_COUNT_2_BIT", "Count2" },
-			{  "VK_SAMPLE_COUNT_4_BIT", "Count4" },
-			{  "VK_SAMPLE_COUNT_8_BIT", "Count8" },
-			{  "VK_SAMPLE_COUNT_16_BIT", "Count16" },
-			{  "VK_SAMPLE_COUNT_32_BIT", "Count32" },
-			{  "VK_SAMPLE_COUNT_64_BIT", "Count64" },
+            {  "VK_SAMPLE_COUNT_2_BIT", "Count2" },
+            {  "VK_SAMPLE_COUNT_4_BIT", "Count4" },
+            {  "VK_SAMPLE_COUNT_8_BIT", "Count8" },
+            {  "VK_SAMPLE_COUNT_16_BIT", "Count16" },
+            {  "VK_SAMPLE_COUNT_32_BIT", "Count32" },
+            {  "VK_SAMPLE_COUNT_64_BIT", "Count64" },
 			// VkImageType
 			{  "VK_IMAGE_TYPE_1D", "Image1D" },
-			{  "VK_IMAGE_TYPE_2D", "Image2D" },
-			{  "VK_IMAGE_TYPE_3D", "Image3D" },
+            {  "VK_IMAGE_TYPE_2D", "Image2D" },
+            {  "VK_IMAGE_TYPE_3D", "Image3D" },
 			// VkImageViewType
 			{  "VK_IMAGE_VIEW_TYPE_1D", "Image1D" },
-			{  "VK_IMAGE_VIEW_TYPE_2D", "Image2D" },
-			{  "VK_IMAGE_VIEW_TYPE_3D", "Image3D" },
-			{  "VK_IMAGE_VIEW_TYPE_CUBE", "ImageCube" },
-			{  "VK_IMAGE_VIEW_TYPE_1D_ARRAY", "Image1DArray" },
-			{  "VK_IMAGE_VIEW_TYPE_2D_ARRAY", "Image2DArray" },
-			{  "VK_IMAGE_VIEW_TYPE_CUBE_ARRAY", "ImageCubeArray" },
-		};
+            {  "VK_IMAGE_VIEW_TYPE_2D", "Image2D" },
+            {  "VK_IMAGE_VIEW_TYPE_3D", "Image3D" },
+            {  "VK_IMAGE_VIEW_TYPE_CUBE", "ImageCube" },
+            {  "VK_IMAGE_VIEW_TYPE_1D_ARRAY", "Image1DArray" },
+            {  "VK_IMAGE_VIEW_TYPE_2D_ARRAY", "Image2DArray" },
+            {  "VK_IMAGE_VIEW_TYPE_CUBE_ARRAY", "ImageCubeArray" },
+        };
 
         private static readonly HashSet<string> s_ignoredParts = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {
