@@ -401,7 +401,7 @@ namespace Vk.Samples
                 // Color attachment
                 attachments[0] = new VkAttachmentDescription();
                 attachments[0].format = Swapchain.ColorFormat;
-                attachments[0].samples = VkSampleCountFlags._1;
+                attachments[0].samples = VkSampleCountFlags.Count1;
                 attachments[0].loadOp = VkAttachmentLoadOp.Clear;
                 attachments[0].storeOp = VkAttachmentStoreOp.Store;
                 attachments[0].stencilLoadOp = VkAttachmentLoadOp.DontCare;
@@ -411,7 +411,7 @@ namespace Vk.Samples
                 // Depth attachment
                 attachments[1] = new VkAttachmentDescription();
                 attachments[1].format = DepthFormat;
-                attachments[1].samples = VkSampleCountFlags._1;
+                attachments[1].samples = VkSampleCountFlags.Count1;
                 attachments[1].loadOp = VkAttachmentLoadOp.Clear;
                 attachments[1].storeOp = VkAttachmentStoreOp.Store;
                 attachments[1].stencilLoadOp = VkAttachmentLoadOp.DontCare;
@@ -594,12 +594,12 @@ namespace Vk.Samples
         protected virtual void SetupDepthStencil()
         {
             VkImageCreateInfo image = VkImageCreateInfo.New();
-            image.imageType = VkImageType._2d;
+            image.imageType = VkImageType.Image2D;
             image.format = DepthFormat;
             image.extent = new VkExtent3D() { width = width, height = height, depth = 1 };
             image.mipLevels = 1;
             image.arrayLayers = 1;
-            image.samples = VkSampleCountFlags._1;
+            image.samples = VkSampleCountFlags.Count1;
             image.tiling = VkImageTiling.Optimal;
             image.usage = (VkImageUsageFlags.DepthStencilAttachment | VkImageUsageFlags.TransferSrc);
             image.flags = 0;
@@ -609,7 +609,7 @@ namespace Vk.Samples
             mem_alloc.memoryTypeIndex = 0;
 
             VkImageViewCreateInfo depthStencilView = VkImageViewCreateInfo.New();
-            depthStencilView.viewType = VkImageViewType._2d;
+            depthStencilView.viewType = VkImageViewType.Image2D;
             depthStencilView.format = DepthFormat;
             depthStencilView.flags = 0;
             depthStencilView.subresourceRange = new VkImageSubresourceRange();

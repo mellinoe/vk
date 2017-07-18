@@ -272,11 +272,11 @@ namespace Vk.Samples
 
                 // Create optimal tiled target image
                 VkImageCreateInfo imageCreateInfo = Initializers.imageCreateInfo();
-                imageCreateInfo.imageType = VkImageType._2d;
+                imageCreateInfo.imageType = VkImageType.Image2D;
                 imageCreateInfo.format = format;
                 imageCreateInfo.mipLevels = texture.mipLevels;
                 imageCreateInfo.arrayLayers = 1;
-                imageCreateInfo.samples = VkSampleCountFlags._1;
+                imageCreateInfo.samples = VkSampleCountFlags.Count1;
                 imageCreateInfo.tiling = VkImageTiling.Optimal;
                 imageCreateInfo.sharingMode = VkSharingMode.Exclusive;
                 // Set initial layout of the image to undefined
@@ -479,7 +479,7 @@ namespace Vk.Samples
             // are abstracted by image views containing additional
             // information and sub resource ranges
             VkImageViewCreateInfo view = Initializers.imageViewCreateInfo();
-            view.viewType = VkImageViewType._2d;
+            view.viewType = VkImageViewType.Image2D;
             view.format = format;
             view.components = new VkComponentMapping { r = VkComponentSwizzle.R, g = VkComponentSwizzle.G, b = VkComponentSwizzle.B, a = VkComponentSwizzle.A };
             // The subresource range describes the set of mip levels (and array layers) that can be accessed through this image view
@@ -791,7 +791,7 @@ namespace Vk.Samples
 
             VkPipelineMultisampleStateCreateInfo multisampleState =
                 Initializers.pipelineMultisampleStateCreateInfo(
-                    VkSampleCountFlags._1,
+                    VkSampleCountFlags.Count1,
                     0);
 
             FixedArray2<VkDynamicState> dynamicStateEnables = new FixedArray2<VkDynamicState>(

@@ -75,15 +75,15 @@ namespace Vulkan
 
     public enum VkImageType
     {
-        _1d = 0,
-        _2d = 1,
-        _3d = 2,
+        Image1D = 0,
+        Image2D = 1,
+        Image3D = 2,
     }
     public static partial class RawConstants
     {
-        public const VkImageType VK_IMAGE_TYPE_1D = VkImageType._1d;
-        public const VkImageType VK_IMAGE_TYPE_2D = VkImageType._2d;
-        public const VkImageType VK_IMAGE_TYPE_3D = VkImageType._3d;
+        public const VkImageType VK_IMAGE_TYPE_1D = VkImageType.Image1D;
+        public const VkImageType VK_IMAGE_TYPE_2D = VkImageType.Image2D;
+        public const VkImageType VK_IMAGE_TYPE_3D = VkImageType.Image3D;
     }
 
     public enum VkImageTiling
@@ -99,23 +99,23 @@ namespace Vulkan
 
     public enum VkImageViewType
     {
-        _1d = 0,
-        _2d = 1,
-        _3d = 2,
-        Cube = 3,
-        _1dArray = 4,
-        _2dArray = 5,
-        CubeArray = 6,
+        Image1D = 0,
+        Image2D = 1,
+        Image3D = 2,
+        ImageCube = 3,
+        Image1DArray = 4,
+        Image2DArray = 5,
+        ImageCubeArray = 6,
     }
     public static partial class RawConstants
     {
-        public const VkImageViewType VK_IMAGE_VIEW_TYPE_1D = VkImageViewType._1d;
-        public const VkImageViewType VK_IMAGE_VIEW_TYPE_2D = VkImageViewType._2d;
-        public const VkImageViewType VK_IMAGE_VIEW_TYPE_3D = VkImageViewType._3d;
-        public const VkImageViewType VK_IMAGE_VIEW_TYPE_CUBE = VkImageViewType.Cube;
-        public const VkImageViewType VK_IMAGE_VIEW_TYPE_1D_ARRAY = VkImageViewType._1dArray;
-        public const VkImageViewType VK_IMAGE_VIEW_TYPE_2D_ARRAY = VkImageViewType._2dArray;
-        public const VkImageViewType VK_IMAGE_VIEW_TYPE_CUBE_ARRAY = VkImageViewType.CubeArray;
+        public const VkImageViewType VK_IMAGE_VIEW_TYPE_1D = VkImageViewType.Image1D;
+        public const VkImageViewType VK_IMAGE_VIEW_TYPE_2D = VkImageViewType.Image2D;
+        public const VkImageViewType VK_IMAGE_VIEW_TYPE_3D = VkImageViewType.Image3D;
+        public const VkImageViewType VK_IMAGE_VIEW_TYPE_CUBE = VkImageViewType.ImageCube;
+        public const VkImageViewType VK_IMAGE_VIEW_TYPE_1D_ARRAY = VkImageViewType.Image1DArray;
+        public const VkImageViewType VK_IMAGE_VIEW_TYPE_2D_ARRAY = VkImageViewType.Image2DArray;
+        public const VkImageViewType VK_IMAGE_VIEW_TYPE_CUBE_ARRAY = VkImageViewType.ImageCubeArray;
     }
 
     public enum VkCommandBufferLevel
@@ -1962,36 +1962,36 @@ namespace Vulkan
     {
         None = 0,
         ///<summary>Sample count 1 supported</summary>
-        _1 = 1,
+        Count1 = 1,
         ///<summary>Sample count 2 supported</summary>
-        _2 = 2,
+        Count2 = 2,
         ///<summary>Sample count 4 supported</summary>
-        _4 = 4,
+        Count4 = 4,
         ///<summary>Sample count 8 supported</summary>
-        _8 = 8,
+        Count8 = 8,
         ///<summary>Sample count 16 supported</summary>
-        _16 = 16,
+        Count16 = 16,
         ///<summary>Sample count 32 supported</summary>
-        _32 = 32,
+        Count32 = 32,
         ///<summary>Sample count 64 supported</summary>
-        _64 = 64,
+        Count64 = 64,
     }
     public static partial class RawConstants
     {
         ///<summary>Sample count 1 supported</summary>
-        public const VkSampleCountFlags VK_SAMPLE_COUNT_1_BIT = VkSampleCountFlags._1;
+        public const VkSampleCountFlags VK_SAMPLE_COUNT_1_BIT = VkSampleCountFlags.Count1;
         ///<summary>Sample count 2 supported</summary>
-        public const VkSampleCountFlags VK_SAMPLE_COUNT_2_BIT = VkSampleCountFlags._2;
+        public const VkSampleCountFlags VK_SAMPLE_COUNT_2_BIT = VkSampleCountFlags.Count2;
         ///<summary>Sample count 4 supported</summary>
-        public const VkSampleCountFlags VK_SAMPLE_COUNT_4_BIT = VkSampleCountFlags._4;
+        public const VkSampleCountFlags VK_SAMPLE_COUNT_4_BIT = VkSampleCountFlags.Count4;
         ///<summary>Sample count 8 supported</summary>
-        public const VkSampleCountFlags VK_SAMPLE_COUNT_8_BIT = VkSampleCountFlags._8;
+        public const VkSampleCountFlags VK_SAMPLE_COUNT_8_BIT = VkSampleCountFlags.Count8;
         ///<summary>Sample count 16 supported</summary>
-        public const VkSampleCountFlags VK_SAMPLE_COUNT_16_BIT = VkSampleCountFlags._16;
+        public const VkSampleCountFlags VK_SAMPLE_COUNT_16_BIT = VkSampleCountFlags.Count16;
         ///<summary>Sample count 32 supported</summary>
-        public const VkSampleCountFlags VK_SAMPLE_COUNT_32_BIT = VkSampleCountFlags._32;
+        public const VkSampleCountFlags VK_SAMPLE_COUNT_32_BIT = VkSampleCountFlags.Count32;
         ///<summary>Sample count 64 supported</summary>
-        public const VkSampleCountFlags VK_SAMPLE_COUNT_64_BIT = VkSampleCountFlags._64;
+        public const VkSampleCountFlags VK_SAMPLE_COUNT_64_BIT = VkSampleCountFlags.Count64;
     }
 
     [Flags]

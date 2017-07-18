@@ -145,11 +145,11 @@ namespace Vk.Samples
 
                 // Create optimal tiled target image
                 VkImageCreateInfo imageCreateInfo = Initializers.imageCreateInfo();
-                imageCreateInfo.imageType = VkImageType._2d;
+                imageCreateInfo.imageType = VkImageType.Image2D;
                 imageCreateInfo.format = format;
                 imageCreateInfo.mipLevels = mipLevels;
                 imageCreateInfo.arrayLayers = 1;
-                imageCreateInfo.samples = VkSampleCountFlags._1;
+                imageCreateInfo.samples = VkSampleCountFlags.Count1;
                 imageCreateInfo.tiling = VkImageTiling.Optimal;
                 imageCreateInfo.sharingMode = VkSharingMode.Exclusive;
                 imageCreateInfo.initialLayout = VkImageLayout.Undefined;
@@ -313,7 +313,7 @@ namespace Vk.Samples
             // are abstracted by image views containing additional
             // information and sub resource ranges
             VkImageViewCreateInfo viewCreateInfo = VkImageViewCreateInfo.New();
-            viewCreateInfo.viewType = VkImageViewType._2d;
+            viewCreateInfo.viewType = VkImageViewType.Image2D;
             viewCreateInfo.format = format;
             viewCreateInfo.components = new VkComponentMapping { r = VkComponentSwizzle.R, g = VkComponentSwizzle.G, b = VkComponentSwizzle.B, a = VkComponentSwizzle.A };
             viewCreateInfo.subresourceRange = new VkImageSubresourceRange { aspectMask = VkImageAspectFlags.Color, baseMipLevel = 0, levelCount = 1, baseArrayLayer = 0, layerCount = 1 };

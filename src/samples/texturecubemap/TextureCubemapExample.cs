@@ -153,10 +153,10 @@ namespace Vk.Samples
 
             // Create optimal tiled target image
             VkImageCreateInfo imageCreateInfo = Initializers.imageCreateInfo();
-            imageCreateInfo.imageType = VkImageType._2d;
+            imageCreateInfo.imageType = VkImageType.Image2D;
             imageCreateInfo.format = format;
             imageCreateInfo.mipLevels = cubeMap.mipLevels;
-            imageCreateInfo.samples = VkSampleCountFlags._1;
+            imageCreateInfo.samples = VkSampleCountFlags.Count1;
             imageCreateInfo.tiling = VkImageTiling.Optimal;
             imageCreateInfo.usage = VkImageUsageFlags.Sampled;
             imageCreateInfo.sharingMode = VkSharingMode.Exclusive;
@@ -266,7 +266,7 @@ namespace Vk.Samples
             // Create image view
             VkImageViewCreateInfo view = Initializers.imageViewCreateInfo();
             // Cube map view type
-            view.viewType = VkImageViewType.Cube;
+            view.viewType = VkImageViewType.ImageCube;
             view.format = format;
             view.components = new VkComponentMapping { r = VkComponentSwizzle.R, g = VkComponentSwizzle.G, b = VkComponentSwizzle.B, a = VkComponentSwizzle.A };
             view.subresourceRange = new VkImageSubresourceRange { aspectMask = VkImageAspectFlags.Color, baseMipLevel = 0, layerCount = 1, baseArrayLayer = 0, levelCount = 1 };
@@ -576,7 +576,7 @@ namespace Vk.Samples
 
             VkPipelineMultisampleStateCreateInfo multisampleState =
                 Initializers.pipelineMultisampleStateCreateInfo(
-                    VkSampleCountFlags._1,
+                    VkSampleCountFlags.Count1,
                     0);
 
             FixedArray2<VkDynamicState> dynamicStateEnables = new FixedArray2<VkDynamicState>(

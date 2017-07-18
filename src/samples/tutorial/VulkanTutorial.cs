@@ -464,7 +464,7 @@ namespace Vk.Samples
 		{
 			VkAttachmentDescription colorAttachment = new VkAttachmentDescription();
 			colorAttachment.format = _scImageFormat;
-			colorAttachment.samples = VkSampleCountFlags._1;
+			colorAttachment.samples = VkSampleCountFlags.Count1;
 			colorAttachment.loadOp = VkAttachmentLoadOp.Clear;
 			colorAttachment.storeOp = VkAttachmentStoreOp.Store;
 			colorAttachment.stencilLoadOp = VkAttachmentLoadOp.DontCare;
@@ -580,7 +580,7 @@ namespace Vk.Samples
 			rasterizerStateCI.frontFace = VkFrontFace.CounterClockwise;
 
 			VkPipelineMultisampleStateCreateInfo multisampleStateCI = VkPipelineMultisampleStateCreateInfo.New();
-			multisampleStateCI.rasterizationSamples = VkSampleCountFlags._1;
+			multisampleStateCI.rasterizationSamples = VkSampleCountFlags.Count1;
 			multisampleStateCI.minSampleShading = 1f;
 
 			VkPipelineColorBlendAttachmentState colorBlendAttachementState = new VkPipelineColorBlendAttachmentState();
@@ -740,7 +740,7 @@ namespace Vk.Samples
 			out VkDeviceMemory memory)
 		{
 			VkImageCreateInfo imageCI = VkImageCreateInfo.New();
-			imageCI.imageType = VkImageType._2d;
+			imageCI.imageType = VkImageType.Image2D;
 			imageCI.extent.width = width;
 			imageCI.extent.height = height;
 			imageCI.extent.depth = 1;
@@ -751,7 +751,7 @@ namespace Vk.Samples
 			imageCI.initialLayout = VkImageLayout.Preinitialized;
 			imageCI.usage = usage;
 			imageCI.sharingMode = VkSharingMode.Exclusive;
-			imageCI.samples = VkSampleCountFlags._1;
+			imageCI.samples = VkSampleCountFlags.Count1;
 
 			vkCreateImage(_device, ref imageCI, null, out image);
 
@@ -1099,7 +1099,7 @@ namespace Vk.Samples
 		{
 			VkImageViewCreateInfo imageViewCI = VkImageViewCreateInfo.New();
 			imageViewCI.image = image;
-			imageViewCI.viewType = VkImageViewType._2d;
+			imageViewCI.viewType = VkImageViewType.Image2D;
 			imageViewCI.format = format;
 			imageViewCI.subresourceRange.aspectMask = VkImageAspectFlags.Color;
 			imageViewCI.subresourceRange.baseMipLevel = 0;

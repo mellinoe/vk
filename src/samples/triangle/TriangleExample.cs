@@ -630,13 +630,13 @@ namespace Vk.Samples
             // Create an optimal image used as the depth stencil attachment
             VkImageCreateInfo image = VkImageCreateInfo.New();
             image.sType = VkStructureType.ImageCreateInfo;
-            image.imageType = VkImageType._2d;
+            image.imageType = VkImageType.Image2D;
             image.format = DepthFormat;
             // Use example's height and width
             image.extent = new VkExtent3D() { width = width, height = height, depth = 1 };
             image.mipLevels = 1;
             image.arrayLayers = 1;
-            image.samples = VkSampleCountFlags._1;
+            image.samples = VkSampleCountFlags.Count1;
             image.tiling = VkImageTiling.Optimal;
             image.usage = (VkImageUsageFlags.DepthStencilAttachment | VkImageUsageFlags.TransferSrc);
             image.initialLayout = VkImageLayout.Undefined;
@@ -655,7 +655,7 @@ namespace Vk.Samples
             // Images aren't directly accessed in Vulkan, but rather through views described by a subresource range
             // This allows for multiple views of one image with differing ranges (e.g. for different layers)
             VkImageViewCreateInfo depthStencilView = VkImageViewCreateInfo.New();
-            depthStencilView.viewType = VkImageViewType._2d;
+            depthStencilView.viewType = VkImageViewType.Image2D;
             depthStencilView.format = DepthFormat;
             depthStencilView.subresourceRange = new VkImageSubresourceRange();
             depthStencilView.subresourceRange.aspectMask = (VkImageAspectFlags.Depth | VkImageAspectFlags.Stencil);
@@ -709,7 +709,7 @@ namespace Vk.Samples
 
             // Color attachment
             attachments.First.format = Swapchain.ColorFormat;                                  // Use the color format selected by the swapchain
-            attachments.First.samples = VkSampleCountFlags._1;                              // We don't use multi sampling in this example
+            attachments.First.samples = VkSampleCountFlags.Count1;                              // We don't use multi sampling in this example
             attachments.First.loadOp = VkAttachmentLoadOp.Clear;                               // Clear this attachment at the start of the render pass
             attachments.First.storeOp = VkAttachmentStoreOp.Store;                             // Keep it's contents after the render pass is finished (for displaying it)
             attachments.First.stencilLoadOp = VkAttachmentLoadOp.DontCare;                     // We don't use stencil, so don't care for load
@@ -719,7 +719,7 @@ namespace Vk.Samples
                                                                                                // As we want to present the color buffer to the swapchain, we transition to PRESENT_KHR	
                                                                                                // Depth attachment
             attachments.Second.format = DepthFormat;                                            // A proper depth format is selected in the example base
-            attachments.Second.samples = VkSampleCountFlags._1;
+            attachments.Second.samples = VkSampleCountFlags.Count1;
             attachments.Second.loadOp = VkAttachmentLoadOp.Clear;                            // Clear depth at start of first subpass
             attachments.Second.storeOp = VkAttachmentStoreOp.DontCare;                      // We don't need depth after render pass has finished (DONT_CARE may result in better performance)
             attachments.Second.stencilLoadOp = VkAttachmentLoadOp.DontCare;                 // No stencil
@@ -879,7 +879,7 @@ namespace Vk.Samples
             // Multi sampling state
             // This example does not make use fo multi sampling (for anti-aliasing), the state must still be set and passed to the Pipeline
             VkPipelineMultisampleStateCreateInfo multisampleState = VkPipelineMultisampleStateCreateInfo.New();
-            multisampleState.rasterizationSamples = VkSampleCountFlags._1;
+            multisampleState.rasterizationSamples = VkSampleCountFlags.Count1;
             multisampleState.pSampleMask = null;
 
             // Vertex input descriptions 
