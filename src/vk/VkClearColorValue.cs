@@ -1,41 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using System.Text;
 
 namespace Vulkan
 {
-    /// <summary>
-    /// Structure specifying a clear color value.
-    /// </summary>
-    /// <summary>
-    /// Structure specifying a clear color value.
-    /// </summary>
-    [StructLayout(LayoutKind.Explicit)]
-    public struct VkClearColorValue
+    public partial struct VkClearColorValue
     {
-        [FieldOffset(0)] public VkColor4 Float4;
-        [FieldOffset(0)] public VkColorI4 Int4;
-        [FieldOffset(0)] public VkColorU4 UInt4;
-
         public VkClearColorValue(float r, float g, float b, float a = 1.0f) : this()
         {
-            Float4 = new VkColor4(r, g, b, a);
+            float32_0 = r;
+            float32_1 = g;
+            float32_2 = b;
+            float32_3 = a;
         }
 
-        public VkClearColorValue(VkColor4 value) : this()
+        public VkClearColorValue(int r, int g, int b, int a = 255) : this()
         {
-            Float4 = value;
+            int32_0 = r;
+            int32_1 = g;
+            int32_2 = b;
+            int32_3 = a;
         }
 
-        public VkClearColorValue(VkColorI4 value) : this()
+        public VkClearColorValue(uint r, uint g, uint b, uint a = 255) : this()
         {
-            Int4 = value;
-        }
-
-        public VkClearColorValue(VkColorU4 value) : this()
-        {
-            UInt4 = value;
+            uint32_0 = r;
+            uint32_1 = g;
+            uint32_2 = b;
+            uint32_3 = a;
         }
     }
 }

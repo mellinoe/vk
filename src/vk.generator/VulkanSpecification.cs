@@ -70,7 +70,7 @@ namespace Vk.Generator
 
             StructureDefinition[] unions = 
                 types.Elements("type")
-                .Where(typex => typex.HasCategoryAttribute("union") && ShouldIncludeUnion(typex.GetNameAttribute()))
+                .Where(typex => typex.HasCategoryAttribute("union"))
                 .Select(typex => StructureDefinition.CreateFromXml(typex)).ToArray();
 
             HandleDefinition[] handles = types.Elements("type").Where(typex => typex.HasCategoryAttribute("handle"))
@@ -116,11 +116,6 @@ namespace Vk.Generator
         private EnumDefinition GetEnumDef(EnumDefinition[] enums, string name)
         {
             return enums.Single(ed => ed.Name == name);
-        }
-
-        private static bool ShouldIncludeUnion(string name)
-        {
-            return name != "VkClearColorValue";
         }
     }
 }
