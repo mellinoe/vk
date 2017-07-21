@@ -211,12 +211,7 @@ namespace Vk.Samples
             VkImageViewCreateInfo colorImageView = Initializers.imageViewCreateInfo();
             colorImageView.viewType = VK_IMAGE_VIEW_TYPE_2D;
             colorImageView.format = FB_COLOR_FORMAT;
-            colorImageView.subresourceRange = new VkImageSubresourceRange();
-            colorImageView.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-            colorImageView.subresourceRange.baseMipLevel = 0;
-            colorImageView.subresourceRange.levelCount = 1;
-            colorImageView.subresourceRange.baseArrayLayer = 0;
-            colorImageView.subresourceRange.layerCount = 1;
+            colorImageView.subresourceRange = new VkImageSubresourceRange(VkImageAspectFlags.Color);
             colorImageView.image = offscreenPass.color.image;
             Util.CheckResult(vkCreateImageView(device, &colorImageView, null, out offscreenPass.color.view));
 
