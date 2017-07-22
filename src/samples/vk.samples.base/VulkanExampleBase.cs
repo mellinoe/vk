@@ -92,7 +92,7 @@ namespace Vk.Samples
 
         protected VkClearColorValue defaultClearColor = GetDefaultClearColor();
         private static VkClearColorValue GetDefaultClearColor()
-            => new VkClearColorValue() { float32_0 = 0.025f, float32_1 = 0.025f, float32_2 = 0.025f, float32_3 = 1.0f };
+            => new VkClearColorValue(0.025f, 0.025f, 0.025f, 1.0f);
 
         // fps timer (one second interval)
         float fpsTimer = 0.0f;

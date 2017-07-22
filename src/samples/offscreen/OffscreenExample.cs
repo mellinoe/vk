@@ -211,12 +211,7 @@ namespace Vk.Samples
             VkImageViewCreateInfo colorImageView = Initializers.imageViewCreateInfo();
             colorImageView.viewType = VK_IMAGE_VIEW_TYPE_2D;
             colorImageView.format = FB_COLOR_FORMAT;
-            colorImageView.subresourceRange = new VkImageSubresourceRange();
-            colorImageView.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-            colorImageView.subresourceRange.baseMipLevel = 0;
-            colorImageView.subresourceRange.levelCount = 1;
-            colorImageView.subresourceRange.baseArrayLayer = 0;
-            colorImageView.subresourceRange.layerCount = 1;
+            colorImageView.subresourceRange = new VkImageSubresourceRange(VkImageAspectFlags.Color);
             colorImageView.image = offscreenPass.color.image;
             Util.CheckResult(vkCreateImageView(device, &colorImageView, null, out offscreenPass.color.view));
 
@@ -357,8 +352,8 @@ namespace Vk.Samples
             VkCommandBufferBeginInfo cmdBufInfo = Initializers.commandBufferBeginInfo();
 
             FixedArray2<VkClearValue> clearValues = new FixedArray2<VkClearValue>();
-            clearValues.First.color = new VkClearColorValue() { float32_0 = 0.0f, float32_1 = 0.0f, float32_2 = 0.0f, float32_3 = 0.0f };
-            clearValues.Second.depthStencil = new VkClearDepthStencilValue() { depth = 1.0f, stencil = 0 };
+            clearValues.First.color = new VkClearColorValue(0.0f, 0.0f, 0.0f, 0.0f);
+            clearValues.Second.depthStencil = new VkClearDepthStencilValue(1.0f, 0);
 
             VkRenderPassBeginInfo renderPassBeginInfo = Initializers.renderPassBeginInfo();
             renderPassBeginInfo.renderPass = offscreenPass.renderPass;

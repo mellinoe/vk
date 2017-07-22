@@ -167,7 +167,7 @@ namespace Vk.Samples
             VkSemaphore signalSemaphore = _renderCompleteSemaphore;
             submitInfo.signalSemaphoreCount = 1;
             submitInfo.pSignalSemaphores = &signalSemaphore;
-            vkQueueSubmit(_graphicsQueue, 1, ref submitInfo, VkFence.Null);
+            vkQueueSubmit(_graphicsQueue, 1, &submitInfo, VkFence.Null);
 
             VkPresentInfoKHR presentInfo = VkPresentInfoKHR.New();
             presentInfo.waitSemaphoreCount = 1;
@@ -1041,7 +1041,7 @@ namespace Vk.Samples
             submitInfo.commandBufferCount = 1;
             submitInfo.pCommandBuffers = &cb;
 
-            vkQueueSubmit(_graphicsQueue, 1, ref submitInfo, VkFence.Null);
+            vkQueueSubmit(_graphicsQueue, 1, &submitInfo, VkFence.Null);
             vkQueueWaitIdle(_graphicsQueue);
 
             vkFreeCommandBuffers(_device, _commandPool, 1, ref cb);

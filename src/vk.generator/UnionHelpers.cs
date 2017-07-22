@@ -7,7 +7,7 @@ namespace Vk.Generator
         public static void WriteUnion(CsCodeWriter cw, TypeNameMappings tnm, StructureDefinition union)
         {
             cw.WriteLine("[StructLayout(LayoutKind.Explicit)]");
-            using (cw.PushBlock("public struct " + union.Name))
+            using (cw.PushBlock("public partial struct " + union.Name))
             {
                 foreach (var member in union.Members)
                 {

@@ -439,7 +439,7 @@ namespace Vk.Samples
             // We use two attachments (color and depth) that are cleared at the start of the subpass and as such we need to set clear values for both
             byte* clearValuesData = stackalloc byte[2 * sizeof(VkClearValue)];
             VkClearValue* clearValues = (VkClearValue*)clearValuesData;
-            clearValues[0].color = new VkClearColorValue() { float32_0 = 0.0f, float32_1 = 0.0f, float32_2 = 0.2f, float32_3 = 1.0f };
+            clearValues[0].color = new VkClearColorValue(0.0f, 0.0f, 0.2f);
             clearValues[1].depthStencil = new VkClearDepthStencilValue() { depth = 1.0f, stencil = 0 };
 
             VkRenderPassBeginInfo renderPassBeginInfo = VkRenderPassBeginInfo.New();

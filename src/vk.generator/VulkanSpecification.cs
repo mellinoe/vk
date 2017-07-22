@@ -68,7 +68,9 @@ namespace Vk.Generator
             StructureDefinition[] structures = types.Elements("type").Where(typex => typex.HasCategoryAttribute("struct"))
                 .Select(typex => StructureDefinition.CreateFromXml(typex)).ToArray();
 
-            StructureDefinition[] unions = types.Elements("type").Where(typex => typex.HasCategoryAttribute("union"))
+            StructureDefinition[] unions = 
+                types.Elements("type")
+                .Where(typex => typex.HasCategoryAttribute("union"))
                 .Select(typex => StructureDefinition.CreateFromXml(typex)).ToArray();
 
             HandleDefinition[] handles = types.Elements("type").Where(typex => typex.HasCategoryAttribute("handle"))
@@ -85,7 +87,17 @@ namespace Vk.Generator
             ExtensionDefinition[] extensions = registry.Element("extensions").Elements("extension")
                 .Select(xe => ExtensionDefinition.CreateFromXml(xe)).ToArray();
 
-            return new VulkanSpecification(commandDefinitions, constantDefinitions, typedefDefinitions, enumDefinitions, structures, unions, handles, bitmaskTypes, baseTypes, extensions);
+            return new VulkanSpecification(
+                commandDefinitions, 
+                constantDefinitions, 
+                typedefDefinitions, 
+                enumDefinitions, 
+                structures,
+                unions, 
+                handles, 
+                bitmaskTypes, 
+                baseTypes, 
+                extensions);
         }
 
         private void AddExtensionEnums(EnumDefinition[] enums, ExtensionDefinition[] extensions)

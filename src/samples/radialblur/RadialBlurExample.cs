@@ -344,7 +344,7 @@ namespace Vk.Samples
             VkCommandBufferBeginInfo cmdBufInfo = Initializers.commandBufferBeginInfo();
 
             FixedArray2<VkClearValue> clearValues = new FixedArray2<VkClearValue>();
-            clearValues.First.color = new VkClearColorValue { float32_0 = 0.0f, float32_1 = 0.0f, float32_2 = 0.0f, float32_3 = 0.0f };
+            clearValues.First.color = new VkClearColorValue(0.0f, 0.0f, 0.0f, 0.0f);
             clearValues.Second.depthStencil = new VkClearDepthStencilValue { depth = 1.0f, stencil = 0 };
 
             VkRenderPassBeginInfo renderPassBeginInfo = Initializers.renderPassBeginInfo();
