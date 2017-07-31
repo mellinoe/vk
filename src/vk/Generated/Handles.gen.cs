@@ -1,9 +1,11 @@
 // This file is generated.
 
 using System;
+using System.Diagnostics;
 
 namespace Vulkan
 {
+    [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkInstance : IEquatable<VkInstance>
     {
         public readonly IntPtr Handle;
@@ -17,9 +19,11 @@ namespace Vulkan
         public bool Equals(VkInstance h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkInstance h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
+        private string DebuggerDisplay => string.Format("VkInstance [{0}]", Handle);
     }
 
     ///<summary>A dispatchable handle owned by a VkInstance.</summary>
+    [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkPhysicalDevice : IEquatable<VkPhysicalDevice>
     {
         public readonly IntPtr Handle;
@@ -33,9 +37,11 @@ namespace Vulkan
         public bool Equals(VkPhysicalDevice h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkPhysicalDevice h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
+        private string DebuggerDisplay => string.Format("VkPhysicalDevice [{0}]", Handle);
     }
 
     ///<summary>A dispatchable handle owned by a VkPhysicalDevice.</summary>
+    [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkDevice : IEquatable<VkDevice>
     {
         public readonly IntPtr Handle;
@@ -49,9 +55,11 @@ namespace Vulkan
         public bool Equals(VkDevice h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkDevice h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
+        private string DebuggerDisplay => string.Format("VkDevice [{0}]", Handle);
     }
 
     ///<summary>A dispatchable handle owned by a VkDevice.</summary>
+    [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkQueue : IEquatable<VkQueue>
     {
         public readonly IntPtr Handle;
@@ -65,9 +73,11 @@ namespace Vulkan
         public bool Equals(VkQueue h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkQueue h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
+        private string DebuggerDisplay => string.Format("VkQueue [{0}]", Handle);
     }
 
     ///<summary>A dispatchable handle owned by a VkCommandPool.</summary>
+    [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkCommandBuffer : IEquatable<VkCommandBuffer>
     {
         public readonly IntPtr Handle;
@@ -81,9 +91,11 @@ namespace Vulkan
         public bool Equals(VkCommandBuffer h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkCommandBuffer h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
+        private string DebuggerDisplay => string.Format("VkCommandBuffer [{0}]", Handle);
     }
 
     ///<summary>A non-dispatchable handle owned by a VkDevice.</summary>
+    [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkDeviceMemory : IEquatable<VkDeviceMemory>
     {
         public readonly IntPtr Handle;
@@ -97,9 +109,11 @@ namespace Vulkan
         public bool Equals(VkDeviceMemory h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkDeviceMemory h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
+        private string DebuggerDisplay => string.Format("VkDeviceMemory [{0}]", Handle);
     }
 
     ///<summary>A non-dispatchable handle owned by a VkDevice.</summary>
+    [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkCommandPool : IEquatable<VkCommandPool>
     {
         public readonly IntPtr Handle;
@@ -113,9 +127,11 @@ namespace Vulkan
         public bool Equals(VkCommandPool h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkCommandPool h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
+        private string DebuggerDisplay => string.Format("VkCommandPool [{0}]", Handle);
     }
 
     ///<summary>A non-dispatchable handle owned by a VkDevice.</summary>
+    [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkBuffer : IEquatable<VkBuffer>
     {
         public readonly IntPtr Handle;
@@ -129,9 +145,11 @@ namespace Vulkan
         public bool Equals(VkBuffer h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkBuffer h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
+        private string DebuggerDisplay => string.Format("VkBuffer [{0}]", Handle);
     }
 
     ///<summary>A non-dispatchable handle owned by a VkDevice.</summary>
+    [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkBufferView : IEquatable<VkBufferView>
     {
         public readonly IntPtr Handle;
@@ -145,9 +163,11 @@ namespace Vulkan
         public bool Equals(VkBufferView h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkBufferView h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
+        private string DebuggerDisplay => string.Format("VkBufferView [{0}]", Handle);
     }
 
     ///<summary>A non-dispatchable handle owned by a VkDevice.</summary>
+    [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkImage : IEquatable<VkImage>
     {
         public readonly IntPtr Handle;
@@ -161,9 +181,11 @@ namespace Vulkan
         public bool Equals(VkImage h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkImage h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
+        private string DebuggerDisplay => string.Format("VkImage [{0}]", Handle);
     }
 
     ///<summary>A non-dispatchable handle owned by a VkDevice.</summary>
+    [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkImageView : IEquatable<VkImageView>
     {
         public readonly IntPtr Handle;
@@ -177,9 +199,11 @@ namespace Vulkan
         public bool Equals(VkImageView h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkImageView h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
+        private string DebuggerDisplay => string.Format("VkImageView [{0}]", Handle);
     }
 
     ///<summary>A non-dispatchable handle owned by a VkDevice.</summary>
+    [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkShaderModule : IEquatable<VkShaderModule>
     {
         public readonly IntPtr Handle;
@@ -193,9 +217,11 @@ namespace Vulkan
         public bool Equals(VkShaderModule h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkShaderModule h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
+        private string DebuggerDisplay => string.Format("VkShaderModule [{0}]", Handle);
     }
 
     ///<summary>A non-dispatchable handle owned by a VkDevice.</summary>
+    [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkPipeline : IEquatable<VkPipeline>
     {
         public readonly IntPtr Handle;
@@ -209,9 +235,11 @@ namespace Vulkan
         public bool Equals(VkPipeline h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkPipeline h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
+        private string DebuggerDisplay => string.Format("VkPipeline [{0}]", Handle);
     }
 
     ///<summary>A non-dispatchable handle owned by a VkDevice.</summary>
+    [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkPipelineLayout : IEquatable<VkPipelineLayout>
     {
         public readonly IntPtr Handle;
@@ -225,9 +253,11 @@ namespace Vulkan
         public bool Equals(VkPipelineLayout h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkPipelineLayout h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
+        private string DebuggerDisplay => string.Format("VkPipelineLayout [{0}]", Handle);
     }
 
     ///<summary>A non-dispatchable handle owned by a VkDevice.</summary>
+    [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkSampler : IEquatable<VkSampler>
     {
         public readonly IntPtr Handle;
@@ -241,9 +271,11 @@ namespace Vulkan
         public bool Equals(VkSampler h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkSampler h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
+        private string DebuggerDisplay => string.Format("VkSampler [{0}]", Handle);
     }
 
     ///<summary>A non-dispatchable handle owned by a VkDescriptorPool.</summary>
+    [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkDescriptorSet : IEquatable<VkDescriptorSet>
     {
         public readonly IntPtr Handle;
@@ -257,9 +289,11 @@ namespace Vulkan
         public bool Equals(VkDescriptorSet h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkDescriptorSet h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
+        private string DebuggerDisplay => string.Format("VkDescriptorSet [{0}]", Handle);
     }
 
     ///<summary>A non-dispatchable handle owned by a VkDevice.</summary>
+    [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkDescriptorSetLayout : IEquatable<VkDescriptorSetLayout>
     {
         public readonly IntPtr Handle;
@@ -273,9 +307,11 @@ namespace Vulkan
         public bool Equals(VkDescriptorSetLayout h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkDescriptorSetLayout h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
+        private string DebuggerDisplay => string.Format("VkDescriptorSetLayout [{0}]", Handle);
     }
 
     ///<summary>A non-dispatchable handle owned by a VkDevice.</summary>
+    [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkDescriptorPool : IEquatable<VkDescriptorPool>
     {
         public readonly IntPtr Handle;
@@ -289,9 +325,11 @@ namespace Vulkan
         public bool Equals(VkDescriptorPool h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkDescriptorPool h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
+        private string DebuggerDisplay => string.Format("VkDescriptorPool [{0}]", Handle);
     }
 
     ///<summary>A non-dispatchable handle owned by a VkDevice.</summary>
+    [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkFence : IEquatable<VkFence>
     {
         public readonly IntPtr Handle;
@@ -305,9 +343,11 @@ namespace Vulkan
         public bool Equals(VkFence h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkFence h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
+        private string DebuggerDisplay => string.Format("VkFence [{0}]", Handle);
     }
 
     ///<summary>A non-dispatchable handle owned by a VkDevice.</summary>
+    [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkSemaphore : IEquatable<VkSemaphore>
     {
         public readonly IntPtr Handle;
@@ -321,9 +361,11 @@ namespace Vulkan
         public bool Equals(VkSemaphore h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkSemaphore h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
+        private string DebuggerDisplay => string.Format("VkSemaphore [{0}]", Handle);
     }
 
     ///<summary>A non-dispatchable handle owned by a VkDevice.</summary>
+    [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkEvent : IEquatable<VkEvent>
     {
         public readonly IntPtr Handle;
@@ -337,9 +379,11 @@ namespace Vulkan
         public bool Equals(VkEvent h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkEvent h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
+        private string DebuggerDisplay => string.Format("VkEvent [{0}]", Handle);
     }
 
     ///<summary>A non-dispatchable handle owned by a VkDevice.</summary>
+    [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkQueryPool : IEquatable<VkQueryPool>
     {
         public readonly IntPtr Handle;
@@ -353,9 +397,11 @@ namespace Vulkan
         public bool Equals(VkQueryPool h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkQueryPool h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
+        private string DebuggerDisplay => string.Format("VkQueryPool [{0}]", Handle);
     }
 
     ///<summary>A non-dispatchable handle owned by a VkDevice.</summary>
+    [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkFramebuffer : IEquatable<VkFramebuffer>
     {
         public readonly IntPtr Handle;
@@ -369,9 +415,11 @@ namespace Vulkan
         public bool Equals(VkFramebuffer h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkFramebuffer h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
+        private string DebuggerDisplay => string.Format("VkFramebuffer [{0}]", Handle);
     }
 
     ///<summary>A non-dispatchable handle owned by a VkDevice.</summary>
+    [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkRenderPass : IEquatable<VkRenderPass>
     {
         public readonly IntPtr Handle;
@@ -385,9 +433,11 @@ namespace Vulkan
         public bool Equals(VkRenderPass h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkRenderPass h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
+        private string DebuggerDisplay => string.Format("VkRenderPass [{0}]", Handle);
     }
 
     ///<summary>A non-dispatchable handle owned by a VkDevice.</summary>
+    [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkPipelineCache : IEquatable<VkPipelineCache>
     {
         public readonly IntPtr Handle;
@@ -401,9 +451,11 @@ namespace Vulkan
         public bool Equals(VkPipelineCache h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkPipelineCache h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
+        private string DebuggerDisplay => string.Format("VkPipelineCache [{0}]", Handle);
     }
 
     ///<summary>A non-dispatchable handle owned by a VkDevice.</summary>
+    [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkObjectTableNVX : IEquatable<VkObjectTableNVX>
     {
         public readonly IntPtr Handle;
@@ -417,9 +469,11 @@ namespace Vulkan
         public bool Equals(VkObjectTableNVX h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkObjectTableNVX h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
+        private string DebuggerDisplay => string.Format("VkObjectTableNVX [{0}]", Handle);
     }
 
     ///<summary>A non-dispatchable handle owned by a VkDevice.</summary>
+    [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkIndirectCommandsLayoutNVX : IEquatable<VkIndirectCommandsLayoutNVX>
     {
         public readonly IntPtr Handle;
@@ -433,8 +487,10 @@ namespace Vulkan
         public bool Equals(VkIndirectCommandsLayoutNVX h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkIndirectCommandsLayoutNVX h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
+        private string DebuggerDisplay => string.Format("VkIndirectCommandsLayoutNVX [{0}]", Handle);
     }
 
+    [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkDisplayKHR : IEquatable<VkDisplayKHR>
     {
         public readonly IntPtr Handle;
@@ -448,9 +504,11 @@ namespace Vulkan
         public bool Equals(VkDisplayKHR h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkDisplayKHR h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
+        private string DebuggerDisplay => string.Format("VkDisplayKHR [{0}]", Handle);
     }
 
     ///<summary>A non-dispatchable handle owned by a VkPhysicalDevice,VkDisplayKHR.</summary>
+    [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkDisplayModeKHR : IEquatable<VkDisplayModeKHR>
     {
         public readonly IntPtr Handle;
@@ -464,9 +522,11 @@ namespace Vulkan
         public bool Equals(VkDisplayModeKHR h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkDisplayModeKHR h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
+        private string DebuggerDisplay => string.Format("VkDisplayModeKHR [{0}]", Handle);
     }
 
     ///<summary>A non-dispatchable handle owned by a VkInstance.</summary>
+    [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkSurfaceKHR : IEquatable<VkSurfaceKHR>
     {
         public readonly IntPtr Handle;
@@ -480,9 +540,11 @@ namespace Vulkan
         public bool Equals(VkSurfaceKHR h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkSurfaceKHR h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
+        private string DebuggerDisplay => string.Format("VkSurfaceKHR [{0}]", Handle);
     }
 
     ///<summary>A non-dispatchable handle owned by a VkSurfaceKHR.</summary>
+    [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkSwapchainKHR : IEquatable<VkSwapchainKHR>
     {
         public readonly IntPtr Handle;
@@ -496,9 +558,11 @@ namespace Vulkan
         public bool Equals(VkSwapchainKHR h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkSwapchainKHR h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
+        private string DebuggerDisplay => string.Format("VkSwapchainKHR [{0}]", Handle);
     }
 
     ///<summary>A non-dispatchable handle owned by a VkInstance.</summary>
+    [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkDebugReportCallbackEXT : IEquatable<VkDebugReportCallbackEXT>
     {
         public readonly IntPtr Handle;
@@ -512,5 +576,6 @@ namespace Vulkan
         public bool Equals(VkDebugReportCallbackEXT h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkDebugReportCallbackEXT h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
+        private string DebuggerDisplay => string.Format("VkDebugReportCallbackEXT [{0}]", Handle);
     }
 }

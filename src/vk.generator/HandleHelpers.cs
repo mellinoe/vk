@@ -14,6 +14,7 @@ namespace Vk.Generator
                 cw.Write("</summary>");
                 cw.Write(Environment.NewLine);
             }
+            cw.WriteLine($"[DebuggerDisplay(\"{{DebuggerDisplay,nq}}\")]");
             using (cw.PushBlock($"public partial struct {handle.Name} : IEquatable<{handle.Name}>"))
             {
                 cw.WriteLine("public readonly IntPtr Handle;");
@@ -28,6 +29,7 @@ namespace Vk.Generator
                 cw.WriteLine($"public bool Equals({handle.Name} h) => Handle.Equals(h.Handle);");
                 cw.WriteLine($"public override bool Equals(object o) => o is {handle.Name} h && Equals(h);");
                 cw.WriteLine($"public override int GetHashCode() => Handle.GetHashCode();");
+                cw.WriteLine($"private string DebuggerDisplay => string.Format(\"{handle.Name} [{{0}}]\", Handle);");
             }
         }
     }

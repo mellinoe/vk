@@ -95,6 +95,7 @@ namespace Vk.Generator
                 cw.WriteLine();
 
                 cw.Using("System");
+                cw.Using("System.Diagnostics");
                 cw.WriteLine();
 
                 using (cw.PushBlock("namespace Vulkan"))
