@@ -8,9 +8,11 @@ namespace Vulkan
     {
         public const uint MaxPhysicalDeviceNameSize = 256;
         public const uint UuidSize = 16;
+        public const uint LuidSize = 8;
         public const uint MaxExtensionNameSize = 256;
         public const uint MaxDescriptionSize = 256;
         public const uint MaxMemoryTypes = 32;
+        ///<summary>The maximum number of unique memory heaps, each of which supporting 1 or more memory types</summary>
         public const uint MaxMemoryHeaps = 16;
         public const float LodClampNone = 1000.0f;
         public const uint RemainingMipLevels = (~0U);
@@ -20,16 +22,20 @@ namespace Vulkan
         public const uint True = 1;
         public const uint False = 0;
         public const uint QueueFamilyIgnored = (~0U);
+        public const uint QueueFamilyExternal = (~0U-1);
         public const uint SubpassExternal = (~0U);
+        public const uint MaxDeviceGroupSizeKhx = 32;
     }
 
     public static partial class RawConstants
     {
         public const uint VK_MAX_PHYSICAL_DEVICE_NAME_SIZE = VulkanNative.MaxPhysicalDeviceNameSize;
         public const uint VK_UUID_SIZE = VulkanNative.UuidSize;
+        public const uint VK_LUID_SIZE_KHR = VulkanNative.LuidSize;
         public const uint VK_MAX_EXTENSION_NAME_SIZE = VulkanNative.MaxExtensionNameSize;
         public const uint VK_MAX_DESCRIPTION_SIZE = VulkanNative.MaxDescriptionSize;
         public const uint VK_MAX_MEMORY_TYPES = VulkanNative.MaxMemoryTypes;
+        ///<summary>The maximum number of unique memory heaps, each of which supporting 1 or more memory types</summary>
         public const uint VK_MAX_MEMORY_HEAPS = VulkanNative.MaxMemoryHeaps;
         public const float VK_LOD_CLAMP_NONE = VulkanNative.LodClampNone;
         public const uint VK_REMAINING_MIP_LEVELS = VulkanNative.RemainingMipLevels;
@@ -39,6 +45,8 @@ namespace Vulkan
         public const uint VK_TRUE = VulkanNative.True;
         public const uint VK_FALSE = VulkanNative.False;
         public const uint VK_QUEUE_FAMILY_IGNORED = VulkanNative.QueueFamilyIgnored;
+        public const uint VK_QUEUE_FAMILY_EXTERNAL_KHR = VulkanNative.QueueFamilyExternal;
         public const uint VK_SUBPASS_EXTERNAL = VulkanNative.SubpassExternal;
+        public const uint VK_MAX_DEVICE_GROUP_SIZE_KHX = VulkanNative.MaxDeviceGroupSizeKhx;
     }
 }

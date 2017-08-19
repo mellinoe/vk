@@ -490,6 +490,24 @@ namespace Vulkan
         private string DebuggerDisplay => string.Format("VkIndirectCommandsLayoutNVX [{0}]", Handle);
     }
 
+    ///<summary>A non-dispatchable handle owned by a VkDevice.</summary>
+    [DebuggerDisplay("{DebuggerDisplay,nq}")]
+    public partial struct VkDescriptorUpdateTemplateKHR : IEquatable<VkDescriptorUpdateTemplateKHR>
+    {
+        public readonly IntPtr Handle;
+        public VkDescriptorUpdateTemplateKHR(IntPtr existingHandle) { Handle = existingHandle; }
+        public static VkDescriptorUpdateTemplateKHR Null => new VkDescriptorUpdateTemplateKHR(IntPtr.Zero);
+        public static implicit operator VkDescriptorUpdateTemplateKHR(IntPtr handle) => new VkDescriptorUpdateTemplateKHR(handle);
+        public static bool operator ==(VkDescriptorUpdateTemplateKHR left, VkDescriptorUpdateTemplateKHR right) => left.Handle == right.Handle;
+        public static bool operator !=(VkDescriptorUpdateTemplateKHR left, VkDescriptorUpdateTemplateKHR right) => left.Handle != right.Handle;
+        public static bool operator ==(VkDescriptorUpdateTemplateKHR left, IntPtr right) => left.Handle == right;
+        public static bool operator !=(VkDescriptorUpdateTemplateKHR left, IntPtr right) => left.Handle != right;
+        public bool Equals(VkDescriptorUpdateTemplateKHR h) => Handle.Equals(h.Handle);
+        public override bool Equals(object o) => o is VkDescriptorUpdateTemplateKHR h && Equals(h);
+        public override int GetHashCode() => Handle.GetHashCode();
+        private string DebuggerDisplay => string.Format("VkDescriptorUpdateTemplateKHR [{0}]", Handle);
+    }
+
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkDisplayKHR : IEquatable<VkDisplayKHR>
     {

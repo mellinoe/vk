@@ -17,6 +17,19 @@ namespace Vk.Generator
         private static readonly Dictionary<string, string> s_knownEnumValueNames = new Dictionary<string, string>
         {
             {  "VK_STENCIL_FRONT_AND_BACK", "FrontAndBack" },
+            // VkStructureType
+            {  "VK_STRUCTURE_TYPE_SURFACE_CAPABILITIES2_EXT", "SurfaceCapabilities2Ext" },
+            {  "VK_STRUCTURE_TYPE_SURFACE_CAPABILITIES_2_KHR", "SurfaceCapabilities2Khr" },
+            {  "VK_STRUCTURE_TYPE_EXTERNAL_MEMORY_IMAGE_CREATE_INFO_KHR", "ExportMemoryImageCreateInfoKHR" },
+            {  "VK_STRUCTURE_TYPE_EXTERNAL_MEMORY_IMAGE_CREATE_INFO_NV", "ExportMemoryImageCreateInfoNV" },
+            {  "VK_STRUCTURE_TYPE_WIN32_KEYED_MUTEX_ACQUIRE_RELEASE_INFO_NV", "Win32KeyedMutexAcquireReleaseInfoNV" },
+            {  "VK_STRUCTURE_TYPE_EXPORT_MEMORY_ALLOCATE_INFO_NV", "ExportMemoryAllocateInfoNV" },
+            {  "VK_STRUCTURE_TYPE_EXPORT_MEMORY_ALLOCATE_INFO_KHR", "ExportMemoryAllocateInfoKHR" },
+            {  "VK_STRUCTURE_TYPE_IMPORT_MEMORY_WIN32_HANDLE_INFO_NV", "ImportMemoryWin32HandleInfoNV" },
+            {  "VK_STRUCTURE_TYPE_IMPORT_MEMORY_WIN32_HANDLE_INFO_KHR", "ImportMemoryWin32HandleInfoKHR" },
+            {  "VK_STRUCTURE_TYPE_EXPORT_MEMORY_WIN32_HANDLE_INFO_NV", "ExportMemoryWin32HandleInfoNV" },
+            {  "VK_STRUCTURE_TYPE_EXPORT_MEMORY_WIN32_HANDLE_INFO_KHR", "ExportMemoryWin32HandleInfoKHR" },
+
             // VkSampleCountFlagBits
             {  "VK_SAMPLE_COUNT_1_BIT", "Count1" },
             {  "VK_SAMPLE_COUNT_2_BIT", "Count2" },

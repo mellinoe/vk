@@ -28,11 +28,13 @@ namespace Vk.Generator
             { "Display", "Xlib.Display" },
             { "Window", "Xlib.Window" },
             { "VisualID", "Xlib.VisualID" },
+            { "RROutput", "IntPtr" },
 
             { "HINSTANCE", "Win32.HINSTANCE" },
             { "HWND", "Win32.HWND" },
             { "HANDLE", "Win32.HANDLE" },
             { "SECURITY_ATTRIBUTES", "Win32.SECURITY_ATTRIBUTES" },
+            { "LPCWSTR", "IntPtr" },
 
             { "xcb_connection_t", "Xcb.xcb_connection_t" },
             { "xcb_window_t", "Xcb.xcb_window_t" },

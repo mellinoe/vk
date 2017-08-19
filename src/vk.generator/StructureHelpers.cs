@@ -26,7 +26,11 @@ namespace Vk.Generator
                     }
                     else if (member.ElementCountSymbolic != null)
                     {
-                        WriteMemberSymbolicCount(cw, tnm, member, constants);
+                        var validConstant = constants.FirstOrDefault(cd => cd.Name == member.ElementCountSymbolic);
+                        if (validConstant != null)
+                            WriteMemberSymbolicCount(cw, tnm, member, constants);
+                        else
+                            WriteMember(cw, tnm, member, string.Empty);
                     }
                     else
                     {

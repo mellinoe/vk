@@ -76,7 +76,11 @@ namespace Vk.Generator
                 }
                 else
                 {
-                    extensionConstants.Add(new ExtensionConstant(name, enumXE.Attribute("value").Value));
+                    var valueAttribute = enumXE.Attribute("value");
+                    if (valueAttribute == null)
+                        continue;
+
+                    extensionConstants.Add(new ExtensionConstant(name, valueAttribute.Value));
                 }
             }
             foreach (var commandXE in require.Elements("command"))
