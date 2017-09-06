@@ -18,17 +18,6 @@ namespace Vk.Generator
         {
             {  "VK_STENCIL_FRONT_AND_BACK", "FrontAndBack" },
             // VkStructureType
-            {  "VK_STRUCTURE_TYPE_SURFACE_CAPABILITIES2_EXT", "SurfaceCapabilities2Ext" },
-            {  "VK_STRUCTURE_TYPE_SURFACE_CAPABILITIES_2_KHR", "SurfaceCapabilities2Khr" },
-            {  "VK_STRUCTURE_TYPE_EXTERNAL_MEMORY_IMAGE_CREATE_INFO_KHR", "ExportMemoryImageCreateInfoKHR" },
-            {  "VK_STRUCTURE_TYPE_EXTERNAL_MEMORY_IMAGE_CREATE_INFO_NV", "ExportMemoryImageCreateInfoNV" },
-            {  "VK_STRUCTURE_TYPE_WIN32_KEYED_MUTEX_ACQUIRE_RELEASE_INFO_NV", "Win32KeyedMutexAcquireReleaseInfoNV" },
-            {  "VK_STRUCTURE_TYPE_EXPORT_MEMORY_ALLOCATE_INFO_NV", "ExportMemoryAllocateInfoNV" },
-            {  "VK_STRUCTURE_TYPE_EXPORT_MEMORY_ALLOCATE_INFO_KHR", "ExportMemoryAllocateInfoKHR" },
-            {  "VK_STRUCTURE_TYPE_IMPORT_MEMORY_WIN32_HANDLE_INFO_NV", "ImportMemoryWin32HandleInfoNV" },
-            {  "VK_STRUCTURE_TYPE_IMPORT_MEMORY_WIN32_HANDLE_INFO_KHR", "ImportMemoryWin32HandleInfoKHR" },
-            {  "VK_STRUCTURE_TYPE_EXPORT_MEMORY_WIN32_HANDLE_INFO_NV", "ExportMemoryWin32HandleInfoNV" },
-            {  "VK_STRUCTURE_TYPE_EXPORT_MEMORY_WIN32_HANDLE_INFO_KHR", "ExportMemoryWin32HandleInfoKHR" },
 
             // VkSampleCountFlagBits
             {  "VK_SAMPLE_COUNT_1_BIT", "Count1" },
@@ -55,20 +44,20 @@ namespace Vk.Generator
         private static readonly HashSet<string> s_ignoredParts = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {
             "flags",
-            "nvx",
-            "nv",
-            "bit",
-            "amd",
-            "ext",
+            "bit"
+        };
+
+        private static readonly HashSet<string> s_preserveCaps = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
             "khr",
+            "ext",
+            "nv",
+            "nvx",
+            "amd",
         };
 
         public static void WriteEnum(CsCodeWriter cw, EnumDefinition enumDef, TypeNameMappings tnm)
         {
-            if (enumDef.Name.EndsWith("FlagBits"))
-            {
-
-            }
             if (enumDef.Type == EnumType.Bitmask)
             {
                 cw.WriteLine("[Flags]");
@@ -183,7 +172,8 @@ namespace Vk.Generator
                 return value;
             }
 
-            string[] parts = value.Substring(enumPrefix.Length, value.Length - enumPrefix.Length).Split(s_underscoreSeparator, StringSplitOptions.RemoveEmptyEntries);
+            string[] parts = value.Substring(enumPrefix.Length, value.Length - enumPrefix.Length)
+                .Split(s_underscoreSeparator, StringSplitOptions.RemoveEmptyEntries);
             StringBuilder sb = new StringBuilder();
             foreach (string part in parts)
             {
@@ -192,10 +182,17 @@ namespace Vk.Generator
                     continue;
                 }
 
-                sb.Append(char.ToUpper(part[0]));
-                for (int i = 1; i < part.Length; i++)
+                if (s_preserveCaps.Contains(part))
                 {
-                    sb.Append(char.ToLower(part[i]));
+                    sb.Append(part);
+                }
+                else
+                {
+                    sb.Append(char.ToUpper(part[0]));
+                    for (int i = 1; i < part.Length; i++)
+                    {
+                        sb.Append(char.ToLower(part[i]));
+                    }
                 }
             }
 

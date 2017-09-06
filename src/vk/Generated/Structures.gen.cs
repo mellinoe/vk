@@ -1558,7 +1558,7 @@ namespace Vulkan
         public static VkDisplayModeCreateInfoKHR New()
         {
             VkDisplayModeCreateInfoKHR ret = new VkDisplayModeCreateInfoKHR();
-            ret.sType = VkStructureType.DisplayModeCreateInfo;
+            ret.sType = VkStructureType.DisplayModeCreateInfoKHR;
             return ret;
         }
     }
@@ -1591,7 +1591,7 @@ namespace Vulkan
         public static VkDisplaySurfaceCreateInfoKHR New()
         {
             VkDisplaySurfaceCreateInfoKHR ret = new VkDisplaySurfaceCreateInfoKHR();
-            ret.sType = VkStructureType.DisplaySurfaceCreateInfo;
+            ret.sType = VkStructureType.DisplaySurfaceCreateInfoKHR;
             return ret;
         }
     }
@@ -1606,7 +1606,7 @@ namespace Vulkan
         public static VkDisplayPresentInfoKHR New()
         {
             VkDisplayPresentInfoKHR ret = new VkDisplayPresentInfoKHR();
-            ret.sType = VkStructureType.DisplayPresentInfo;
+            ret.sType = VkStructureType.DisplayPresentInfoKHR;
             return ret;
         }
     }
@@ -1634,7 +1634,7 @@ namespace Vulkan
         public static VkAndroidSurfaceCreateInfoKHR New()
         {
             VkAndroidSurfaceCreateInfoKHR ret = new VkAndroidSurfaceCreateInfoKHR();
-            ret.sType = VkStructureType.AndroidSurfaceCreateInfo;
+            ret.sType = VkStructureType.AndroidSurfaceCreateInfoKHR;
             return ret;
         }
     }
@@ -1649,7 +1649,7 @@ namespace Vulkan
         public static VkMirSurfaceCreateInfoKHR New()
         {
             VkMirSurfaceCreateInfoKHR ret = new VkMirSurfaceCreateInfoKHR();
-            ret.sType = VkStructureType.MirSurfaceCreateInfo;
+            ret.sType = VkStructureType.MirSurfaceCreateInfoKHR;
             return ret;
         }
     }
@@ -1678,7 +1678,7 @@ namespace Vulkan
         public static VkWaylandSurfaceCreateInfoKHR New()
         {
             VkWaylandSurfaceCreateInfoKHR ret = new VkWaylandSurfaceCreateInfoKHR();
-            ret.sType = VkStructureType.WaylandSurfaceCreateInfo;
+            ret.sType = VkStructureType.WaylandSurfaceCreateInfoKHR;
             return ret;
         }
     }
@@ -1693,7 +1693,7 @@ namespace Vulkan
         public static VkWin32SurfaceCreateInfoKHR New()
         {
             VkWin32SurfaceCreateInfoKHR ret = new VkWin32SurfaceCreateInfoKHR();
-            ret.sType = VkStructureType.Win32SurfaceCreateInfo;
+            ret.sType = VkStructureType.Win32SurfaceCreateInfoKHR;
             return ret;
         }
     }
@@ -1708,7 +1708,7 @@ namespace Vulkan
         public static VkXlibSurfaceCreateInfoKHR New()
         {
             VkXlibSurfaceCreateInfoKHR ret = new VkXlibSurfaceCreateInfoKHR();
-            ret.sType = VkStructureType.XlibSurfaceCreateInfo;
+            ret.sType = VkStructureType.XlibSurfaceCreateInfoKHR;
             return ret;
         }
     }
@@ -1723,7 +1723,7 @@ namespace Vulkan
         public static VkXcbSurfaceCreateInfoKHR New()
         {
             VkXcbSurfaceCreateInfoKHR ret = new VkXcbSurfaceCreateInfoKHR();
-            ret.sType = VkStructureType.XcbSurfaceCreateInfo;
+            ret.sType = VkStructureType.XcbSurfaceCreateInfoKHR;
             return ret;
         }
     }
@@ -1757,7 +1757,7 @@ namespace Vulkan
         public static VkSwapchainCreateInfoKHR New()
         {
             VkSwapchainCreateInfoKHR ret = new VkSwapchainCreateInfoKHR();
-            ret.sType = VkStructureType.SwapchainCreateInfo;
+            ret.sType = VkStructureType.SwapchainCreateInfoKHR;
             return ret;
         }
     }
@@ -1775,7 +1775,7 @@ namespace Vulkan
         public static VkPresentInfoKHR New()
         {
             VkPresentInfoKHR ret = new VkPresentInfoKHR();
-            ret.sType = VkStructureType.PresentInfo;
+            ret.sType = VkStructureType.PresentInfoKHR;
             return ret;
         }
     }
@@ -1790,7 +1790,7 @@ namespace Vulkan
         public static VkDebugReportCallbackCreateInfoEXT New()
         {
             VkDebugReportCallbackCreateInfoEXT ret = new VkDebugReportCallbackCreateInfoEXT();
-            ret.sType = VkStructureType.DebugReportCallbackCreateInfo;
+            ret.sType = VkStructureType.DebugReportCallbackCreateInfoEXT;
             return ret;
         }
     }
@@ -1804,7 +1804,7 @@ namespace Vulkan
         public static VkValidationFlagsEXT New()
         {
             VkValidationFlagsEXT ret = new VkValidationFlagsEXT();
-            ret.sType = VkStructureType.Validation;
+            ret.sType = VkStructureType.ValidationEXT;
             return ret;
         }
     }
@@ -1817,7 +1817,7 @@ namespace Vulkan
         public static VkPipelineRasterizationStateRasterizationOrderAMD New()
         {
             VkPipelineRasterizationStateRasterizationOrderAMD ret = new VkPipelineRasterizationStateRasterizationOrderAMD();
-            ret.sType = VkStructureType.PipelineRasterizationStateRasterizationOrder;
+            ret.sType = VkStructureType.PipelineRasterizationStateRasterizationOrderAMD;
             return ret;
         }
     }
@@ -1832,7 +1832,7 @@ namespace Vulkan
         public static VkDebugMarkerObjectNameInfoEXT New()
         {
             VkDebugMarkerObjectNameInfoEXT ret = new VkDebugMarkerObjectNameInfoEXT();
-            ret.sType = VkStructureType.DebugMarkerObjectNameInfo;
+            ret.sType = VkStructureType.DebugMarkerObjectNameInfoEXT;
             return ret;
         }
     }
@@ -1849,7 +1849,7 @@ namespace Vulkan
         public static VkDebugMarkerObjectTagInfoEXT New()
         {
             VkDebugMarkerObjectTagInfoEXT ret = new VkDebugMarkerObjectTagInfoEXT();
-            ret.sType = VkStructureType.DebugMarkerObjectTagInfo;
+            ret.sType = VkStructureType.DebugMarkerObjectTagInfoEXT;
             return ret;
         }
     }
@@ -1866,7 +1866,7 @@ namespace Vulkan
         public static VkDebugMarkerMarkerInfoEXT New()
         {
             VkDebugMarkerMarkerInfoEXT ret = new VkDebugMarkerMarkerInfoEXT();
-            ret.sType = VkStructureType.DebugMarkerMarkerInfo;
+            ret.sType = VkStructureType.DebugMarkerMarkerInfoEXT;
             return ret;
         }
     }
@@ -1879,7 +1879,7 @@ namespace Vulkan
         public static VkDedicatedAllocationImageCreateInfoNV New()
         {
             VkDedicatedAllocationImageCreateInfoNV ret = new VkDedicatedAllocationImageCreateInfoNV();
-            ret.sType = VkStructureType.DedicatedAllocationImageCreateInfo;
+            ret.sType = VkStructureType.DedicatedAllocationImageCreateInfoNV;
             return ret;
         }
     }
@@ -1892,7 +1892,7 @@ namespace Vulkan
         public static VkDedicatedAllocationBufferCreateInfoNV New()
         {
             VkDedicatedAllocationBufferCreateInfoNV ret = new VkDedicatedAllocationBufferCreateInfoNV();
-            ret.sType = VkStructureType.DedicatedAllocationBufferCreateInfo;
+            ret.sType = VkStructureType.DedicatedAllocationBufferCreateInfoNV;
             return ret;
         }
     }
@@ -1906,7 +1906,7 @@ namespace Vulkan
         public static VkDedicatedAllocationMemoryAllocateInfoNV New()
         {
             VkDedicatedAllocationMemoryAllocateInfoNV ret = new VkDedicatedAllocationMemoryAllocateInfoNV();
-            ret.sType = VkStructureType.DedicatedAllocationMemoryAllocateInfo;
+            ret.sType = VkStructureType.DedicatedAllocationMemoryAllocateInfoNV;
             return ret;
         }
     }
@@ -1927,7 +1927,7 @@ namespace Vulkan
         public static VkExternalMemoryImageCreateInfoNV New()
         {
             VkExternalMemoryImageCreateInfoNV ret = new VkExternalMemoryImageCreateInfoNV();
-            ret.sType = VkStructureType.ExportMemoryImageCreateInfoNV;
+            ret.sType = VkStructureType.ExternalMemoryImageCreateInfoNV;
             return ret;
         }
     }
@@ -2000,7 +2000,7 @@ namespace Vulkan
         public static VkDeviceGeneratedCommandsFeaturesNVX New()
         {
             VkDeviceGeneratedCommandsFeaturesNVX ret = new VkDeviceGeneratedCommandsFeaturesNVX();
-            ret.sType = VkStructureType.DeviceGeneratedCommandsFeatures;
+            ret.sType = VkStructureType.DeviceGeneratedCommandsFeaturesNVX;
             return ret;
         }
     }
@@ -2017,7 +2017,7 @@ namespace Vulkan
         public static VkDeviceGeneratedCommandsLimitsNVX New()
         {
             VkDeviceGeneratedCommandsLimitsNVX ret = new VkDeviceGeneratedCommandsLimitsNVX();
-            ret.sType = VkStructureType.DeviceGeneratedCommandsLimits;
+            ret.sType = VkStructureType.DeviceGeneratedCommandsLimitsNVX;
             return ret;
         }
     }
@@ -2048,7 +2048,7 @@ namespace Vulkan
         public static VkIndirectCommandsLayoutCreateInfoNVX New()
         {
             VkIndirectCommandsLayoutCreateInfoNVX ret = new VkIndirectCommandsLayoutCreateInfoNVX();
-            ret.sType = VkStructureType.IndirectCommandsLayoutCreateInfo;
+            ret.sType = VkStructureType.IndirectCommandsLayoutCreateInfoNVX;
             return ret;
         }
     }
@@ -2070,7 +2070,7 @@ namespace Vulkan
         public static VkCmdProcessCommandsInfoNVX New()
         {
             VkCmdProcessCommandsInfoNVX ret = new VkCmdProcessCommandsInfoNVX();
-            ret.sType = VkStructureType.CmdProcessCommandsInfo;
+            ret.sType = VkStructureType.CmdProcessCommandsInfoNVX;
             return ret;
         }
     }
@@ -2085,7 +2085,7 @@ namespace Vulkan
         public static VkCmdReserveSpaceForCommandsInfoNVX New()
         {
             VkCmdReserveSpaceForCommandsInfoNVX ret = new VkCmdReserveSpaceForCommandsInfoNVX();
-            ret.sType = VkStructureType.CmdReserveSpaceForCommandsInfo;
+            ret.sType = VkStructureType.CmdReserveSpaceForCommandsInfoNVX;
             return ret;
         }
     }
@@ -2106,7 +2106,7 @@ namespace Vulkan
         public static VkObjectTableCreateInfoNVX New()
         {
             VkObjectTableCreateInfoNVX ret = new VkObjectTableCreateInfoNVX();
-            ret.sType = VkStructureType.ObjectTableCreateInfo;
+            ret.sType = VkStructureType.ObjectTableCreateInfoNVX;
             return ret;
         }
     }
@@ -2163,7 +2163,7 @@ namespace Vulkan
         public static VkPhysicalDeviceFeatures2KHR New()
         {
             VkPhysicalDeviceFeatures2KHR ret = new VkPhysicalDeviceFeatures2KHR();
-            ret.sType = VkStructureType.PhysicalDeviceFeatures2;
+            ret.sType = VkStructureType.PhysicalDeviceFeatures2KHR;
             return ret;
         }
     }
@@ -2176,7 +2176,7 @@ namespace Vulkan
         public static VkPhysicalDeviceProperties2KHR New()
         {
             VkPhysicalDeviceProperties2KHR ret = new VkPhysicalDeviceProperties2KHR();
-            ret.sType = VkStructureType.PhysicalDeviceProperties2;
+            ret.sType = VkStructureType.PhysicalDeviceProperties2KHR;
             return ret;
         }
     }
@@ -2189,7 +2189,7 @@ namespace Vulkan
         public static VkFormatProperties2KHR New()
         {
             VkFormatProperties2KHR ret = new VkFormatProperties2KHR();
-            ret.sType = VkStructureType.FormatProperties2;
+            ret.sType = VkStructureType.FormatProperties2KHR;
             return ret;
         }
     }
@@ -2202,7 +2202,7 @@ namespace Vulkan
         public static VkImageFormatProperties2KHR New()
         {
             VkImageFormatProperties2KHR ret = new VkImageFormatProperties2KHR();
-            ret.sType = VkStructureType.ImageFormatProperties2;
+            ret.sType = VkStructureType.ImageFormatProperties2KHR;
             return ret;
         }
     }
@@ -2219,7 +2219,7 @@ namespace Vulkan
         public static VkPhysicalDeviceImageFormatInfo2KHR New()
         {
             VkPhysicalDeviceImageFormatInfo2KHR ret = new VkPhysicalDeviceImageFormatInfo2KHR();
-            ret.sType = VkStructureType.PhysicalDeviceImageFormatInfo2;
+            ret.sType = VkStructureType.PhysicalDeviceImageFormatInfo2KHR;
             return ret;
         }
     }
@@ -2232,7 +2232,7 @@ namespace Vulkan
         public static VkQueueFamilyProperties2KHR New()
         {
             VkQueueFamilyProperties2KHR ret = new VkQueueFamilyProperties2KHR();
-            ret.sType = VkStructureType.QueueFamilyProperties2;
+            ret.sType = VkStructureType.QueueFamilyProperties2KHR;
             return ret;
         }
     }
@@ -2245,7 +2245,7 @@ namespace Vulkan
         public static VkPhysicalDeviceMemoryProperties2KHR New()
         {
             VkPhysicalDeviceMemoryProperties2KHR ret = new VkPhysicalDeviceMemoryProperties2KHR();
-            ret.sType = VkStructureType.PhysicalDeviceMemoryProperties2;
+            ret.sType = VkStructureType.PhysicalDeviceMemoryProperties2KHR;
             return ret;
         }
     }
@@ -2258,7 +2258,7 @@ namespace Vulkan
         public static VkSparseImageFormatProperties2KHR New()
         {
             VkSparseImageFormatProperties2KHR ret = new VkSparseImageFormatProperties2KHR();
-            ret.sType = VkStructureType.SparseImageFormatProperties2;
+            ret.sType = VkStructureType.SparseImageFormatProperties2KHR;
             return ret;
         }
     }
@@ -2275,7 +2275,7 @@ namespace Vulkan
         public static VkPhysicalDeviceSparseImageFormatInfo2KHR New()
         {
             VkPhysicalDeviceSparseImageFormatInfo2KHR ret = new VkPhysicalDeviceSparseImageFormatInfo2KHR();
-            ret.sType = VkStructureType.PhysicalDeviceSparseImageFormatInfo2;
+            ret.sType = VkStructureType.PhysicalDeviceSparseImageFormatInfo2KHR;
             return ret;
         }
     }
@@ -2288,7 +2288,7 @@ namespace Vulkan
         public static VkPhysicalDevicePushDescriptorPropertiesKHR New()
         {
             VkPhysicalDevicePushDescriptorPropertiesKHR ret = new VkPhysicalDevicePushDescriptorPropertiesKHR();
-            ret.sType = VkStructureType.PhysicalDevicePushDescriptorProperties;
+            ret.sType = VkStructureType.PhysicalDevicePushDescriptorPropertiesKHR;
             return ret;
         }
     }
@@ -2302,7 +2302,7 @@ namespace Vulkan
         public static VkPresentRegionsKHR New()
         {
             VkPresentRegionsKHR ret = new VkPresentRegionsKHR();
-            ret.sType = VkStructureType.PresentRegions;
+            ret.sType = VkStructureType.PresentRegionsKHR;
             return ret;
         }
     }
@@ -2329,7 +2329,7 @@ namespace Vulkan
         public static VkPhysicalDeviceVariablePointerFeaturesKHR New()
         {
             VkPhysicalDeviceVariablePointerFeaturesKHR ret = new VkPhysicalDeviceVariablePointerFeaturesKHR();
-            ret.sType = VkStructureType.PhysicalDeviceVariablePointerFeatures;
+            ret.sType = VkStructureType.PhysicalDeviceVariablePointerFeaturesKHR;
             return ret;
         }
     }
@@ -2349,7 +2349,7 @@ namespace Vulkan
         public static VkPhysicalDeviceExternalImageFormatInfoKHR New()
         {
             VkPhysicalDeviceExternalImageFormatInfoKHR ret = new VkPhysicalDeviceExternalImageFormatInfoKHR();
-            ret.sType = VkStructureType.PhysicalDeviceExternalImageFormatInfo;
+            ret.sType = VkStructureType.PhysicalDeviceExternalImageFormatInfoKHR;
             return ret;
         }
     }
@@ -2362,7 +2362,7 @@ namespace Vulkan
         public static VkExternalImageFormatPropertiesKHR New()
         {
             VkExternalImageFormatPropertiesKHR ret = new VkExternalImageFormatPropertiesKHR();
-            ret.sType = VkStructureType.ExternalImageFormatProperties;
+            ret.sType = VkStructureType.ExternalImageFormatPropertiesKHR;
             return ret;
         }
     }
@@ -2377,7 +2377,7 @@ namespace Vulkan
         public static VkPhysicalDeviceExternalBufferInfoKHR New()
         {
             VkPhysicalDeviceExternalBufferInfoKHR ret = new VkPhysicalDeviceExternalBufferInfoKHR();
-            ret.sType = VkStructureType.PhysicalDeviceExternalBufferInfo;
+            ret.sType = VkStructureType.PhysicalDeviceExternalBufferInfoKHR;
             return ret;
         }
     }
@@ -2390,7 +2390,7 @@ namespace Vulkan
         public static VkExternalBufferPropertiesKHR New()
         {
             VkExternalBufferPropertiesKHR ret = new VkExternalBufferPropertiesKHR();
-            ret.sType = VkStructureType.ExternalBufferProperties;
+            ret.sType = VkStructureType.ExternalBufferPropertiesKHR;
             return ret;
         }
     }
@@ -2401,13 +2401,13 @@ namespace Vulkan
         public void* pNext;
         public fixed byte deviceUUID[(int)VulkanNative.UuidSize];
         public fixed byte driverUUID[(int)VulkanNative.UuidSize];
-        public fixed byte deviceLUID[(int)VulkanNative.LuidSize];
+        public fixed byte deviceLUID[(int)VulkanNative.LuidSizeKHR];
         public uint deviceNodeMask;
         public VkBool32 deviceLUIDValid;
         public static VkPhysicalDeviceIDPropertiesKHR New()
         {
             VkPhysicalDeviceIDPropertiesKHR ret = new VkPhysicalDeviceIDPropertiesKHR();
-            ret.sType = VkStructureType.PhysicalDeviceIdProperties;
+            ret.sType = VkStructureType.PhysicalDeviceIdPropertiesKHR;
             return ret;
         }
     }
@@ -2420,7 +2420,7 @@ namespace Vulkan
         public static VkExternalMemoryImageCreateInfoKHR New()
         {
             VkExternalMemoryImageCreateInfoKHR ret = new VkExternalMemoryImageCreateInfoKHR();
-            ret.sType = VkStructureType.ExportMemoryImageCreateInfoKHR;
+            ret.sType = VkStructureType.ExternalMemoryImageCreateInfoKHR;
             return ret;
         }
     }
@@ -2433,7 +2433,7 @@ namespace Vulkan
         public static VkExternalMemoryBufferCreateInfoKHR New()
         {
             VkExternalMemoryBufferCreateInfoKHR ret = new VkExternalMemoryBufferCreateInfoKHR();
-            ret.sType = VkStructureType.ExternalMemoryBufferCreateInfo;
+            ret.sType = VkStructureType.ExternalMemoryBufferCreateInfoKHR;
             return ret;
         }
     }
@@ -2489,7 +2489,7 @@ namespace Vulkan
         public static VkMemoryWin32HandlePropertiesKHR New()
         {
             VkMemoryWin32HandlePropertiesKHR ret = new VkMemoryWin32HandlePropertiesKHR();
-            ret.sType = VkStructureType.MemoryWin32HandleProperties;
+            ret.sType = VkStructureType.MemoryWin32HandlePropertiesKHR;
             return ret;
         }
     }
@@ -2503,7 +2503,7 @@ namespace Vulkan
         public static VkMemoryGetWin32HandleInfoKHR New()
         {
             VkMemoryGetWin32HandleInfoKHR ret = new VkMemoryGetWin32HandleInfoKHR();
-            ret.sType = VkStructureType.MemoryGetWin32HandleInfo;
+            ret.sType = VkStructureType.MemoryGetWin32HandleInfoKHR;
             return ret;
         }
     }
@@ -2517,7 +2517,7 @@ namespace Vulkan
         public static VkImportMemoryFdInfoKHR New()
         {
             VkImportMemoryFdInfoKHR ret = new VkImportMemoryFdInfoKHR();
-            ret.sType = VkStructureType.ImportMemoryFdInfo;
+            ret.sType = VkStructureType.ImportMemoryFdInfoKHR;
             return ret;
         }
     }
@@ -2530,7 +2530,7 @@ namespace Vulkan
         public static VkMemoryFdPropertiesKHR New()
         {
             VkMemoryFdPropertiesKHR ret = new VkMemoryFdPropertiesKHR();
-            ret.sType = VkStructureType.MemoryFdProperties;
+            ret.sType = VkStructureType.MemoryFdPropertiesKHR;
             return ret;
         }
     }
@@ -2544,7 +2544,7 @@ namespace Vulkan
         public static VkMemoryGetFdInfoKHR New()
         {
             VkMemoryGetFdInfoKHR ret = new VkMemoryGetFdInfoKHR();
-            ret.sType = VkStructureType.MemoryGetFdInfo;
+            ret.sType = VkStructureType.MemoryGetFdInfoKHR;
             return ret;
         }
     }
@@ -2563,7 +2563,7 @@ namespace Vulkan
         public static VkWin32KeyedMutexAcquireReleaseInfoKHR New()
         {
             VkWin32KeyedMutexAcquireReleaseInfoKHR ret = new VkWin32KeyedMutexAcquireReleaseInfoKHR();
-            ret.sType = VkStructureType.Win32KeyedMutexAcquireReleaseInfo;
+            ret.sType = VkStructureType.Win32KeyedMutexAcquireReleaseInfoKHR;
             return ret;
         }
     }
@@ -2576,7 +2576,7 @@ namespace Vulkan
         public static VkPhysicalDeviceExternalSemaphoreInfoKHR New()
         {
             VkPhysicalDeviceExternalSemaphoreInfoKHR ret = new VkPhysicalDeviceExternalSemaphoreInfoKHR();
-            ret.sType = VkStructureType.PhysicalDeviceExternalSemaphoreInfo;
+            ret.sType = VkStructureType.PhysicalDeviceExternalSemaphoreInfoKHR;
             return ret;
         }
     }
@@ -2591,7 +2591,7 @@ namespace Vulkan
         public static VkExternalSemaphorePropertiesKHR New()
         {
             VkExternalSemaphorePropertiesKHR ret = new VkExternalSemaphorePropertiesKHR();
-            ret.sType = VkStructureType.ExternalSemaphoreProperties;
+            ret.sType = VkStructureType.ExternalSemaphorePropertiesKHR;
             return ret;
         }
     }
@@ -2604,7 +2604,7 @@ namespace Vulkan
         public static VkExportSemaphoreCreateInfoKHR New()
         {
             VkExportSemaphoreCreateInfoKHR ret = new VkExportSemaphoreCreateInfoKHR();
-            ret.sType = VkStructureType.ExportSemaphoreCreateInfo;
+            ret.sType = VkStructureType.ExportSemaphoreCreateInfoKHR;
             return ret;
         }
     }
@@ -2621,7 +2621,7 @@ namespace Vulkan
         public static VkImportSemaphoreWin32HandleInfoKHR New()
         {
             VkImportSemaphoreWin32HandleInfoKHR ret = new VkImportSemaphoreWin32HandleInfoKHR();
-            ret.sType = VkStructureType.ImportSemaphoreWin32HandleInfo;
+            ret.sType = VkStructureType.ImportSemaphoreWin32HandleInfoKHR;
             return ret;
         }
     }
@@ -2636,7 +2636,7 @@ namespace Vulkan
         public static VkExportSemaphoreWin32HandleInfoKHR New()
         {
             VkExportSemaphoreWin32HandleInfoKHR ret = new VkExportSemaphoreWin32HandleInfoKHR();
-            ret.sType = VkStructureType.ExportSemaphoreWin32HandleInfo;
+            ret.sType = VkStructureType.ExportSemaphoreWin32HandleInfoKHR;
             return ret;
         }
     }
@@ -2652,7 +2652,7 @@ namespace Vulkan
         public static VkD3D12FenceSubmitInfoKHR New()
         {
             VkD3D12FenceSubmitInfoKHR ret = new VkD3D12FenceSubmitInfoKHR();
-            ret.sType = VkStructureType.D3d12FenceSubmitInfo;
+            ret.sType = VkStructureType.D3d12FenceSubmitInfoKHR;
             return ret;
         }
     }
@@ -2666,7 +2666,7 @@ namespace Vulkan
         public static VkSemaphoreGetWin32HandleInfoKHR New()
         {
             VkSemaphoreGetWin32HandleInfoKHR ret = new VkSemaphoreGetWin32HandleInfoKHR();
-            ret.sType = VkStructureType.SemaphoreGetWin32HandleInfo;
+            ret.sType = VkStructureType.SemaphoreGetWin32HandleInfoKHR;
             return ret;
         }
     }
@@ -2682,7 +2682,7 @@ namespace Vulkan
         public static VkImportSemaphoreFdInfoKHR New()
         {
             VkImportSemaphoreFdInfoKHR ret = new VkImportSemaphoreFdInfoKHR();
-            ret.sType = VkStructureType.ImportSemaphoreFdInfo;
+            ret.sType = VkStructureType.ImportSemaphoreFdInfoKHR;
             return ret;
         }
     }
@@ -2696,7 +2696,7 @@ namespace Vulkan
         public static VkSemaphoreGetFdInfoKHR New()
         {
             VkSemaphoreGetFdInfoKHR ret = new VkSemaphoreGetFdInfoKHR();
-            ret.sType = VkStructureType.SemaphoreGetFdInfo;
+            ret.sType = VkStructureType.SemaphoreGetFdInfoKHR;
             return ret;
         }
     }
@@ -2709,7 +2709,7 @@ namespace Vulkan
         public static VkPhysicalDeviceExternalFenceInfoKHR New()
         {
             VkPhysicalDeviceExternalFenceInfoKHR ret = new VkPhysicalDeviceExternalFenceInfoKHR();
-            ret.sType = VkStructureType.PhysicalDeviceExternalFenceInfo;
+            ret.sType = VkStructureType.PhysicalDeviceExternalFenceInfoKHR;
             return ret;
         }
     }
@@ -2724,7 +2724,7 @@ namespace Vulkan
         public static VkExternalFencePropertiesKHR New()
         {
             VkExternalFencePropertiesKHR ret = new VkExternalFencePropertiesKHR();
-            ret.sType = VkStructureType.ExternalFenceProperties;
+            ret.sType = VkStructureType.ExternalFencePropertiesKHR;
             return ret;
         }
     }
@@ -2737,7 +2737,7 @@ namespace Vulkan
         public static VkExportFenceCreateInfoKHR New()
         {
             VkExportFenceCreateInfoKHR ret = new VkExportFenceCreateInfoKHR();
-            ret.sType = VkStructureType.ExportFenceCreateInfo;
+            ret.sType = VkStructureType.ExportFenceCreateInfoKHR;
             return ret;
         }
     }
@@ -2754,7 +2754,7 @@ namespace Vulkan
         public static VkImportFenceWin32HandleInfoKHR New()
         {
             VkImportFenceWin32HandleInfoKHR ret = new VkImportFenceWin32HandleInfoKHR();
-            ret.sType = VkStructureType.ImportFenceWin32HandleInfo;
+            ret.sType = VkStructureType.ImportFenceWin32HandleInfoKHR;
             return ret;
         }
     }
@@ -2769,7 +2769,7 @@ namespace Vulkan
         public static VkExportFenceWin32HandleInfoKHR New()
         {
             VkExportFenceWin32HandleInfoKHR ret = new VkExportFenceWin32HandleInfoKHR();
-            ret.sType = VkStructureType.ExportFenceWin32HandleInfo;
+            ret.sType = VkStructureType.ExportFenceWin32HandleInfoKHR;
             return ret;
         }
     }
@@ -2783,7 +2783,7 @@ namespace Vulkan
         public static VkFenceGetWin32HandleInfoKHR New()
         {
             VkFenceGetWin32HandleInfoKHR ret = new VkFenceGetWin32HandleInfoKHR();
-            ret.sType = VkStructureType.FenceGetWin32HandleInfo;
+            ret.sType = VkStructureType.FenceGetWin32HandleInfoKHR;
             return ret;
         }
     }
@@ -2799,7 +2799,7 @@ namespace Vulkan
         public static VkImportFenceFdInfoKHR New()
         {
             VkImportFenceFdInfoKHR ret = new VkImportFenceFdInfoKHR();
-            ret.sType = VkStructureType.ImportFenceFdInfo;
+            ret.sType = VkStructureType.ImportFenceFdInfoKHR;
             return ret;
         }
     }
@@ -2813,7 +2813,7 @@ namespace Vulkan
         public static VkFenceGetFdInfoKHR New()
         {
             VkFenceGetFdInfoKHR ret = new VkFenceGetFdInfoKHR();
-            ret.sType = VkStructureType.FenceGetFdInfo;
+            ret.sType = VkStructureType.FenceGetFdInfoKHR;
             return ret;
         }
     }
@@ -2883,7 +2883,7 @@ namespace Vulkan
         public static VkSurfaceCapabilities2EXT New()
         {
             VkSurfaceCapabilities2EXT ret = new VkSurfaceCapabilities2EXT();
-            ret.sType = VkStructureType.SurfaceCapabilities2Ext;
+            ret.sType = VkStructureType.SurfaceCapabilities2EXT;
             return ret;
         }
     }
@@ -2896,7 +2896,7 @@ namespace Vulkan
         public static VkDisplayPowerInfoEXT New()
         {
             VkDisplayPowerInfoEXT ret = new VkDisplayPowerInfoEXT();
-            ret.sType = VkStructureType.DisplayPowerInfo;
+            ret.sType = VkStructureType.DisplayPowerInfoEXT;
             return ret;
         }
     }
@@ -2909,7 +2909,7 @@ namespace Vulkan
         public static VkDeviceEventInfoEXT New()
         {
             VkDeviceEventInfoEXT ret = new VkDeviceEventInfoEXT();
-            ret.sType = VkStructureType.DeviceEventInfo;
+            ret.sType = VkStructureType.DeviceEventInfoEXT;
             return ret;
         }
     }
@@ -2922,7 +2922,7 @@ namespace Vulkan
         public static VkDisplayEventInfoEXT New()
         {
             VkDisplayEventInfoEXT ret = new VkDisplayEventInfoEXT();
-            ret.sType = VkStructureType.DisplayEventInfo;
+            ret.sType = VkStructureType.DisplayEventInfoEXT;
             return ret;
         }
     }
@@ -2935,7 +2935,7 @@ namespace Vulkan
         public static VkSwapchainCounterCreateInfoEXT New()
         {
             VkSwapchainCounterCreateInfoEXT ret = new VkSwapchainCounterCreateInfoEXT();
-            ret.sType = VkStructureType.SwapchainCounterCreateInfo;
+            ret.sType = VkStructureType.SwapchainCounterCreateInfoEXT;
             return ret;
         }
     }
@@ -3221,7 +3221,7 @@ namespace Vulkan
         public static VkDescriptorUpdateTemplateCreateInfoKHR New()
         {
             VkDescriptorUpdateTemplateCreateInfoKHR ret = new VkDescriptorUpdateTemplateCreateInfoKHR();
-            ret.sType = VkStructureType.DescriptorUpdateTemplateCreateInfo;
+            ret.sType = VkStructureType.DescriptorUpdateTemplateCreateInfoKHR;
             return ret;
         }
     }
@@ -3247,7 +3247,7 @@ namespace Vulkan
         public static VkHdrMetadataEXT New()
         {
             VkHdrMetadataEXT ret = new VkHdrMetadataEXT();
-            ret.sType = VkStructureType.HdrMetadata;
+            ret.sType = VkStructureType.HdrMetadataEXT;
             return ret;
         }
     }
@@ -3330,7 +3330,7 @@ namespace Vulkan
         public static VkPipelineViewportWScalingStateCreateInfoNV New()
         {
             VkPipelineViewportWScalingStateCreateInfoNV ret = new VkPipelineViewportWScalingStateCreateInfoNV();
-            ret.sType = VkStructureType.PipelineViewportWScalingStateCreateInfo;
+            ret.sType = VkStructureType.PipelineViewportWScalingStateCreateInfoNV;
             return ret;
         }
     }
@@ -3353,7 +3353,7 @@ namespace Vulkan
         public static VkPipelineViewportSwizzleStateCreateInfoNV New()
         {
             VkPipelineViewportSwizzleStateCreateInfoNV ret = new VkPipelineViewportSwizzleStateCreateInfoNV();
-            ret.sType = VkStructureType.PipelineViewportSwizzleStateCreateInfo;
+            ret.sType = VkStructureType.PipelineViewportSwizzleStateCreateInfoNV;
             return ret;
         }
     }
@@ -3366,7 +3366,7 @@ namespace Vulkan
         public static VkPhysicalDeviceDiscardRectanglePropertiesEXT New()
         {
             VkPhysicalDeviceDiscardRectanglePropertiesEXT ret = new VkPhysicalDeviceDiscardRectanglePropertiesEXT();
-            ret.sType = VkStructureType.PhysicalDeviceDiscardRectangleProperties;
+            ret.sType = VkStructureType.PhysicalDeviceDiscardRectanglePropertiesEXT;
             return ret;
         }
     }
@@ -3382,7 +3382,7 @@ namespace Vulkan
         public static VkPipelineDiscardRectangleStateCreateInfoEXT New()
         {
             VkPipelineDiscardRectangleStateCreateInfoEXT ret = new VkPipelineDiscardRectangleStateCreateInfoEXT();
-            ret.sType = VkStructureType.PipelineDiscardRectangleStateCreateInfo;
+            ret.sType = VkStructureType.PipelineDiscardRectangleStateCreateInfoEXT;
             return ret;
         }
     }
@@ -3395,7 +3395,7 @@ namespace Vulkan
         public static VkPhysicalDeviceMultiviewPerViewAttributesPropertiesNVX New()
         {
             VkPhysicalDeviceMultiviewPerViewAttributesPropertiesNVX ret = new VkPhysicalDeviceMultiviewPerViewAttributesPropertiesNVX();
-            ret.sType = VkStructureType.PhysicalDeviceMultiviewPerViewAttributesProperties;
+            ret.sType = VkStructureType.PhysicalDeviceMultiviewPerViewAttributesPropertiesNVX;
             return ret;
         }
     }
@@ -3408,7 +3408,7 @@ namespace Vulkan
         public static VkPhysicalDeviceSurfaceInfo2KHR New()
         {
             VkPhysicalDeviceSurfaceInfo2KHR ret = new VkPhysicalDeviceSurfaceInfo2KHR();
-            ret.sType = VkStructureType.PhysicalDeviceSurfaceInfo2;
+            ret.sType = VkStructureType.PhysicalDeviceSurfaceInfo2KHR;
             return ret;
         }
     }
@@ -3421,7 +3421,7 @@ namespace Vulkan
         public static VkSurfaceCapabilities2KHR New()
         {
             VkSurfaceCapabilities2KHR ret = new VkSurfaceCapabilities2KHR();
-            ret.sType = VkStructureType.SurfaceCapabilities2Khr;
+            ret.sType = VkStructureType.SurfaceCapabilities2KHR;
             return ret;
         }
     }
@@ -3434,7 +3434,7 @@ namespace Vulkan
         public static VkSurfaceFormat2KHR New()
         {
             VkSurfaceFormat2KHR ret = new VkSurfaceFormat2KHR();
-            ret.sType = VkStructureType.SurfaceFormat2;
+            ret.sType = VkStructureType.SurfaceFormat2KHR;
             return ret;
         }
     }
@@ -3447,7 +3447,7 @@ namespace Vulkan
         public static VkSharedPresentSurfaceCapabilitiesKHR New()
         {
             VkSharedPresentSurfaceCapabilitiesKHR ret = new VkSharedPresentSurfaceCapabilitiesKHR();
-            ret.sType = VkStructureType.SharedPresentSurfaceCapabilities;
+            ret.sType = VkStructureType.SharedPresentSurfaceCapabilitiesKHR;
             return ret;
         }
     }
@@ -3463,7 +3463,7 @@ namespace Vulkan
         public static VkPhysicalDevice16BitStorageFeaturesKHR New()
         {
             VkPhysicalDevice16BitStorageFeaturesKHR ret = new VkPhysicalDevice16BitStorageFeaturesKHR();
-            ret.sType = VkStructureType.PhysicalDevice16bitStorageFeatures;
+            ret.sType = VkStructureType.PhysicalDevice16bitStorageFeaturesKHR;
             return ret;
         }
     }
@@ -3476,7 +3476,7 @@ namespace Vulkan
         public static VkBufferMemoryRequirementsInfo2KHR New()
         {
             VkBufferMemoryRequirementsInfo2KHR ret = new VkBufferMemoryRequirementsInfo2KHR();
-            ret.sType = VkStructureType.BufferMemoryRequirementsInfo2;
+            ret.sType = VkStructureType.BufferMemoryRequirementsInfo2KHR;
             return ret;
         }
     }
@@ -3489,7 +3489,7 @@ namespace Vulkan
         public static VkImageMemoryRequirementsInfo2KHR New()
         {
             VkImageMemoryRequirementsInfo2KHR ret = new VkImageMemoryRequirementsInfo2KHR();
-            ret.sType = VkStructureType.ImageMemoryRequirementsInfo2;
+            ret.sType = VkStructureType.ImageMemoryRequirementsInfo2KHR;
             return ret;
         }
     }
@@ -3502,7 +3502,7 @@ namespace Vulkan
         public static VkImageSparseMemoryRequirementsInfo2KHR New()
         {
             VkImageSparseMemoryRequirementsInfo2KHR ret = new VkImageSparseMemoryRequirementsInfo2KHR();
-            ret.sType = VkStructureType.ImageSparseMemoryRequirementsInfo2;
+            ret.sType = VkStructureType.ImageSparseMemoryRequirementsInfo2KHR;
             return ret;
         }
     }
@@ -3515,7 +3515,7 @@ namespace Vulkan
         public static VkMemoryRequirements2KHR New()
         {
             VkMemoryRequirements2KHR ret = new VkMemoryRequirements2KHR();
-            ret.sType = VkStructureType.MemoryRequirements2;
+            ret.sType = VkStructureType.MemoryRequirements2KHR;
             return ret;
         }
     }
@@ -3528,7 +3528,7 @@ namespace Vulkan
         public static VkSparseImageMemoryRequirements2KHR New()
         {
             VkSparseImageMemoryRequirements2KHR ret = new VkSparseImageMemoryRequirements2KHR();
-            ret.sType = VkStructureType.SparseImageMemoryRequirements2;
+            ret.sType = VkStructureType.SparseImageMemoryRequirements2KHR;
             return ret;
         }
     }
@@ -3542,7 +3542,7 @@ namespace Vulkan
         public static VkMemoryDedicatedRequirementsKHR New()
         {
             VkMemoryDedicatedRequirementsKHR ret = new VkMemoryDedicatedRequirementsKHR();
-            ret.sType = VkStructureType.MemoryDedicatedRequirements;
+            ret.sType = VkStructureType.MemoryDedicatedRequirementsKHR;
             return ret;
         }
     }
@@ -3556,7 +3556,7 @@ namespace Vulkan
         public static VkMemoryDedicatedAllocateInfoKHR New()
         {
             VkMemoryDedicatedAllocateInfoKHR ret = new VkMemoryDedicatedAllocateInfoKHR();
-            ret.sType = VkStructureType.MemoryDedicatedAllocateInfo;
+            ret.sType = VkStructureType.MemoryDedicatedAllocateInfoKHR;
             return ret;
         }
     }
@@ -3569,7 +3569,7 @@ namespace Vulkan
         public static VkTextureLODGatherFormatPropertiesAMD New()
         {
             VkTextureLODGatherFormatPropertiesAMD ret = new VkTextureLODGatherFormatPropertiesAMD();
-            ret.sType = VkStructureType.TextureLodGatherFormatProperties;
+            ret.sType = VkStructureType.TextureLodGatherFormatPropertiesAMD;
             return ret;
         }
     }
@@ -3584,7 +3584,7 @@ namespace Vulkan
         public static VkPipelineCoverageToColorStateCreateInfoNV New()
         {
             VkPipelineCoverageToColorStateCreateInfoNV ret = new VkPipelineCoverageToColorStateCreateInfoNV();
-            ret.sType = VkStructureType.PipelineCoverageToColorStateCreateInfo;
+            ret.sType = VkStructureType.PipelineCoverageToColorStateCreateInfoNV;
             return ret;
         }
     }
@@ -3598,7 +3598,7 @@ namespace Vulkan
         public static VkPhysicalDeviceSamplerFilterMinmaxPropertiesEXT New()
         {
             VkPhysicalDeviceSamplerFilterMinmaxPropertiesEXT ret = new VkPhysicalDeviceSamplerFilterMinmaxPropertiesEXT();
-            ret.sType = VkStructureType.PhysicalDeviceSamplerFilterMinmaxProperties;
+            ret.sType = VkStructureType.PhysicalDeviceSamplerFilterMinmaxPropertiesEXT;
             return ret;
         }
     }
@@ -3611,7 +3611,7 @@ namespace Vulkan
         public static VkSamplerReductionModeCreateInfoEXT New()
         {
             VkSamplerReductionModeCreateInfoEXT ret = new VkSamplerReductionModeCreateInfoEXT();
-            ret.sType = VkStructureType.SamplerReductionModeCreateInfo;
+            ret.sType = VkStructureType.SamplerReductionModeCreateInfoEXT;
             return ret;
         }
     }
@@ -3624,7 +3624,7 @@ namespace Vulkan
         public static VkPhysicalDeviceBlendOperationAdvancedFeaturesEXT New()
         {
             VkPhysicalDeviceBlendOperationAdvancedFeaturesEXT ret = new VkPhysicalDeviceBlendOperationAdvancedFeaturesEXT();
-            ret.sType = VkStructureType.PhysicalDeviceBlendOperationAdvancedFeatures;
+            ret.sType = VkStructureType.PhysicalDeviceBlendOperationAdvancedFeaturesEXT;
             return ret;
         }
     }
@@ -3642,7 +3642,7 @@ namespace Vulkan
         public static VkPhysicalDeviceBlendOperationAdvancedPropertiesEXT New()
         {
             VkPhysicalDeviceBlendOperationAdvancedPropertiesEXT ret = new VkPhysicalDeviceBlendOperationAdvancedPropertiesEXT();
-            ret.sType = VkStructureType.PhysicalDeviceBlendOperationAdvancedProperties;
+            ret.sType = VkStructureType.PhysicalDeviceBlendOperationAdvancedPropertiesEXT;
             return ret;
         }
     }
@@ -3657,7 +3657,7 @@ namespace Vulkan
         public static VkPipelineColorBlendAdvancedStateCreateInfoEXT New()
         {
             VkPipelineColorBlendAdvancedStateCreateInfoEXT ret = new VkPipelineColorBlendAdvancedStateCreateInfoEXT();
-            ret.sType = VkStructureType.PipelineColorBlendAdvancedStateCreateInfo;
+            ret.sType = VkStructureType.PipelineColorBlendAdvancedStateCreateInfoEXT;
             return ret;
         }
     }
@@ -3674,7 +3674,7 @@ namespace Vulkan
         public static VkPipelineCoverageModulationStateCreateInfoNV New()
         {
             VkPipelineCoverageModulationStateCreateInfoNV ret = new VkPipelineCoverageModulationStateCreateInfoNV();
-            ret.sType = VkStructureType.PipelineCoverageModulationStateCreateInfo;
+            ret.sType = VkStructureType.PipelineCoverageModulationStateCreateInfoNV;
             return ret;
         }
     }

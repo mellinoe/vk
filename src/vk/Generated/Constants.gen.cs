@@ -8,7 +8,7 @@ namespace Vulkan
     {
         public const uint MaxPhysicalDeviceNameSize = 256;
         public const uint UuidSize = 16;
-        public const uint LuidSize = 8;
+        public const uint LuidSizeKHR = 8;
         public const uint MaxExtensionNameSize = 256;
         public const uint MaxDescriptionSize = 256;
         public const uint MaxMemoryTypes = 32;
@@ -22,7 +22,7 @@ namespace Vulkan
         public const uint True = 1;
         public const uint False = 0;
         public const uint QueueFamilyIgnored = (~0U);
-        public const uint QueueFamilyExternal = (~0U-1);
+        public const uint QueueFamilyExternalKHR = (~0U-1);
         public const uint SubpassExternal = (~0U);
         public const uint MaxDeviceGroupSizeKhx = 32;
     }
@@ -31,7 +31,7 @@ namespace Vulkan
     {
         public const uint VK_MAX_PHYSICAL_DEVICE_NAME_SIZE = VulkanNative.MaxPhysicalDeviceNameSize;
         public const uint VK_UUID_SIZE = VulkanNative.UuidSize;
-        public const uint VK_LUID_SIZE_KHR = VulkanNative.LuidSize;
+        public const uint VK_LUID_SIZE_KHR = VulkanNative.LuidSizeKHR;
         public const uint VK_MAX_EXTENSION_NAME_SIZE = VulkanNative.MaxExtensionNameSize;
         public const uint VK_MAX_DESCRIPTION_SIZE = VulkanNative.MaxDescriptionSize;
         public const uint VK_MAX_MEMORY_TYPES = VulkanNative.MaxMemoryTypes;
@@ -45,7 +45,7 @@ namespace Vulkan
         public const uint VK_TRUE = VulkanNative.True;
         public const uint VK_FALSE = VulkanNative.False;
         public const uint VK_QUEUE_FAMILY_IGNORED = VulkanNative.QueueFamilyIgnored;
-        public const uint VK_QUEUE_FAMILY_EXTERNAL_KHR = VulkanNative.QueueFamilyExternal;
+        public const uint VK_QUEUE_FAMILY_EXTERNAL_KHR = VulkanNative.QueueFamilyExternalKHR;
         public const uint VK_SUBPASS_EXTERNAL = VulkanNative.SubpassExternal;
         public const uint VK_MAX_DEVICE_GROUP_SIZE_KHX = VulkanNative.MaxDeviceGroupSizeKhx;
     }

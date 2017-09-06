@@ -407,7 +407,7 @@ namespace Vk.Samples
                 attachments[0].stencilLoadOp = VkAttachmentLoadOp.DontCare;
                 attachments[0].stencilStoreOp = VkAttachmentStoreOp.DontCare;
                 attachments[0].initialLayout = VkImageLayout.Undefined;
-                attachments[0].finalLayout = VkImageLayout.PresentSrc;
+                attachments[0].finalLayout = VkImageLayout.PresentSrcKHR;
                 // Depth attachment
                 attachments[1] = new VkAttachmentDescription();
                 attachments[1].format = DepthFormat;

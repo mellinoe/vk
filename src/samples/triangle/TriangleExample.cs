@@ -715,7 +715,7 @@ namespace Vk.Samples
             attachments.First.stencilLoadOp = VkAttachmentLoadOp.DontCare;                     // We don't use stencil, so don't care for load
             attachments.First.stencilStoreOp = VkAttachmentStoreOp.DontCare;                   // Same for store
             attachments.First.initialLayout = VkImageLayout.Undefined;                         // Layout at render pass start. Initial doesn't matter, so we use undefined
-            attachments.First.finalLayout = VkImageLayout.PresentSrc;                          // Layout to which the attachment is transitioned when the render pass is finished
+            attachments.First.finalLayout = VkImageLayout.PresentSrcKHR;                          // Layout to which the attachment is transitioned when the render pass is finished
                                                                                                // As we want to present the color buffer to the swapchain, we transition to PRESENT_KHR	
                                                                                                // Depth attachment
             attachments.Second.format = DepthFormat;                                            // A proper depth format is selected in the example base

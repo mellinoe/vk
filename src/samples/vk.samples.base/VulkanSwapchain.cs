@@ -250,7 +250,7 @@ namespace Vk.Samples
 
                 // The VK_PRESENT_MODE_FIFO_KHR mode must always be present as per spec
                 // This mode waits for the vertical blank ("v-sync")
-                VkPresentModeKHR swapchainPresentMode = VkPresentModeKHR.Fifo;
+                VkPresentModeKHR swapchainPresentMode = VkPresentModeKHR.FifoKHR;
 
                 // If v-sync is not requested, try to find a mailbox mode
                 // It's the lowest latency non-tearing present mode available
@@ -258,14 +258,14 @@ namespace Vk.Samples
                 {
                     for (uint i = 0; i < presentModeCount; i++)
                     {
-                        if (presentModes[i] == VkPresentModeKHR.Mailbox)
+                        if (presentModes[i] == VkPresentModeKHR.MailboxKHR)
                         {
-                            swapchainPresentMode = VkPresentModeKHR.Mailbox;
+                            swapchainPresentMode = VkPresentModeKHR.MailboxKHR;
                             break;
                         }
-                        if ((swapchainPresentMode != VkPresentModeKHR.Mailbox) && (presentModes[i] == VkPresentModeKHR.Immediate))
+                        if ((swapchainPresentMode != VkPresentModeKHR.MailboxKHR) && (presentModes[i] == VkPresentModeKHR.ImmediateKHR))
                         {
-                            swapchainPresentMode = VkPresentModeKHR.Immediate;
+                            swapchainPresentMode = VkPresentModeKHR.ImmediateKHR;
                         }
                     }
                 }
@@ -279,10 +279,10 @@ namespace Vk.Samples
 
                 // Find the transformation of the Surface
                 VkSurfaceTransformFlagsKHR preTransform;
-                if ((surfCaps.supportedTransforms & VkSurfaceTransformFlagsKHR.Identity) != 0)
+                if ((surfCaps.supportedTransforms & VkSurfaceTransformFlagsKHR.IdentityKHR) != 0)
                 {
                     // We prefer a non-rotated transform
-                    preTransform = VkSurfaceTransformFlagsKHR.Identity;
+                    preTransform = VkSurfaceTransformFlagsKHR.IdentityKHR;
                 }
                 else
                 {
@@ -306,7 +306,7 @@ namespace Vk.Samples
                 swapchainCI.oldSwapchain = oldSwapchain;
                 // Setting clipped to VK_TRUE allows the implementation to discard rendering outside of the Surface area
                 swapchainCI.clipped = True;
-                swapchainCI.compositeAlpha = VkCompositeAlphaFlagsKHR.Opaque;
+                swapchainCI.compositeAlpha = VkCompositeAlphaFlagsKHR.OpaqueKHR;
 
                 // Set additional usage flag for blitting from the swapchain Images if supported
                 VkFormatProperties formatProps;
