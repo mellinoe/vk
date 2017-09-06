@@ -50,6 +50,7 @@ namespace Vk.Generator
         private static readonly HashSet<string> s_preserveCaps = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {
             "khr",
+            "khx",
             "ext",
             "nv",
             "nvx",

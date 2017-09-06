@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace Vk.Generator
@@ -38,56 +40,57 @@ namespace Vk.Generator
             List<EnumExtensionValue> enumExtensions = new List<EnumExtensionValue>();
             List<string> commandNames = new List<string>();
 
-            var require = xe.Element("require");
-            foreach (var enumXE in require.Elements("enum"))
+            foreach (var require in xe.Elements("require"))
             {
-                string enumName = enumXE.GetNameAttribute();
-                string extends = enumXE.Attribute("extends")?.Value;
-                if (extends != null)
+                foreach (var enumXE in require.Elements("enum"))
                 {
-                    string valueString;
-                    string offsetString = enumXE.Attribute("offset")?.Value;
-                    if (offsetString != null)
+                    string enumName = enumXE.GetNameAttribute();
+                    string extends = enumXE.Attribute("extends")?.Value;
+                    if (extends != null)
                     {
-                        int offset = int.Parse(offsetString);
-                        int direction = 1;
-                        if (enumXE.Attribute("dir")?.Value == "-1")
+                        string valueString;
+                        string offsetString = enumXE.Attribute("offset")?.Value;
+                        if (offsetString != null)
                         {
-                            direction = -1;
-                        }
+                            int offset = int.Parse(offsetString);
+                            int direction = 1;
+                            if (enumXE.Attribute("dir")?.Value == "-1")
+                            {
+                                direction = -1;
+                            }
 
-                        int value = direction * (1000000000 + (number - 1) * 1000 + offset);
-                        valueString = value.ToString();
-                    }
-                    else
-                    {
-                        string bitPosString = enumXE.Attribute("bitpos")?.Value;
-                        if (bitPosString != null)
-                        {
-                            int shift = int.Parse(bitPosString);
-                            valueString = (1 << shift).ToString();
+                            int value = direction * (1000000000 + (number - 1) * 1000 + offset);
+                            valueString = value.ToString();
                         }
                         else
                         {
-                            valueString = enumXE.Attribute("value").Value;
+                            string bitPosString = enumXE.Attribute("bitpos")?.Value;
+                            if (bitPosString != null)
+                            {
+                                int shift = int.Parse(bitPosString);
+                                valueString = (1 << shift).ToString();
+                            }
+                            else
+                            {
+                                valueString = enumXE.Attribute("value").Value;
+                            }
                         }
+                        enumExtensions.Add(new EnumExtensionValue(extends, enumName, valueString));
                     }
-                    enumExtensions.Add(new EnumExtensionValue(extends, enumName, valueString));
+                    else
+                    {
+                        var valueAttribute = enumXE.Attribute("value");
+                        if (valueAttribute == null)
+                            continue;
+
+                        extensionConstants.Add(new ExtensionConstant(name, valueAttribute.Value));
+                    }
                 }
-                else
+                foreach (var commandXE in require.Elements("command"))
                 {
-                    var valueAttribute = enumXE.Attribute("value");
-                    if (valueAttribute == null)
-                        continue;
-
-                    extensionConstants.Add(new ExtensionConstant(name, valueAttribute.Value));
+                    commandNames.Add(commandXE.GetNameAttribute());
                 }
             }
-            foreach (var commandXE in require.Elements("command"))
-            {
-                commandNames.Add(commandXE.GetNameAttribute());
-            }
-
             return new ExtensionDefinition(name, number, type, extensionConstants.ToArray(), enumExtensions.ToArray(), commandNames.ToArray());
         }
     }
@@ -103,6 +106,7 @@ namespace Vk.Generator
         }
     }
 
+    [DebuggerDisplay("{DebuggerDisplayString}")]
     public class EnumExtensionValue
     {
         public string ExtendedType { get; }
@@ -115,5 +119,8 @@ namespace Vk.Generator
             Name = name;
             Value = value;
         }
+
+        private string DebuggerDisplayString =>
+            $"Ext: {ExtendedType}, {Name} = {Value}";
     }
 }

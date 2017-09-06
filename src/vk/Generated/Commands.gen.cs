@@ -1324,6 +1324,25 @@ namespace Vulkan
             throw new NotImplementedException();
         }
 
+        private static IntPtr vkCmdSetSampleLocationsEXT_ptr;
+        [Generator.CalliRewrite]
+        public static unsafe void vkCmdSetSampleLocationsEXT(VkCommandBuffer commandBuffer, VkSampleLocationsInfoEXT* pSampleLocationsInfo)
+        {
+            throw new NotImplementedException();
+        }
+
+        [Generator.CalliRewrite]
+        public static unsafe void vkCmdSetSampleLocationsEXT(VkCommandBuffer commandBuffer, ref VkSampleLocationsInfoEXT pSampleLocationsInfo)
+        {
+            throw new NotImplementedException();
+        }
+
+        [Generator.CalliRewrite]
+        public static unsafe void vkCmdSetSampleLocationsEXT(VkCommandBuffer commandBuffer, IntPtr pSampleLocationsInfo)
+        {
+            throw new NotImplementedException();
+        }
+
         private static IntPtr vkCmdSetScissor_ptr;
         [Generator.CalliRewrite]
         public static unsafe void vkCmdSetScissor(VkCommandBuffer commandBuffer, uint firstScissor, uint scissorCount, VkRect2D* pScissors)
@@ -6220,6 +6239,115 @@ namespace Vulkan
             throw new NotImplementedException();
         }
 
+        private static IntPtr vkCreateValidationCacheEXT_ptr;
+        [Generator.CalliRewrite]
+        public static unsafe VkResult vkCreateValidationCacheEXT(VkDevice device, VkValidationCacheCreateInfoEXT* pCreateInfo, VkAllocationCallbacks* pAllocator, VkValidationCacheEXT* pValidationCache)
+        {
+            throw new NotImplementedException();
+        }
+
+        [Generator.CalliRewrite]
+        public static unsafe VkResult vkCreateValidationCacheEXT(VkDevice device, VkValidationCacheCreateInfoEXT* pCreateInfo, VkAllocationCallbacks* pAllocator, out VkValidationCacheEXT pValidationCache)
+        {
+            throw new NotImplementedException();
+        }
+
+        [Generator.CalliRewrite]
+        public static unsafe VkResult vkCreateValidationCacheEXT(VkDevice device, VkValidationCacheCreateInfoEXT* pCreateInfo, ref VkAllocationCallbacks pAllocator, VkValidationCacheEXT* pValidationCache)
+        {
+            throw new NotImplementedException();
+        }
+
+        [Generator.CalliRewrite]
+        public static unsafe VkResult vkCreateValidationCacheEXT(VkDevice device, VkValidationCacheCreateInfoEXT* pCreateInfo, ref VkAllocationCallbacks pAllocator, out VkValidationCacheEXT pValidationCache)
+        {
+            throw new NotImplementedException();
+        }
+
+        [Generator.CalliRewrite]
+        public static unsafe VkResult vkCreateValidationCacheEXT(VkDevice device, VkValidationCacheCreateInfoEXT* pCreateInfo, IntPtr pAllocator, VkValidationCacheEXT* pValidationCache)
+        {
+            throw new NotImplementedException();
+        }
+
+        [Generator.CalliRewrite]
+        public static unsafe VkResult vkCreateValidationCacheEXT(VkDevice device, VkValidationCacheCreateInfoEXT* pCreateInfo, IntPtr pAllocator, out VkValidationCacheEXT pValidationCache)
+        {
+            throw new NotImplementedException();
+        }
+
+        [Generator.CalliRewrite]
+        public static unsafe VkResult vkCreateValidationCacheEXT(VkDevice device, ref VkValidationCacheCreateInfoEXT pCreateInfo, VkAllocationCallbacks* pAllocator, VkValidationCacheEXT* pValidationCache)
+        {
+            throw new NotImplementedException();
+        }
+
+        [Generator.CalliRewrite]
+        public static unsafe VkResult vkCreateValidationCacheEXT(VkDevice device, ref VkValidationCacheCreateInfoEXT pCreateInfo, VkAllocationCallbacks* pAllocator, out VkValidationCacheEXT pValidationCache)
+        {
+            throw new NotImplementedException();
+        }
+
+        [Generator.CalliRewrite]
+        public static unsafe VkResult vkCreateValidationCacheEXT(VkDevice device, ref VkValidationCacheCreateInfoEXT pCreateInfo, ref VkAllocationCallbacks pAllocator, VkValidationCacheEXT* pValidationCache)
+        {
+            throw new NotImplementedException();
+        }
+
+        [Generator.CalliRewrite]
+        public static unsafe VkResult vkCreateValidationCacheEXT(VkDevice device, ref VkValidationCacheCreateInfoEXT pCreateInfo, ref VkAllocationCallbacks pAllocator, out VkValidationCacheEXT pValidationCache)
+        {
+            throw new NotImplementedException();
+        }
+
+        [Generator.CalliRewrite]
+        public static unsafe VkResult vkCreateValidationCacheEXT(VkDevice device, ref VkValidationCacheCreateInfoEXT pCreateInfo, IntPtr pAllocator, VkValidationCacheEXT* pValidationCache)
+        {
+            throw new NotImplementedException();
+        }
+
+        [Generator.CalliRewrite]
+        public static unsafe VkResult vkCreateValidationCacheEXT(VkDevice device, ref VkValidationCacheCreateInfoEXT pCreateInfo, IntPtr pAllocator, out VkValidationCacheEXT pValidationCache)
+        {
+            throw new NotImplementedException();
+        }
+
+        [Generator.CalliRewrite]
+        public static unsafe VkResult vkCreateValidationCacheEXT(VkDevice device, IntPtr pCreateInfo, VkAllocationCallbacks* pAllocator, VkValidationCacheEXT* pValidationCache)
+        {
+            throw new NotImplementedException();
+        }
+
+        [Generator.CalliRewrite]
+        public static unsafe VkResult vkCreateValidationCacheEXT(VkDevice device, IntPtr pCreateInfo, VkAllocationCallbacks* pAllocator, out VkValidationCacheEXT pValidationCache)
+        {
+            throw new NotImplementedException();
+        }
+
+        [Generator.CalliRewrite]
+        public static unsafe VkResult vkCreateValidationCacheEXT(VkDevice device, IntPtr pCreateInfo, ref VkAllocationCallbacks pAllocator, VkValidationCacheEXT* pValidationCache)
+        {
+            throw new NotImplementedException();
+        }
+
+        [Generator.CalliRewrite]
+        public static unsafe VkResult vkCreateValidationCacheEXT(VkDevice device, IntPtr pCreateInfo, ref VkAllocationCallbacks pAllocator, out VkValidationCacheEXT pValidationCache)
+        {
+            throw new NotImplementedException();
+        }
+
+        [Generator.CalliRewrite]
+        public static unsafe VkResult vkCreateValidationCacheEXT(VkDevice device, IntPtr pCreateInfo, IntPtr pAllocator, VkValidationCacheEXT* pValidationCache)
+        {
+            throw new NotImplementedException();
+        }
+
+        [Generator.CalliRewrite]
+        public static unsafe VkResult vkCreateValidationCacheEXT(VkDevice device, IntPtr pCreateInfo, IntPtr pAllocator, out VkValidationCacheEXT pValidationCache)
+        {
+            throw new NotImplementedException();
+        }
+
         private static IntPtr vkCreateViSurfaceNN_ptr;
         ///<remarks>Success codes:VK_SUCCESS. Error codes:VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY, VK_ERROR_NATIVE_WINDOW_IN_USE_KHR</remarks>
         [Generator.CalliRewrite]
@@ -7414,6 +7542,25 @@ namespace Vulkan
 
         [Generator.CalliRewrite]
         public static unsafe void vkDestroySwapchainKHR(VkDevice device, VkSwapchainKHR swapchain, IntPtr pAllocator)
+        {
+            throw new NotImplementedException();
+        }
+
+        private static IntPtr vkDestroyValidationCacheEXT_ptr;
+        [Generator.CalliRewrite]
+        public static unsafe void vkDestroyValidationCacheEXT(VkDevice device, VkValidationCacheEXT validationCache, VkAllocationCallbacks* pAllocator)
+        {
+            throw new NotImplementedException();
+        }
+
+        [Generator.CalliRewrite]
+        public static unsafe void vkDestroyValidationCacheEXT(VkDevice device, VkValidationCacheEXT validationCache, ref VkAllocationCallbacks pAllocator)
+        {
+            throw new NotImplementedException();
+        }
+
+        [Generator.CalliRewrite]
+        public static unsafe void vkDestroyValidationCacheEXT(VkDevice device, VkValidationCacheEXT validationCache, IntPtr pAllocator)
         {
             throw new NotImplementedException();
         }
@@ -9201,6 +9348,19 @@ namespace Vulkan
             throw new NotImplementedException();
         }
 
+        private static IntPtr vkGetPhysicalDeviceMultisamplePropertiesEXT_ptr;
+        [Generator.CalliRewrite]
+        public static unsafe void vkGetPhysicalDeviceMultisamplePropertiesEXT(VkPhysicalDevice physicalDevice, VkSampleCountFlags samples, VkMultisamplePropertiesEXT* pMultisampleProperties)
+        {
+            throw new NotImplementedException();
+        }
+
+        [Generator.CalliRewrite]
+        public static unsafe void vkGetPhysicalDeviceMultisamplePropertiesEXT(VkPhysicalDevice physicalDevice, VkSampleCountFlags samples, out VkMultisamplePropertiesEXT pMultisampleProperties)
+        {
+            throw new NotImplementedException();
+        }
+
         private static IntPtr vkGetPhysicalDevicePresentRectanglesKHX_ptr;
         ///<remarks>Success codes:VK_SUCCESS, VK_INCOMPLETE. Error codes:VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY</remarks>
         [Generator.CalliRewrite]
@@ -10102,6 +10262,28 @@ namespace Vulkan
             throw new NotImplementedException();
         }
 
+        private static IntPtr vkGetValidationCacheDataEXT_ptr;
+        ///<remarks>Success codes:VK_SUCCESS, VK_INCOMPLETE. Error codes:VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY</remarks>
+        [Generator.CalliRewrite]
+        public static unsafe VkResult vkGetValidationCacheDataEXT(VkDevice device, VkValidationCacheEXT validationCache, UIntPtr* pDataSize, void* pData)
+        {
+            throw new NotImplementedException();
+        }
+
+        ///<remarks>Success codes:VK_SUCCESS, VK_INCOMPLETE. Error codes:VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY</remarks>
+        [Generator.CalliRewrite]
+        public static unsafe VkResult vkGetValidationCacheDataEXT(VkDevice device, VkValidationCacheEXT validationCache, ref UIntPtr pDataSize, void* pData)
+        {
+            throw new NotImplementedException();
+        }
+
+        ///<remarks>Success codes:VK_SUCCESS, VK_INCOMPLETE. Error codes:VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY</remarks>
+        [Generator.CalliRewrite]
+        public static unsafe VkResult vkGetValidationCacheDataEXT(VkDevice device, VkValidationCacheEXT validationCache, IntPtr pDataSize, void* pData)
+        {
+            throw new NotImplementedException();
+        }
+
         private static IntPtr vkImportFenceFdKHR_ptr;
         ///<remarks>Success codes:VK_SUCCESS. Error codes:VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_INVALID_EXTERNAL_HANDLE_KHR</remarks>
         [Generator.CalliRewrite]
@@ -10238,6 +10420,28 @@ namespace Vulkan
         ///<remarks>Success codes:VK_SUCCESS. Error codes:VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY</remarks>
         [Generator.CalliRewrite]
         public static unsafe VkResult vkMergePipelineCaches(VkDevice device, VkPipelineCache dstCache, uint srcCacheCount, IntPtr pSrcCaches)
+        {
+            throw new NotImplementedException();
+        }
+
+        private static IntPtr vkMergeValidationCachesEXT_ptr;
+        ///<remarks>Success codes:VK_SUCCESS. Error codes:VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY</remarks>
+        [Generator.CalliRewrite]
+        public static unsafe VkResult vkMergeValidationCachesEXT(VkDevice device, VkValidationCacheEXT dstCache, uint srcCacheCount, VkValidationCacheEXT* pSrcCaches)
+        {
+            throw new NotImplementedException();
+        }
+
+        ///<remarks>Success codes:VK_SUCCESS. Error codes:VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY</remarks>
+        [Generator.CalliRewrite]
+        public static unsafe VkResult vkMergeValidationCachesEXT(VkDevice device, VkValidationCacheEXT dstCache, uint srcCacheCount, ref VkValidationCacheEXT pSrcCaches)
+        {
+            throw new NotImplementedException();
+        }
+
+        ///<remarks>Success codes:VK_SUCCESS. Error codes:VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY</remarks>
+        [Generator.CalliRewrite]
+        public static unsafe VkResult vkMergeValidationCachesEXT(VkDevice device, VkValidationCacheEXT dstCache, uint srcCacheCount, IntPtr pSrcCaches)
         {
             throw new NotImplementedException();
         }
@@ -11291,11 +11495,17 @@ namespace Vulkan
             vkCreateMacOSSurfaceMVK_ptr = s_nativeLib.LoadFunctionPointer("vkCreateMacOSSurfaceMVK");
             vkCmdSetViewportWScalingNV_ptr = s_nativeLib.LoadFunctionPointer("vkCmdSetViewportWScalingNV");
             vkCmdSetDiscardRectangleEXT_ptr = s_nativeLib.LoadFunctionPointer("vkCmdSetDiscardRectangleEXT");
+            vkCmdSetSampleLocationsEXT_ptr = s_nativeLib.LoadFunctionPointer("vkCmdSetSampleLocationsEXT");
+            vkGetPhysicalDeviceMultisamplePropertiesEXT_ptr = s_nativeLib.LoadFunctionPointer("vkGetPhysicalDeviceMultisamplePropertiesEXT");
             vkGetPhysicalDeviceSurfaceCapabilities2KHR_ptr = s_nativeLib.LoadFunctionPointer("vkGetPhysicalDeviceSurfaceCapabilities2KHR");
             vkGetPhysicalDeviceSurfaceFormats2KHR_ptr = s_nativeLib.LoadFunctionPointer("vkGetPhysicalDeviceSurfaceFormats2KHR");
             vkGetBufferMemoryRequirements2KHR_ptr = s_nativeLib.LoadFunctionPointer("vkGetBufferMemoryRequirements2KHR");
             vkGetImageMemoryRequirements2KHR_ptr = s_nativeLib.LoadFunctionPointer("vkGetImageMemoryRequirements2KHR");
             vkGetImageSparseMemoryRequirements2KHR_ptr = s_nativeLib.LoadFunctionPointer("vkGetImageSparseMemoryRequirements2KHR");
+            vkCreateValidationCacheEXT_ptr = s_nativeLib.LoadFunctionPointer("vkCreateValidationCacheEXT");
+            vkDestroyValidationCacheEXT_ptr = s_nativeLib.LoadFunctionPointer("vkDestroyValidationCacheEXT");
+            vkGetValidationCacheDataEXT_ptr = s_nativeLib.LoadFunctionPointer("vkGetValidationCacheDataEXT");
+            vkMergeValidationCachesEXT_ptr = s_nativeLib.LoadFunctionPointer("vkMergeValidationCachesEXT");
         }
     }
 }

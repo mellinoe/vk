@@ -24,7 +24,7 @@ namespace Vulkan
         public const uint QueueFamilyIgnored = (~0U);
         public const uint QueueFamilyExternalKHR = (~0U-1);
         public const uint SubpassExternal = (~0U);
-        public const uint MaxDeviceGroupSizeKhx = 32;
+        public const uint MaxDeviceGroupSizeKHX = 32;
     }
 
     public static partial class RawConstants
@@ -47,6 +47,6 @@ namespace Vulkan
         public const uint VK_QUEUE_FAMILY_IGNORED = VulkanNative.QueueFamilyIgnored;
         public const uint VK_QUEUE_FAMILY_EXTERNAL_KHR = VulkanNative.QueueFamilyExternalKHR;
         public const uint VK_SUBPASS_EXTERNAL = VulkanNative.SubpassExternal;
-        public const uint VK_MAX_DEVICE_GROUP_SIZE_KHX = VulkanNative.MaxDeviceGroupSizeKhx;
+        public const uint VK_MAX_DEVICE_GROUP_SIZE_KHX = VulkanNative.MaxDeviceGroupSizeKHX;
     }
 }

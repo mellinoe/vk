@@ -2828,7 +2828,7 @@ namespace Vulkan
         public static VkPhysicalDeviceMultiviewFeaturesKHX New()
         {
             VkPhysicalDeviceMultiviewFeaturesKHX ret = new VkPhysicalDeviceMultiviewFeaturesKHX();
-            ret.sType = VkStructureType.PhysicalDeviceMultiviewFeaturesKhx;
+            ret.sType = VkStructureType.PhysicalDeviceMultiviewFeaturesKHX;
             return ret;
         }
     }
@@ -2842,7 +2842,7 @@ namespace Vulkan
         public static VkPhysicalDeviceMultiviewPropertiesKHX New()
         {
             VkPhysicalDeviceMultiviewPropertiesKHX ret = new VkPhysicalDeviceMultiviewPropertiesKHX();
-            ret.sType = VkStructureType.PhysicalDeviceMultiviewPropertiesKhx;
+            ret.sType = VkStructureType.PhysicalDeviceMultiviewPropertiesKHX;
             return ret;
         }
     }
@@ -2860,7 +2860,7 @@ namespace Vulkan
         public static VkRenderPassMultiviewCreateInfoKHX New()
         {
             VkRenderPassMultiviewCreateInfoKHX ret = new VkRenderPassMultiviewCreateInfoKHX();
-            ret.sType = VkStructureType.RenderPassMultiviewCreateInfoKhx;
+            ret.sType = VkStructureType.RenderPassMultiviewCreateInfoKHX;
             return ret;
         }
     }
@@ -2981,7 +2981,7 @@ namespace Vulkan
         public static VkPhysicalDeviceGroupPropertiesKHX New()
         {
             VkPhysicalDeviceGroupPropertiesKHX ret = new VkPhysicalDeviceGroupPropertiesKHX();
-            ret.sType = VkStructureType.PhysicalDeviceGroupPropertiesKhx;
+            ret.sType = VkStructureType.PhysicalDeviceGroupPropertiesKHX;
             return ret;
         }
     }
@@ -2995,7 +2995,7 @@ namespace Vulkan
         public static VkMemoryAllocateFlagsInfoKHX New()
         {
             VkMemoryAllocateFlagsInfoKHX ret = new VkMemoryAllocateFlagsInfoKHX();
-            ret.sType = VkStructureType.MemoryAllocateInfoKhx;
+            ret.sType = VkStructureType.MemoryAllocateInfoKHX;
             return ret;
         }
     }
@@ -3012,7 +3012,7 @@ namespace Vulkan
         public static VkBindBufferMemoryInfoKHX New()
         {
             VkBindBufferMemoryInfoKHX ret = new VkBindBufferMemoryInfoKHX();
-            ret.sType = VkStructureType.BindBufferMemoryInfoKhx;
+            ret.sType = VkStructureType.BindBufferMemoryInfoKHX;
             return ret;
         }
     }
@@ -3031,7 +3031,7 @@ namespace Vulkan
         public static VkBindImageMemoryInfoKHX New()
         {
             VkBindImageMemoryInfoKHX ret = new VkBindImageMemoryInfoKHX();
-            ret.sType = VkStructureType.BindImageMemoryInfoKhx;
+            ret.sType = VkStructureType.BindImageMemoryInfoKHX;
             return ret;
         }
     }
@@ -3046,7 +3046,7 @@ namespace Vulkan
         public static VkDeviceGroupRenderPassBeginInfoKHX New()
         {
             VkDeviceGroupRenderPassBeginInfoKHX ret = new VkDeviceGroupRenderPassBeginInfoKHX();
-            ret.sType = VkStructureType.DeviceGroupRenderPassBeginInfoKhx;
+            ret.sType = VkStructureType.DeviceGroupRenderPassBeginInfoKHX;
             return ret;
         }
     }
@@ -3059,7 +3059,7 @@ namespace Vulkan
         public static VkDeviceGroupCommandBufferBeginInfoKHX New()
         {
             VkDeviceGroupCommandBufferBeginInfoKHX ret = new VkDeviceGroupCommandBufferBeginInfoKHX();
-            ret.sType = VkStructureType.DeviceGroupCommandBufferBeginInfoKhx;
+            ret.sType = VkStructureType.DeviceGroupCommandBufferBeginInfoKHX;
             return ret;
         }
     }
@@ -3077,7 +3077,7 @@ namespace Vulkan
         public static VkDeviceGroupSubmitInfoKHX New()
         {
             VkDeviceGroupSubmitInfoKHX ret = new VkDeviceGroupSubmitInfoKHX();
-            ret.sType = VkStructureType.DeviceGroupSubmitInfoKhx;
+            ret.sType = VkStructureType.DeviceGroupSubmitInfoKHX;
             return ret;
         }
     }
@@ -3091,7 +3091,7 @@ namespace Vulkan
         public static VkDeviceGroupBindSparseInfoKHX New()
         {
             VkDeviceGroupBindSparseInfoKHX ret = new VkDeviceGroupBindSparseInfoKHX();
-            ret.sType = VkStructureType.DeviceGroupBindSparseInfoKhx;
+            ret.sType = VkStructureType.DeviceGroupBindSparseInfoKHX;
             return ret;
         }
     }
@@ -3100,12 +3100,12 @@ namespace Vulkan
     {
         public VkStructureType sType;
         public void* pNext;
-        public fixed uint presentMask[(int)VulkanNative.MaxDeviceGroupSizeKhx];
+        public fixed uint presentMask[(int)VulkanNative.MaxDeviceGroupSizeKHX];
         public VkDeviceGroupPresentModeFlagsKHX modes;
         public static VkDeviceGroupPresentCapabilitiesKHX New()
         {
             VkDeviceGroupPresentCapabilitiesKHX ret = new VkDeviceGroupPresentCapabilitiesKHX();
-            ret.sType = VkStructureType.DeviceGroupPresentCapabilitiesKhx;
+            ret.sType = VkStructureType.DeviceGroupPresentCapabilitiesKHX;
             return ret;
         }
     }
@@ -3118,7 +3118,7 @@ namespace Vulkan
         public static VkImageSwapchainCreateInfoKHX New()
         {
             VkImageSwapchainCreateInfoKHX ret = new VkImageSwapchainCreateInfoKHX();
-            ret.sType = VkStructureType.ImageSwapchainCreateInfoKhx;
+            ret.sType = VkStructureType.ImageSwapchainCreateInfoKHX;
             return ret;
         }
     }
@@ -3132,7 +3132,7 @@ namespace Vulkan
         public static VkBindImageMemorySwapchainInfoKHX New()
         {
             VkBindImageMemorySwapchainInfoKHX ret = new VkBindImageMemorySwapchainInfoKHX();
-            ret.sType = VkStructureType.BindImageMemorySwapchainInfoKhx;
+            ret.sType = VkStructureType.BindImageMemorySwapchainInfoKHX;
             return ret;
         }
     }
@@ -3149,7 +3149,7 @@ namespace Vulkan
         public static VkAcquireNextImageInfoKHX New()
         {
             VkAcquireNextImageInfoKHX ret = new VkAcquireNextImageInfoKHX();
-            ret.sType = VkStructureType.AcquireNextImageInfoKhx;
+            ret.sType = VkStructureType.AcquireNextImageInfoKHX;
             return ret;
         }
     }
@@ -3164,7 +3164,7 @@ namespace Vulkan
         public static VkDeviceGroupPresentInfoKHX New()
         {
             VkDeviceGroupPresentInfoKHX ret = new VkDeviceGroupPresentInfoKHX();
-            ret.sType = VkStructureType.DeviceGroupPresentInfoKhx;
+            ret.sType = VkStructureType.DeviceGroupPresentInfoKHX;
             return ret;
         }
     }
@@ -3178,7 +3178,7 @@ namespace Vulkan
         public static VkDeviceGroupDeviceCreateInfoKHX New()
         {
             VkDeviceGroupDeviceCreateInfoKHX ret = new VkDeviceGroupDeviceCreateInfoKHX();
-            ret.sType = VkStructureType.DeviceGroupDeviceCreateInfoKhx;
+            ret.sType = VkStructureType.DeviceGroupDeviceCreateInfoKHX;
             return ret;
         }
     }
@@ -3191,7 +3191,7 @@ namespace Vulkan
         public static VkDeviceGroupSwapchainCreateInfoKHX New()
         {
             VkDeviceGroupSwapchainCreateInfoKHX ret = new VkDeviceGroupSwapchainCreateInfoKHX();
-            ret.sType = VkStructureType.DeviceGroupSwapchainCreateInfoKhx;
+            ret.sType = VkStructureType.DeviceGroupSwapchainCreateInfoKHX;
             return ret;
         }
     }
@@ -3603,6 +3603,101 @@ namespace Vulkan
         }
     }
 
+    public unsafe partial struct VkSampleLocationEXT
+    {
+        public float x;
+        public float y;
+    }
+
+    public unsafe partial struct VkSampleLocationsInfoEXT
+    {
+        public VkStructureType sType;
+        public void* pNext;
+        public VkSampleCountFlags sampleLocationsPerPixel;
+        public VkExtent2D sampleLocationGridSize;
+        public uint sampleLocationsCount;
+        public VkSampleLocationEXT* pSampleLocations;
+        public static VkSampleLocationsInfoEXT New()
+        {
+            VkSampleLocationsInfoEXT ret = new VkSampleLocationsInfoEXT();
+            ret.sType = VkStructureType.SampleLocationsInfoEXT;
+            return ret;
+        }
+    }
+
+    public unsafe partial struct VkAttachmentSampleLocationsEXT
+    {
+        public uint attachmentIndex;
+        public VkSampleLocationsInfoEXT sampleLocationsInfo;
+    }
+
+    public unsafe partial struct VkSubpassSampleLocationsEXT
+    {
+        public uint subpassIndex;
+        public VkSampleLocationsInfoEXT sampleLocationsInfo;
+    }
+
+    public unsafe partial struct VkRenderPassSampleLocationsBeginInfoEXT
+    {
+        public VkStructureType sType;
+        public void* pNext;
+        public uint attachmentInitialSampleLocationsCount;
+        public VkAttachmentSampleLocationsEXT* pAttachmentInitialSampleLocations;
+        public uint postSubpassSampleLocationsCount;
+        public VkSubpassSampleLocationsEXT* pSubpassSampleLocations;
+        public static VkRenderPassSampleLocationsBeginInfoEXT New()
+        {
+            VkRenderPassSampleLocationsBeginInfoEXT ret = new VkRenderPassSampleLocationsBeginInfoEXT();
+            ret.sType = VkStructureType.RenderPassSampleLocationsBeginInfoEXT;
+            return ret;
+        }
+    }
+
+    public unsafe partial struct VkPipelineSampleLocationsStateCreateInfoEXT
+    {
+        public VkStructureType sType;
+        public void* pNext;
+        public VkBool32 sampleLocationsEnable;
+        public VkSampleLocationsInfoEXT sampleLocationsInfo;
+        public static VkPipelineSampleLocationsStateCreateInfoEXT New()
+        {
+            VkPipelineSampleLocationsStateCreateInfoEXT ret = new VkPipelineSampleLocationsStateCreateInfoEXT();
+            ret.sType = VkStructureType.PipelineSampleLocationsStateCreateInfoEXT;
+            return ret;
+        }
+    }
+
+    public unsafe partial struct VkPhysicalDeviceSampleLocationsPropertiesEXT
+    {
+        public VkStructureType sType;
+        public void* pNext;
+        public VkSampleCountFlags sampleLocationSampleCounts;
+        public VkExtent2D maxSampleLocationGridSize;
+        public float sampleLocationCoordinateRange_0;
+        public float sampleLocationCoordinateRange_1;
+        public uint sampleLocationSubPixelBits;
+        public VkBool32 variableSampleLocations;
+        public static VkPhysicalDeviceSampleLocationsPropertiesEXT New()
+        {
+            VkPhysicalDeviceSampleLocationsPropertiesEXT ret = new VkPhysicalDeviceSampleLocationsPropertiesEXT();
+            ret.sType = VkStructureType.PhysicalDeviceSampleLocationsPropertiesEXT;
+            return ret;
+        }
+    }
+
+    public unsafe partial struct VkMultisamplePropertiesEXT
+    {
+        public VkStructureType sType;
+        public void* pNext;
+        public VkExtent2D maxSampleLocationGridSize;
+        public static VkMultisamplePropertiesEXT New()
+        {
+            VkMultisamplePropertiesEXT ret = new VkMultisamplePropertiesEXT();
+            ret.sType = VkStructureType.MultisamplePropertiesEXT;
+            return ret;
+        }
+    }
+
     public unsafe partial struct VkSamplerReductionModeCreateInfoEXT
     {
         public VkStructureType sType;
@@ -3675,6 +3770,34 @@ namespace Vulkan
         {
             VkPipelineCoverageModulationStateCreateInfoNV ret = new VkPipelineCoverageModulationStateCreateInfoNV();
             ret.sType = VkStructureType.PipelineCoverageModulationStateCreateInfoNV;
+            return ret;
+        }
+    }
+
+    public unsafe partial struct VkValidationCacheCreateInfoEXT
+    {
+        public VkStructureType sType;
+        public void* pNext;
+        public uint flags;
+        public UIntPtr initialDataSize;
+        public void* pInitialData;
+        public static VkValidationCacheCreateInfoEXT New()
+        {
+            VkValidationCacheCreateInfoEXT ret = new VkValidationCacheCreateInfoEXT();
+            ret.sType = VkStructureType.ValidationCacheCreateInfoEXT;
+            return ret;
+        }
+    }
+
+    public unsafe partial struct VkShaderModuleValidationCacheCreateInfoEXT
+    {
+        public VkStructureType sType;
+        public void* pNext;
+        public VkValidationCacheEXT validationCache;
+        public static VkShaderModuleValidationCacheCreateInfoEXT New()
+        {
+            VkShaderModuleValidationCacheCreateInfoEXT ret = new VkShaderModuleValidationCacheCreateInfoEXT();
+            ret.sType = VkStructureType.ShaderModuleValidationCacheCreateInfoEXT;
             return ret;
         }
     }

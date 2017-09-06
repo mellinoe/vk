@@ -508,6 +508,24 @@ namespace Vulkan
         private string DebuggerDisplay => string.Format("VkDescriptorUpdateTemplateKHR [{0}]", Handle);
     }
 
+    ///<summary>A non-dispatchable handle owned by a VkDevice.</summary>
+    [DebuggerDisplay("{DebuggerDisplay,nq}")]
+    public partial struct VkValidationCacheEXT : IEquatable<VkValidationCacheEXT>
+    {
+        public readonly IntPtr Handle;
+        public VkValidationCacheEXT(IntPtr existingHandle) { Handle = existingHandle; }
+        public static VkValidationCacheEXT Null => new VkValidationCacheEXT(IntPtr.Zero);
+        public static implicit operator VkValidationCacheEXT(IntPtr handle) => new VkValidationCacheEXT(handle);
+        public static bool operator ==(VkValidationCacheEXT left, VkValidationCacheEXT right) => left.Handle == right.Handle;
+        public static bool operator !=(VkValidationCacheEXT left, VkValidationCacheEXT right) => left.Handle != right.Handle;
+        public static bool operator ==(VkValidationCacheEXT left, IntPtr right) => left.Handle == right;
+        public static bool operator !=(VkValidationCacheEXT left, IntPtr right) => left.Handle != right;
+        public bool Equals(VkValidationCacheEXT h) => Handle.Equals(h.Handle);
+        public override bool Equals(object o) => o is VkValidationCacheEXT h && Equals(h);
+        public override int GetHashCode() => Handle.GetHashCode();
+        private string DebuggerDisplay => string.Format("VkValidationCacheEXT [{0}]", Handle);
+    }
+
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkDisplayKHR : IEquatable<VkDisplayKHR>
     {

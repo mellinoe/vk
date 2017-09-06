@@ -1132,9 +1132,9 @@ namespace Vulkan
         DedicatedAllocationBufferCreateInfoNV = 1000026001,
         DedicatedAllocationMemoryAllocateInfoNV = 1000026002,
         TextureLodGatherFormatPropertiesAMD = 1000041000,
-        RenderPassMultiviewCreateInfoKhx = 1000053000,
-        PhysicalDeviceMultiviewFeaturesKhx = 1000053001,
-        PhysicalDeviceMultiviewPropertiesKhx = 1000053002,
+        RenderPassMultiviewCreateInfoKHX = 1000053000,
+        PhysicalDeviceMultiviewFeaturesKHX = 1000053001,
+        PhysicalDeviceMultiviewPropertiesKHX = 1000053002,
         ExternalMemoryImageCreateInfoNV = 1000056000,
         ExportMemoryAllocateInfoNV = 1000056001,
         ImportMemoryWin32HandleInfoNV = 1000057000,
@@ -1149,23 +1149,23 @@ namespace Vulkan
         PhysicalDeviceMemoryProperties2KHR = 1000059006,
         SparseImageFormatProperties2KHR = 1000059007,
         PhysicalDeviceSparseImageFormatInfo2KHR = 1000059008,
-        MemoryAllocateInfoKhx = 1000060000,
-        BindBufferMemoryInfoKhx = 1000060001,
-        BindImageMemoryInfoKhx = 1000060002,
-        DeviceGroupRenderPassBeginInfoKhx = 1000060003,
-        DeviceGroupCommandBufferBeginInfoKhx = 1000060004,
-        DeviceGroupSubmitInfoKhx = 1000060005,
-        DeviceGroupBindSparseInfoKhx = 1000060006,
-        DeviceGroupPresentCapabilitiesKhx = 1000060007,
-        ImageSwapchainCreateInfoKhx = 1000060008,
-        BindImageMemorySwapchainInfoKhx = 1000060009,
-        AcquireNextImageInfoKhx = 1000060010,
-        DeviceGroupPresentInfoKhx = 1000060011,
-        DeviceGroupSwapchainCreateInfoKhx = 1000060012,
+        MemoryAllocateInfoKHX = 1000060000,
+        BindBufferMemoryInfoKHX = 1000060001,
+        BindImageMemoryInfoKHX = 1000060002,
+        DeviceGroupRenderPassBeginInfoKHX = 1000060003,
+        DeviceGroupCommandBufferBeginInfoKHX = 1000060004,
+        DeviceGroupSubmitInfoKHX = 1000060005,
+        DeviceGroupBindSparseInfoKHX = 1000060006,
+        AcquireNextImageInfoKHX = 1000060010,
+        DeviceGroupPresentCapabilitiesKHX = 1000060007,
+        ImageSwapchainCreateInfoKHX = 1000060008,
+        BindImageMemorySwapchainInfoKHX = 1000060009,
+        DeviceGroupPresentInfoKHX = 1000060011,
+        DeviceGroupSwapchainCreateInfoKHX = 1000060012,
         ValidationEXT = 1000061000,
         ViSurfaceCreateInfoNn = 1000062000,
-        PhysicalDeviceGroupPropertiesKhx = 1000070000,
-        DeviceGroupDeviceCreateInfoKhx = 1000070001,
+        PhysicalDeviceGroupPropertiesKHX = 1000070000,
+        DeviceGroupDeviceCreateInfoKHX = 1000070001,
         PhysicalDeviceExternalImageFormatInfoKHR = 1000071000,
         ExternalImageFormatPropertiesKHR = 1000071001,
         PhysicalDeviceExternalBufferInfoKHR = 1000071002,
@@ -1232,6 +1232,11 @@ namespace Vulkan
         MemoryDedicatedAllocateInfoKHR = 1000127001,
         PhysicalDeviceSamplerFilterMinmaxPropertiesEXT = 1000130000,
         SamplerReductionModeCreateInfoEXT = 1000130001,
+        SampleLocationsInfoEXT = 1000143000,
+        RenderPassSampleLocationsBeginInfoEXT = 1000143001,
+        PipelineSampleLocationsStateCreateInfoEXT = 1000143002,
+        PhysicalDeviceSampleLocationsPropertiesEXT = 1000143003,
+        MultisamplePropertiesEXT = 1000143004,
         BufferMemoryRequirementsInfo2KHR = 1000146000,
         ImageMemoryRequirementsInfo2KHR = 1000146001,
         ImageSparseMemoryRequirementsInfo2KHR = 1000146002,
@@ -1242,6 +1247,8 @@ namespace Vulkan
         PipelineColorBlendAdvancedStateCreateInfoEXT = 1000148002,
         PipelineCoverageToColorStateCreateInfoNV = 1000149000,
         PipelineCoverageModulationStateCreateInfoNV = 1000152000,
+        ValidationCacheCreateInfoEXT = 1000160000,
+        ShaderModuleValidationCacheCreateInfoEXT = 1000160001,
     }
     public static partial class RawConstants
     {
@@ -1316,9 +1323,9 @@ namespace Vulkan
         public const VkStructureType VK_STRUCTURE_TYPE_DEDICATED_ALLOCATION_BUFFER_CREATE_INFO_NV = VkStructureType.DedicatedAllocationBufferCreateInfoNV;
         public const VkStructureType VK_STRUCTURE_TYPE_DEDICATED_ALLOCATION_MEMORY_ALLOCATE_INFO_NV = VkStructureType.DedicatedAllocationMemoryAllocateInfoNV;
         public const VkStructureType VK_STRUCTURE_TYPE_TEXTURE_LOD_GATHER_FORMAT_PROPERTIES_AMD = VkStructureType.TextureLodGatherFormatPropertiesAMD;
-        public const VkStructureType VK_STRUCTURE_TYPE_RENDER_PASS_MULTIVIEW_CREATE_INFO_KHX = VkStructureType.RenderPassMultiviewCreateInfoKhx;
-        public const VkStructureType VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MULTIVIEW_FEATURES_KHX = VkStructureType.PhysicalDeviceMultiviewFeaturesKhx;
-        public const VkStructureType VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MULTIVIEW_PROPERTIES_KHX = VkStructureType.PhysicalDeviceMultiviewPropertiesKhx;
+        public const VkStructureType VK_STRUCTURE_TYPE_RENDER_PASS_MULTIVIEW_CREATE_INFO_KHX = VkStructureType.RenderPassMultiviewCreateInfoKHX;
+        public const VkStructureType VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MULTIVIEW_FEATURES_KHX = VkStructureType.PhysicalDeviceMultiviewFeaturesKHX;
+        public const VkStructureType VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MULTIVIEW_PROPERTIES_KHX = VkStructureType.PhysicalDeviceMultiviewPropertiesKHX;
         public const VkStructureType VK_STRUCTURE_TYPE_EXTERNAL_MEMORY_IMAGE_CREATE_INFO_NV = VkStructureType.ExternalMemoryImageCreateInfoNV;
         public const VkStructureType VK_STRUCTURE_TYPE_EXPORT_MEMORY_ALLOCATE_INFO_NV = VkStructureType.ExportMemoryAllocateInfoNV;
         public const VkStructureType VK_STRUCTURE_TYPE_IMPORT_MEMORY_WIN32_HANDLE_INFO_NV = VkStructureType.ImportMemoryWin32HandleInfoNV;
@@ -1333,23 +1340,23 @@ namespace Vulkan
         public const VkStructureType VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MEMORY_PROPERTIES_2_KHR = VkStructureType.PhysicalDeviceMemoryProperties2KHR;
         public const VkStructureType VK_STRUCTURE_TYPE_SPARSE_IMAGE_FORMAT_PROPERTIES_2_KHR = VkStructureType.SparseImageFormatProperties2KHR;
         public const VkStructureType VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SPARSE_IMAGE_FORMAT_INFO_2_KHR = VkStructureType.PhysicalDeviceSparseImageFormatInfo2KHR;
-        public const VkStructureType VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_FLAGS_INFO_KHX = VkStructureType.MemoryAllocateInfoKhx;
-        public const VkStructureType VK_STRUCTURE_TYPE_BIND_BUFFER_MEMORY_INFO_KHX = VkStructureType.BindBufferMemoryInfoKhx;
-        public const VkStructureType VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_INFO_KHX = VkStructureType.BindImageMemoryInfoKhx;
-        public const VkStructureType VK_STRUCTURE_TYPE_DEVICE_GROUP_RENDER_PASS_BEGIN_INFO_KHX = VkStructureType.DeviceGroupRenderPassBeginInfoKhx;
-        public const VkStructureType VK_STRUCTURE_TYPE_DEVICE_GROUP_COMMAND_BUFFER_BEGIN_INFO_KHX = VkStructureType.DeviceGroupCommandBufferBeginInfoKhx;
-        public const VkStructureType VK_STRUCTURE_TYPE_DEVICE_GROUP_SUBMIT_INFO_KHX = VkStructureType.DeviceGroupSubmitInfoKhx;
-        public const VkStructureType VK_STRUCTURE_TYPE_DEVICE_GROUP_BIND_SPARSE_INFO_KHX = VkStructureType.DeviceGroupBindSparseInfoKhx;
-        public const VkStructureType VK_STRUCTURE_TYPE_DEVICE_GROUP_PRESENT_CAPABILITIES_KHX = VkStructureType.DeviceGroupPresentCapabilitiesKhx;
-        public const VkStructureType VK_STRUCTURE_TYPE_IMAGE_SWAPCHAIN_CREATE_INFO_KHX = VkStructureType.ImageSwapchainCreateInfoKhx;
-        public const VkStructureType VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_SWAPCHAIN_INFO_KHX = VkStructureType.BindImageMemorySwapchainInfoKhx;
-        public const VkStructureType VK_STRUCTURE_TYPE_ACQUIRE_NEXT_IMAGE_INFO_KHX = VkStructureType.AcquireNextImageInfoKhx;
-        public const VkStructureType VK_STRUCTURE_TYPE_DEVICE_GROUP_PRESENT_INFO_KHX = VkStructureType.DeviceGroupPresentInfoKhx;
-        public const VkStructureType VK_STRUCTURE_TYPE_DEVICE_GROUP_SWAPCHAIN_CREATE_INFO_KHX = VkStructureType.DeviceGroupSwapchainCreateInfoKhx;
+        public const VkStructureType VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_FLAGS_INFO_KHX = VkStructureType.MemoryAllocateInfoKHX;
+        public const VkStructureType VK_STRUCTURE_TYPE_BIND_BUFFER_MEMORY_INFO_KHX = VkStructureType.BindBufferMemoryInfoKHX;
+        public const VkStructureType VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_INFO_KHX = VkStructureType.BindImageMemoryInfoKHX;
+        public const VkStructureType VK_STRUCTURE_TYPE_DEVICE_GROUP_RENDER_PASS_BEGIN_INFO_KHX = VkStructureType.DeviceGroupRenderPassBeginInfoKHX;
+        public const VkStructureType VK_STRUCTURE_TYPE_DEVICE_GROUP_COMMAND_BUFFER_BEGIN_INFO_KHX = VkStructureType.DeviceGroupCommandBufferBeginInfoKHX;
+        public const VkStructureType VK_STRUCTURE_TYPE_DEVICE_GROUP_SUBMIT_INFO_KHX = VkStructureType.DeviceGroupSubmitInfoKHX;
+        public const VkStructureType VK_STRUCTURE_TYPE_DEVICE_GROUP_BIND_SPARSE_INFO_KHX = VkStructureType.DeviceGroupBindSparseInfoKHX;
+        public const VkStructureType VK_STRUCTURE_TYPE_ACQUIRE_NEXT_IMAGE_INFO_KHX = VkStructureType.AcquireNextImageInfoKHX;
+        public const VkStructureType VK_STRUCTURE_TYPE_DEVICE_GROUP_PRESENT_CAPABILITIES_KHX = VkStructureType.DeviceGroupPresentCapabilitiesKHX;
+        public const VkStructureType VK_STRUCTURE_TYPE_IMAGE_SWAPCHAIN_CREATE_INFO_KHX = VkStructureType.ImageSwapchainCreateInfoKHX;
+        public const VkStructureType VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_SWAPCHAIN_INFO_KHX = VkStructureType.BindImageMemorySwapchainInfoKHX;
+        public const VkStructureType VK_STRUCTURE_TYPE_DEVICE_GROUP_PRESENT_INFO_KHX = VkStructureType.DeviceGroupPresentInfoKHX;
+        public const VkStructureType VK_STRUCTURE_TYPE_DEVICE_GROUP_SWAPCHAIN_CREATE_INFO_KHX = VkStructureType.DeviceGroupSwapchainCreateInfoKHX;
         public const VkStructureType VK_STRUCTURE_TYPE_VALIDATION_FLAGS_EXT = VkStructureType.ValidationEXT;
         public const VkStructureType VK_STRUCTURE_TYPE_VI_SURFACE_CREATE_INFO_NN = VkStructureType.ViSurfaceCreateInfoNn;
-        public const VkStructureType VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_GROUP_PROPERTIES_KHX = VkStructureType.PhysicalDeviceGroupPropertiesKhx;
-        public const VkStructureType VK_STRUCTURE_TYPE_DEVICE_GROUP_DEVICE_CREATE_INFO_KHX = VkStructureType.DeviceGroupDeviceCreateInfoKhx;
+        public const VkStructureType VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_GROUP_PROPERTIES_KHX = VkStructureType.PhysicalDeviceGroupPropertiesKHX;
+        public const VkStructureType VK_STRUCTURE_TYPE_DEVICE_GROUP_DEVICE_CREATE_INFO_KHX = VkStructureType.DeviceGroupDeviceCreateInfoKHX;
         public const VkStructureType VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTERNAL_IMAGE_FORMAT_INFO_KHR = VkStructureType.PhysicalDeviceExternalImageFormatInfoKHR;
         public const VkStructureType VK_STRUCTURE_TYPE_EXTERNAL_IMAGE_FORMAT_PROPERTIES_KHR = VkStructureType.ExternalImageFormatPropertiesKHR;
         public const VkStructureType VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTERNAL_BUFFER_INFO_KHR = VkStructureType.PhysicalDeviceExternalBufferInfoKHR;
@@ -1386,7 +1393,7 @@ namespace Vulkan
         public const VkStructureType VK_STRUCTURE_TYPE_DEVICE_GENERATED_COMMANDS_LIMITS_NVX = VkStructureType.DeviceGeneratedCommandsLimitsNVX;
         public const VkStructureType VK_STRUCTURE_TYPE_DEVICE_GENERATED_COMMANDS_FEATURES_NVX = VkStructureType.DeviceGeneratedCommandsFeaturesNVX;
         public const VkStructureType VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_W_SCALING_STATE_CREATE_INFO_NV = VkStructureType.PipelineViewportWScalingStateCreateInfoNV;
-        public const VkStructureType VK_STRUCTURE_TYPE_SURFACE_CAPABILITIES2_EXT = VkStructureType.SurfaceCapabilities2EXT;
+        public const VkStructureType VK_STRUCTURE_TYPE_SURFACE_CAPABILITIES_2_EXT = VkStructureType.SurfaceCapabilities2EXT;
         public const VkStructureType VK_STRUCTURE_TYPE_DISPLAY_POWER_INFO_EXT = VkStructureType.DisplayPowerInfoEXT;
         public const VkStructureType VK_STRUCTURE_TYPE_DEVICE_EVENT_INFO_EXT = VkStructureType.DeviceEventInfoEXT;
         public const VkStructureType VK_STRUCTURE_TYPE_DISPLAY_EVENT_INFO_EXT = VkStructureType.DisplayEventInfoEXT;
@@ -1416,6 +1423,11 @@ namespace Vulkan
         public const VkStructureType VK_STRUCTURE_TYPE_MEMORY_DEDICATED_ALLOCATE_INFO_KHR = VkStructureType.MemoryDedicatedAllocateInfoKHR;
         public const VkStructureType VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SAMPLER_FILTER_MINMAX_PROPERTIES_EXT = VkStructureType.PhysicalDeviceSamplerFilterMinmaxPropertiesEXT;
         public const VkStructureType VK_STRUCTURE_TYPE_SAMPLER_REDUCTION_MODE_CREATE_INFO_EXT = VkStructureType.SamplerReductionModeCreateInfoEXT;
+        public const VkStructureType VK_STRUCTURE_TYPE_SAMPLE_LOCATIONS_INFO_EXT = VkStructureType.SampleLocationsInfoEXT;
+        public const VkStructureType VK_STRUCTURE_TYPE_RENDER_PASS_SAMPLE_LOCATIONS_BEGIN_INFO_EXT = VkStructureType.RenderPassSampleLocationsBeginInfoEXT;
+        public const VkStructureType VK_STRUCTURE_TYPE_PIPELINE_SAMPLE_LOCATIONS_STATE_CREATE_INFO_EXT = VkStructureType.PipelineSampleLocationsStateCreateInfoEXT;
+        public const VkStructureType VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SAMPLE_LOCATIONS_PROPERTIES_EXT = VkStructureType.PhysicalDeviceSampleLocationsPropertiesEXT;
+        public const VkStructureType VK_STRUCTURE_TYPE_MULTISAMPLE_PROPERTIES_EXT = VkStructureType.MultisamplePropertiesEXT;
         public const VkStructureType VK_STRUCTURE_TYPE_BUFFER_MEMORY_REQUIREMENTS_INFO_2_KHR = VkStructureType.BufferMemoryRequirementsInfo2KHR;
         public const VkStructureType VK_STRUCTURE_TYPE_IMAGE_MEMORY_REQUIREMENTS_INFO_2_KHR = VkStructureType.ImageMemoryRequirementsInfo2KHR;
         public const VkStructureType VK_STRUCTURE_TYPE_IMAGE_SPARSE_MEMORY_REQUIREMENTS_INFO_2_KHR = VkStructureType.ImageSparseMemoryRequirementsInfo2KHR;
@@ -1426,6 +1438,8 @@ namespace Vulkan
         public const VkStructureType VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_ADVANCED_STATE_CREATE_INFO_EXT = VkStructureType.PipelineColorBlendAdvancedStateCreateInfoEXT;
         public const VkStructureType VK_STRUCTURE_TYPE_PIPELINE_COVERAGE_TO_COLOR_STATE_CREATE_INFO_NV = VkStructureType.PipelineCoverageToColorStateCreateInfoNV;
         public const VkStructureType VK_STRUCTURE_TYPE_PIPELINE_COVERAGE_MODULATION_STATE_CREATE_INFO_NV = VkStructureType.PipelineCoverageModulationStateCreateInfoNV;
+        public const VkStructureType VK_STRUCTURE_TYPE_VALIDATION_CACHE_CREATE_INFO_EXT = VkStructureType.ValidationCacheCreateInfoEXT;
+        public const VkStructureType VK_STRUCTURE_TYPE_SHADER_MODULE_VALIDATION_CACHE_CREATE_INFO_EXT = VkStructureType.ShaderModuleValidationCacheCreateInfoEXT;
     }
 
     public enum VkSubpassContents
@@ -1549,6 +1563,7 @@ namespace Vulkan
         StencilReference = 8,
         ViewportWScalingNV = 1000087000,
         DiscardRectangleEXT = 1000099000,
+        SampleLocationsEXT = 1000143000,
     }
     public static partial class RawConstants
     {
@@ -1563,6 +1578,7 @@ namespace Vulkan
         public const VkDynamicState VK_DYNAMIC_STATE_STENCIL_REFERENCE = VkDynamicState.StencilReference;
         public const VkDynamicState VK_DYNAMIC_STATE_VIEWPORT_W_SCALING_NV = VkDynamicState.ViewportWScalingNV;
         public const VkDynamicState VK_DYNAMIC_STATE_DISCARD_RECTANGLE_EXT = VkDynamicState.DiscardRectangleEXT;
+        public const VkDynamicState VK_DYNAMIC_STATE_SAMPLE_LOCATIONS_EXT = VkDynamicState.SampleLocationsEXT;
     }
 
     public enum VkDescriptorUpdateTemplateTypeKHR
@@ -1641,6 +1657,7 @@ namespace Vulkan
         DescriptorUpdateTemplateKHR = 1000085000,
         ObjectTableNVX = 1000086000,
         IndirectCommandsLayoutNVX = 1000086001,
+        ValidationCacheEXT = 1000160000,
     }
     public static partial class RawConstants
     {
@@ -1703,6 +1720,7 @@ namespace Vulkan
         public const VkObjectType VK_OBJECT_TYPE_DESCRIPTOR_UPDATE_TEMPLATE_KHR = VkObjectType.DescriptorUpdateTemplateKHR;
         public const VkObjectType VK_OBJECT_TYPE_OBJECT_TABLE_NVX = VkObjectType.ObjectTableNVX;
         public const VkObjectType VK_OBJECT_TYPE_INDIRECT_COMMANDS_LAYOUT_NVX = VkObjectType.IndirectCommandsLayoutNVX;
+        public const VkObjectType VK_OBJECT_TYPE_VALIDATION_CACHE_EXT = VkObjectType.ValidationCacheEXT;
     }
 
     [Flags]
@@ -1765,13 +1783,13 @@ namespace Vulkan
         None = 0,
         ///<summary>If set, heap represents device memory</summary>
         DeviceLocal = 1,
-        MultiInstanceKhx = 2,
+        MultiInstanceKHX = 2,
     }
     public static partial class RawConstants
     {
         ///<summary>If set, heap represents device memory</summary>
         public const VkMemoryHeapFlags VK_MEMORY_HEAP_DEVICE_LOCAL_BIT = VkMemoryHeapFlags.DeviceLocal;
-        public const VkMemoryHeapFlags VK_MEMORY_HEAP_MULTI_INSTANCE_BIT_KHX = VkMemoryHeapFlags.MultiInstanceKhx;
+        public const VkMemoryHeapFlags VK_MEMORY_HEAP_MULTI_INSTANCE_BIT_KHX = VkMemoryHeapFlags.MultiInstanceKHX;
     }
 
     [Flags]
@@ -2003,8 +2021,9 @@ namespace Vulkan
         MutableFormat = 8,
         ///<summary>Allows creating image views with cube type from the created image</summary>
         CubeCompatible = 16,
-        BindSfrKhx = 64,
+        BindSfrKHX = 64,
         _2dArrayCompatibleKHR = 32,
+        SampleLocationsCompatibleDepthEXT = 4096,
     }
     public static partial class RawConstants
     {
@@ -2018,8 +2037,9 @@ namespace Vulkan
         public const VkImageCreateFlags VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT = VkImageCreateFlags.MutableFormat;
         ///<summary>Allows creating image views with cube type from the created image</summary>
         public const VkImageCreateFlags VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT = VkImageCreateFlags.CubeCompatible;
-        public const VkImageCreateFlags VK_IMAGE_CREATE_BIND_SFR_BIT_KHX = VkImageCreateFlags.BindSfrKhx;
+        public const VkImageCreateFlags VK_IMAGE_CREATE_BIND_SFR_BIT_KHX = VkImageCreateFlags.BindSfrKHX;
         public const VkImageCreateFlags VK_IMAGE_CREATE_2D_ARRAY_COMPATIBLE_BIT_KHR = VkImageCreateFlags._2dArrayCompatibleKHR;
+        public const VkImageCreateFlags VK_IMAGE_CREATE_SAMPLE_LOCATIONS_COMPATIBLE_DEPTH_BIT_EXT = VkImageCreateFlags.SampleLocationsCompatibleDepthEXT;
     }
 
     [Flags]
@@ -2029,16 +2049,16 @@ namespace Vulkan
         DisableOptimization = 1,
         AllowDerivatives = 2,
         Derivative = 4,
-        ViewIndexFromDeviceIndexKhx = 8,
-        DispatchBaseKhx = 16,
+        ViewIndexFromDeviceIndexKHX = 8,
+        DispatchBaseKHX = 16,
     }
     public static partial class RawConstants
     {
         public const VkPipelineCreateFlags VK_PIPELINE_CREATE_DISABLE_OPTIMIZATION_BIT = VkPipelineCreateFlags.DisableOptimization;
         public const VkPipelineCreateFlags VK_PIPELINE_CREATE_ALLOW_DERIVATIVES_BIT = VkPipelineCreateFlags.AllowDerivatives;
         public const VkPipelineCreateFlags VK_PIPELINE_CREATE_DERIVATIVE_BIT = VkPipelineCreateFlags.Derivative;
-        public const VkPipelineCreateFlags VK_PIPELINE_CREATE_VIEW_INDEX_FROM_DEVICE_INDEX_BIT_KHX = VkPipelineCreateFlags.ViewIndexFromDeviceIndexKhx;
-        public const VkPipelineCreateFlags VK_PIPELINE_CREATE_DISPATCH_BASE_KHX = VkPipelineCreateFlags.DispatchBaseKhx;
+        public const VkPipelineCreateFlags VK_PIPELINE_CREATE_VIEW_INDEX_FROM_DEVICE_INDEX_BIT_KHX = VkPipelineCreateFlags.ViewIndexFromDeviceIndexKHX;
+        public const VkPipelineCreateFlags VK_PIPELINE_CREATE_DISPATCH_BASE_KHX = VkPipelineCreateFlags.DispatchBaseKHX;
     }
 
     [Flags]
@@ -2509,15 +2529,15 @@ namespace Vulkan
         None = 0,
         ///<summary>Dependency is per pixel region </summary>
         ByRegion = 1,
-        ViewLocalKhx = 2,
-        DeviceGroupKhx = 4,
+        ViewLocalKHX = 2,
+        DeviceGroupKHX = 4,
     }
     public static partial class RawConstants
     {
         ///<summary>Dependency is per pixel region </summary>
         public const VkDependencyFlags VK_DEPENDENCY_BY_REGION_BIT = VkDependencyFlags.ByRegion;
-        public const VkDependencyFlags VK_DEPENDENCY_VIEW_LOCAL_BIT_KHX = VkDependencyFlags.ViewLocalKhx;
-        public const VkDependencyFlags VK_DEPENDENCY_DEVICE_GROUP_BIT_KHX = VkDependencyFlags.DeviceGroupKhx;
+        public const VkDependencyFlags VK_DEPENDENCY_VIEW_LOCAL_BIT_KHX = VkDependencyFlags.ViewLocalKHX;
+        public const VkDependencyFlags VK_DEPENDENCY_DEVICE_GROUP_BIT_KHX = VkDependencyFlags.DeviceGroupKHX;
     }
 
     public enum VkPresentModeKHR
@@ -2691,6 +2711,7 @@ namespace Vulkan
         DisplayModeKHREXT = 30,
         ObjectTableNVXEXT = 31,
         IndirectCommandsLayoutNVXEXT = 32,
+        ValidationCacheEXT = 33,
         DescriptorUpdateTemplateKHREXT = 1000085000,
     }
     public static partial class RawConstants
@@ -2728,6 +2749,7 @@ namespace Vulkan
         public const VkDebugReportObjectTypeEXT VK_DEBUG_REPORT_OBJECT_TYPE_DISPLAY_MODE_KHR_EXT = VkDebugReportObjectTypeEXT.DisplayModeKHREXT;
         public const VkDebugReportObjectTypeEXT VK_DEBUG_REPORT_OBJECT_TYPE_OBJECT_TABLE_NVX_EXT = VkDebugReportObjectTypeEXT.ObjectTableNVXEXT;
         public const VkDebugReportObjectTypeEXT VK_DEBUG_REPORT_OBJECT_TYPE_INDIRECT_COMMANDS_LAYOUT_NVX_EXT = VkDebugReportObjectTypeEXT.IndirectCommandsLayoutNVXEXT;
+        public const VkDebugReportObjectTypeEXT VK_DEBUG_REPORT_OBJECT_TYPE_VALIDATION_CACHE_EXT = VkDebugReportObjectTypeEXT.ValidationCacheEXT;
         public const VkDebugReportObjectTypeEXT VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_UPDATE_TEMPLATE_KHR_EXT = VkDebugReportObjectTypeEXT.DescriptorUpdateTemplateKHREXT;
     }
 
@@ -3035,24 +3057,24 @@ namespace Vulkan
     {
         None = 0,
         ///<summary>Can read with vkCmdCopy commands</summary>
-        CopySrcKhx = 1,
+        CopySrcKHX = 1,
         ///<summary>Can write with vkCmdCopy commands</summary>
-        CopyDstKhx = 2,
+        CopyDstKHX = 2,
         ///<summary>Can read with any access type/command</summary>
-        GenericSrcKhx = 4,
+        GenericSrcKHX = 4,
         ///<summary>Can write with and access type/command</summary>
-        GenericDstKhx = 8,
+        GenericDstKHX = 8,
     }
     public static partial class RawConstants
     {
         ///<summary>Can read with vkCmdCopy commands</summary>
-        public const VkPeerMemoryFeatureFlagsKHX VK_PEER_MEMORY_FEATURE_COPY_SRC_BIT_KHX = VkPeerMemoryFeatureFlagsKHX.CopySrcKhx;
+        public const VkPeerMemoryFeatureFlagsKHX VK_PEER_MEMORY_FEATURE_COPY_SRC_BIT_KHX = VkPeerMemoryFeatureFlagsKHX.CopySrcKHX;
         ///<summary>Can write with vkCmdCopy commands</summary>
-        public const VkPeerMemoryFeatureFlagsKHX VK_PEER_MEMORY_FEATURE_COPY_DST_BIT_KHX = VkPeerMemoryFeatureFlagsKHX.CopyDstKhx;
+        public const VkPeerMemoryFeatureFlagsKHX VK_PEER_MEMORY_FEATURE_COPY_DST_BIT_KHX = VkPeerMemoryFeatureFlagsKHX.CopyDstKHX;
         ///<summary>Can read with any access type/command</summary>
-        public const VkPeerMemoryFeatureFlagsKHX VK_PEER_MEMORY_FEATURE_GENERIC_SRC_BIT_KHX = VkPeerMemoryFeatureFlagsKHX.GenericSrcKhx;
+        public const VkPeerMemoryFeatureFlagsKHX VK_PEER_MEMORY_FEATURE_GENERIC_SRC_BIT_KHX = VkPeerMemoryFeatureFlagsKHX.GenericSrcKHX;
         ///<summary>Can write with and access type/command</summary>
-        public const VkPeerMemoryFeatureFlagsKHX VK_PEER_MEMORY_FEATURE_GENERIC_DST_BIT_KHX = VkPeerMemoryFeatureFlagsKHX.GenericDstKhx;
+        public const VkPeerMemoryFeatureFlagsKHX VK_PEER_MEMORY_FEATURE_GENERIC_DST_BIT_KHX = VkPeerMemoryFeatureFlagsKHX.GenericDstKHX;
     }
 
     [Flags]
@@ -3060,12 +3082,12 @@ namespace Vulkan
     {
         None = 0,
         ///<summary>Force allocation on specific devices</summary>
-        DeviceMaskKhx = 1,
+        DeviceMaskKHX = 1,
     }
     public static partial class RawConstants
     {
         ///<summary>Force allocation on specific devices</summary>
-        public const VkMemoryAllocateFlagsKHX VK_MEMORY_ALLOCATE_DEVICE_MASK_BIT_KHX = VkMemoryAllocateFlagsKHX.DeviceMaskKhx;
+        public const VkMemoryAllocateFlagsKHX VK_MEMORY_ALLOCATE_DEVICE_MASK_BIT_KHX = VkMemoryAllocateFlagsKHX.DeviceMaskKHX;
     }
 
     [Flags]
@@ -3073,35 +3095,35 @@ namespace Vulkan
     {
         None = 0,
         ///<summary>Present from local memory</summary>
-        LocalKhx = 1,
+        LocalKHX = 1,
         ///<summary>Present from remote memory</summary>
-        RemoteKhx = 2,
+        RemoteKHX = 2,
         ///<summary>Present sum of local and/or remote memory</summary>
-        SumKhx = 4,
+        SumKHX = 4,
         ///<summary>Each physical device presents from local memory</summary>
-        LocalMultiDeviceKhx = 8,
+        LocalMultiDeviceKHX = 8,
     }
     public static partial class RawConstants
     {
         ///<summary>Present from local memory</summary>
-        public const VkDeviceGroupPresentModeFlagsKHX VK_DEVICE_GROUP_PRESENT_MODE_LOCAL_BIT_KHX = VkDeviceGroupPresentModeFlagsKHX.LocalKhx;
+        public const VkDeviceGroupPresentModeFlagsKHX VK_DEVICE_GROUP_PRESENT_MODE_LOCAL_BIT_KHX = VkDeviceGroupPresentModeFlagsKHX.LocalKHX;
         ///<summary>Present from remote memory</summary>
-        public const VkDeviceGroupPresentModeFlagsKHX VK_DEVICE_GROUP_PRESENT_MODE_REMOTE_BIT_KHX = VkDeviceGroupPresentModeFlagsKHX.RemoteKhx;
+        public const VkDeviceGroupPresentModeFlagsKHX VK_DEVICE_GROUP_PRESENT_MODE_REMOTE_BIT_KHX = VkDeviceGroupPresentModeFlagsKHX.RemoteKHX;
         ///<summary>Present sum of local and/or remote memory</summary>
-        public const VkDeviceGroupPresentModeFlagsKHX VK_DEVICE_GROUP_PRESENT_MODE_SUM_BIT_KHX = VkDeviceGroupPresentModeFlagsKHX.SumKhx;
+        public const VkDeviceGroupPresentModeFlagsKHX VK_DEVICE_GROUP_PRESENT_MODE_SUM_BIT_KHX = VkDeviceGroupPresentModeFlagsKHX.SumKHX;
         ///<summary>Each physical device presents from local memory</summary>
-        public const VkDeviceGroupPresentModeFlagsKHX VK_DEVICE_GROUP_PRESENT_MODE_LOCAL_MULTI_DEVICE_BIT_KHX = VkDeviceGroupPresentModeFlagsKHX.LocalMultiDeviceKhx;
+        public const VkDeviceGroupPresentModeFlagsKHX VK_DEVICE_GROUP_PRESENT_MODE_LOCAL_MULTI_DEVICE_BIT_KHX = VkDeviceGroupPresentModeFlagsKHX.LocalMultiDeviceKHX;
     }
 
     [Flags]
     public enum VkSwapchainCreateFlagsKHR
     {
         None = 0,
-        BindSfrKhx = 1,
+        BindSfrKHX = 1,
     }
     public static partial class RawConstants
     {
-        public const VkSwapchainCreateFlagsKHR VK_SWAPCHAIN_CREATE_BIND_SFR_BIT_KHX = VkSwapchainCreateFlagsKHR.BindSfrKhx;
+        public const VkSwapchainCreateFlagsKHR VK_SWAPCHAIN_CREATE_BIND_SFR_BIT_KHX = VkSwapchainCreateFlagsKHR.BindSfrKHX;
     }
 
     public enum VkViewportCoordinateSwizzleNV
@@ -3190,5 +3212,14 @@ namespace Vulkan
         public const VkCoverageModulationModeNV VK_COVERAGE_MODULATION_MODE_RGB_NV = VkCoverageModulationModeNV.VK_COVERAGE_MODULATION_MODE_RGB_NV;
         public const VkCoverageModulationModeNV VK_COVERAGE_MODULATION_MODE_ALPHA_NV = VkCoverageModulationModeNV.VK_COVERAGE_MODULATION_MODE_ALPHA_NV;
         public const VkCoverageModulationModeNV VK_COVERAGE_MODULATION_MODE_RGBA_NV = VkCoverageModulationModeNV.VK_COVERAGE_MODULATION_MODE_RGBA_NV;
+    }
+
+    public enum VkValidationCacheHeaderVersionEXT
+    {
+        OneEXT = 1,
+    }
+    public static partial class RawConstants
+    {
+        public const VkValidationCacheHeaderVersionEXT VK_VALIDATION_CACHE_HEADER_VERSION_ONE_EXT = VkValidationCacheHeaderVersionEXT.OneEXT;
     }
 }

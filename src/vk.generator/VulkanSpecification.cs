@@ -104,6 +104,11 @@ namespace Vk.Generator
         {
             foreach (ExtensionDefinition exDef in extensions)
             {
+                if (exDef.Name == "VK_KHX_device_group")
+                {
+
+                }
+
                 foreach (var enumEx in exDef.EnumExtensions)
                 {
                     EnumDefinition enumDef = GetEnumDef(enums, enumEx.ExtendedType);
