@@ -510,6 +510,24 @@ namespace Vulkan
 
     ///<summary>A non-dispatchable handle owned by a VkDevice.</summary>
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
+    public partial struct VkSamplerYcbcrConversionKHR : IEquatable<VkSamplerYcbcrConversionKHR>
+    {
+        public readonly IntPtr Handle;
+        public VkSamplerYcbcrConversionKHR(IntPtr existingHandle) { Handle = existingHandle; }
+        public static VkSamplerYcbcrConversionKHR Null => new VkSamplerYcbcrConversionKHR(IntPtr.Zero);
+        public static implicit operator VkSamplerYcbcrConversionKHR(IntPtr handle) => new VkSamplerYcbcrConversionKHR(handle);
+        public static bool operator ==(VkSamplerYcbcrConversionKHR left, VkSamplerYcbcrConversionKHR right) => left.Handle == right.Handle;
+        public static bool operator !=(VkSamplerYcbcrConversionKHR left, VkSamplerYcbcrConversionKHR right) => left.Handle != right.Handle;
+        public static bool operator ==(VkSamplerYcbcrConversionKHR left, IntPtr right) => left.Handle == right;
+        public static bool operator !=(VkSamplerYcbcrConversionKHR left, IntPtr right) => left.Handle != right;
+        public bool Equals(VkSamplerYcbcrConversionKHR h) => Handle.Equals(h.Handle);
+        public override bool Equals(object o) => o is VkSamplerYcbcrConversionKHR h && Equals(h);
+        public override int GetHashCode() => Handle.GetHashCode();
+        private string DebuggerDisplay => string.Format("VkSamplerYcbcrConversionKHR [{0}]", Handle);
+    }
+
+    ///<summary>A non-dispatchable handle owned by a VkDevice.</summary>
+    [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkValidationCacheEXT : IEquatable<VkValidationCacheEXT>
     {
         public readonly IntPtr Handle;
