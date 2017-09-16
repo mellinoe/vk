@@ -3000,38 +3000,62 @@ namespace Vulkan
         }
     }
 
-    public unsafe partial struct VkBindBufferMemoryInfoKHX
+    public unsafe partial struct VkBindBufferMemoryInfoKHR
     {
         public VkStructureType sType;
         public void* pNext;
         public VkBuffer buffer;
         public VkDeviceMemory memory;
         public ulong memoryOffset;
-        public uint deviceIndexCount;
-        public uint* pDeviceIndices;
-        public static VkBindBufferMemoryInfoKHX New()
+        public static VkBindBufferMemoryInfoKHR New()
         {
-            VkBindBufferMemoryInfoKHX ret = new VkBindBufferMemoryInfoKHX();
-            ret.sType = VkStructureType.BindBufferMemoryInfoKHX;
+            VkBindBufferMemoryInfoKHR ret = new VkBindBufferMemoryInfoKHR();
+            ret.sType = VkStructureType.BindBufferMemoryInfoKHR;
             return ret;
         }
     }
 
-    public unsafe partial struct VkBindImageMemoryInfoKHX
+    public unsafe partial struct VkBindBufferMemoryDeviceGroupInfoKHX
+    {
+        public VkStructureType sType;
+        public void* pNext;
+        public uint deviceIndexCount;
+        public uint* pDeviceIndices;
+        public static VkBindBufferMemoryDeviceGroupInfoKHX New()
+        {
+            VkBindBufferMemoryDeviceGroupInfoKHX ret = new VkBindBufferMemoryDeviceGroupInfoKHX();
+            ret.sType = VkStructureType.BindBufferMemoryDeviceGroupInfoKHX;
+            return ret;
+        }
+    }
+
+    public unsafe partial struct VkBindImageMemoryInfoKHR
     {
         public VkStructureType sType;
         public void* pNext;
         public VkImage image;
         public VkDeviceMemory memory;
         public ulong memoryOffset;
+        public static VkBindImageMemoryInfoKHR New()
+        {
+            VkBindImageMemoryInfoKHR ret = new VkBindImageMemoryInfoKHR();
+            ret.sType = VkStructureType.BindImageMemoryInfoKHR;
+            return ret;
+        }
+    }
+
+    public unsafe partial struct VkBindImageMemoryDeviceGroupInfoKHX
+    {
+        public VkStructureType sType;
+        public void* pNext;
         public uint deviceIndexCount;
         public uint* pDeviceIndices;
         public uint SFRRectCount;
         public VkRect2D* pSFRRects;
-        public static VkBindImageMemoryInfoKHX New()
+        public static VkBindImageMemoryDeviceGroupInfoKHX New()
         {
-            VkBindImageMemoryInfoKHX ret = new VkBindImageMemoryInfoKHX();
-            ret.sType = VkStructureType.BindImageMemoryInfoKHX;
+            VkBindImageMemoryDeviceGroupInfoKHX ret = new VkBindImageMemoryDeviceGroupInfoKHX();
+            ret.sType = VkStructureType.BindImageMemoryDeviceGroupInfoKHX;
             return ret;
         }
     }
@@ -3400,6 +3424,27 @@ namespace Vulkan
         }
     }
 
+    public unsafe partial struct VkInputAttachmentAspectReferenceKHR
+    {
+        public uint subpass;
+        public uint inputAttachmentIndex;
+        public VkImageAspectFlags aspectMask;
+    }
+
+    public unsafe partial struct VkRenderPassInputAttachmentAspectCreateInfoKHR
+    {
+        public VkStructureType sType;
+        public void* pNext;
+        public uint aspectReferenceCount;
+        public VkInputAttachmentAspectReferenceKHR* pAspectReferences;
+        public static VkRenderPassInputAttachmentAspectCreateInfoKHR New()
+        {
+            VkRenderPassInputAttachmentAspectCreateInfoKHR ret = new VkRenderPassInputAttachmentAspectCreateInfoKHR();
+            ret.sType = VkStructureType.RenderPassInputAttachmentAspectCreateInfoKHR;
+            return ret;
+        }
+    }
+
     public unsafe partial struct VkPhysicalDeviceSurfaceInfo2KHR
     {
         public VkStructureType sType;
@@ -3533,6 +3578,19 @@ namespace Vulkan
         }
     }
 
+    public unsafe partial struct VkPhysicalDevicePointClippingPropertiesKHR
+    {
+        public VkStructureType sType;
+        public void* pNext;
+        public VkPointClippingBehaviorKHR pointClippingBehavior;
+        public static VkPhysicalDevicePointClippingPropertiesKHR New()
+        {
+            VkPhysicalDevicePointClippingPropertiesKHR ret = new VkPhysicalDevicePointClippingPropertiesKHR();
+            ret.sType = VkStructureType.PhysicalDevicePointClippingPropertiesKHR;
+            return ret;
+        }
+    }
+
     public unsafe partial struct VkMemoryDedicatedRequirementsKHR
     {
         public VkStructureType sType;
@@ -3557,6 +3615,117 @@ namespace Vulkan
         {
             VkMemoryDedicatedAllocateInfoKHR ret = new VkMemoryDedicatedAllocateInfoKHR();
             ret.sType = VkStructureType.MemoryDedicatedAllocateInfoKHR;
+            return ret;
+        }
+    }
+
+    public unsafe partial struct VkImageViewUsageCreateInfoKHR
+    {
+        public VkStructureType sType;
+        public void* pNext;
+        public VkImageUsageFlags usage;
+        public static VkImageViewUsageCreateInfoKHR New()
+        {
+            VkImageViewUsageCreateInfoKHR ret = new VkImageViewUsageCreateInfoKHR();
+            ret.sType = VkStructureType.ImageViewUsageCreateInfoKHR;
+            return ret;
+        }
+    }
+
+    public unsafe partial struct VkPipelineTessellationDomainOriginStateCreateInfoKHR
+    {
+        public VkStructureType sType;
+        public void* pNext;
+        public VkTessellationDomainOriginKHR domainOrigin;
+        public static VkPipelineTessellationDomainOriginStateCreateInfoKHR New()
+        {
+            VkPipelineTessellationDomainOriginStateCreateInfoKHR ret = new VkPipelineTessellationDomainOriginStateCreateInfoKHR();
+            ret.sType = VkStructureType.PipelineTessellationDomainOriginStateCreateInfoKHR;
+            return ret;
+        }
+    }
+
+    public unsafe partial struct VkSamplerYcbcrConversionInfoKHR
+    {
+        public VkStructureType sType;
+        public void* pNext;
+        public VkSamplerYcbcrConversionKHR conversion;
+        public static VkSamplerYcbcrConversionInfoKHR New()
+        {
+            VkSamplerYcbcrConversionInfoKHR ret = new VkSamplerYcbcrConversionInfoKHR();
+            ret.sType = VkStructureType.SamplerYcbcrConversionInfoKHR;
+            return ret;
+        }
+    }
+
+    public unsafe partial struct VkSamplerYcbcrConversionCreateInfoKHR
+    {
+        public VkStructureType sType;
+        public void* pNext;
+        public VkFormat format;
+        public VkSamplerYcbcrModelConversionKHR ycbcrModel;
+        public VkSamplerYcbcrRangeKHR ycbcrRange;
+        public VkComponentMapping components;
+        public VkChromaLocationKHR xChromaOffset;
+        public VkChromaLocationKHR yChromaOffset;
+        public VkFilter chromaFilter;
+        public VkBool32 forceExplicitReconstruction;
+        public static VkSamplerYcbcrConversionCreateInfoKHR New()
+        {
+            VkSamplerYcbcrConversionCreateInfoKHR ret = new VkSamplerYcbcrConversionCreateInfoKHR();
+            ret.sType = VkStructureType.SamplerYcbcrConversionCreateInfoKHR;
+            return ret;
+        }
+    }
+
+    public unsafe partial struct VkBindImagePlaneMemoryInfoKHR
+    {
+        public VkStructureType sType;
+        public void* pNext;
+        public VkImageAspectFlags planeAspect;
+        public static VkBindImagePlaneMemoryInfoKHR New()
+        {
+            VkBindImagePlaneMemoryInfoKHR ret = new VkBindImagePlaneMemoryInfoKHR();
+            ret.sType = VkStructureType.BindImagePlaneMemoryInfoKHR;
+            return ret;
+        }
+    }
+
+    public unsafe partial struct VkImagePlaneMemoryRequirementsInfoKHR
+    {
+        public VkStructureType sType;
+        public void* pNext;
+        public VkImageAspectFlags planeAspect;
+        public static VkImagePlaneMemoryRequirementsInfoKHR New()
+        {
+            VkImagePlaneMemoryRequirementsInfoKHR ret = new VkImagePlaneMemoryRequirementsInfoKHR();
+            ret.sType = VkStructureType.ImagePlaneMemoryRequirementsInfoKHR;
+            return ret;
+        }
+    }
+
+    public unsafe partial struct VkPhysicalDeviceSamplerYcbcrConversionFeaturesKHR
+    {
+        public VkStructureType sType;
+        public void* pNext;
+        public VkBool32 samplerYcbcrConversion;
+        public static VkPhysicalDeviceSamplerYcbcrConversionFeaturesKHR New()
+        {
+            VkPhysicalDeviceSamplerYcbcrConversionFeaturesKHR ret = new VkPhysicalDeviceSamplerYcbcrConversionFeaturesKHR();
+            ret.sType = VkStructureType.PhysicalDeviceSamplerYcbcrConversionFeaturesKHR;
+            return ret;
+        }
+    }
+
+    public unsafe partial struct VkSamplerYcbcrConversionImageFormatPropertiesKHR
+    {
+        public VkStructureType sType;
+        public void* pNext;
+        public uint combinedImageSamplerDescriptorCount;
+        public static VkSamplerYcbcrConversionImageFormatPropertiesKHR New()
+        {
+            VkSamplerYcbcrConversionImageFormatPropertiesKHR ret = new VkSamplerYcbcrConversionImageFormatPropertiesKHR();
+            ret.sType = VkStructureType.SamplerYcbcrConversionImageFormatPropertiesKHR;
             return ret;
         }
     }
@@ -3770,6 +3939,20 @@ namespace Vulkan
         {
             VkPipelineCoverageModulationStateCreateInfoNV ret = new VkPipelineCoverageModulationStateCreateInfoNV();
             ret.sType = VkStructureType.PipelineCoverageModulationStateCreateInfoNV;
+            return ret;
+        }
+    }
+
+    public unsafe partial struct VkImageFormatListCreateInfoKHR
+    {
+        public VkStructureType sType;
+        public void* pNext;
+        public uint viewFormatCount;
+        public VkFormat* pViewFormats;
+        public static VkImageFormatListCreateInfoKHR New()
+        {
+            VkImageFormatListCreateInfoKHR ret = new VkImageFormatListCreateInfoKHR();
+            ret.sType = VkStructureType.ImageFormatListCreateInfoKHR;
             return ret;
         }
     }

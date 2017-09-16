@@ -26,6 +26,8 @@ namespace Vulkan
         Preinitialized = 8,
         PresentSrcKHR = 1000001002,
         SharedPresentKHR = 1000111000,
+        DepthReadOnlyStencilAttachmentOptimalKHR = 1000117000,
+        DepthAttachmentStencilReadOnlyOptimalKHR = 1000117001,
     }
     public static partial class RawConstants
     {
@@ -49,6 +51,8 @@ namespace Vulkan
         public const VkImageLayout VK_IMAGE_LAYOUT_PREINITIALIZED = VkImageLayout.Preinitialized;
         public const VkImageLayout VK_IMAGE_LAYOUT_PRESENT_SRC_KHR = VkImageLayout.PresentSrcKHR;
         public const VkImageLayout VK_IMAGE_LAYOUT_SHARED_PRESENT_KHR = VkImageLayout.SharedPresentKHR;
+        public const VkImageLayout VK_IMAGE_LAYOUT_DEPTH_READ_ONLY_STENCIL_ATTACHMENT_OPTIMAL_KHR = VkImageLayout.DepthReadOnlyStencilAttachmentOptimalKHR;
+        public const VkImageLayout VK_IMAGE_LAYOUT_DEPTH_ATTACHMENT_STENCIL_READ_ONLY_OPTIMAL_KHR = VkImageLayout.DepthAttachmentStencilReadOnlyOptimalKHR;
     }
 
     public enum VkAttachmentLoadOp
@@ -861,6 +865,40 @@ namespace Vulkan
         Pvrtc14bppSrgbBlockImg = 1000054005,
         Pvrtc22bppSrgbBlockImg = 1000054006,
         Pvrtc24bppSrgbBlockImg = 1000054007,
+        G8b8g8r8422UnormKHR = 1000156000,
+        B8g8r8g8422UnormKHR = 1000156001,
+        G8B8R83plane420UnormKHR = 1000156002,
+        G8B8r82plane420UnormKHR = 1000156003,
+        G8B8R83plane422UnormKHR = 1000156004,
+        G8B8r82plane422UnormKHR = 1000156005,
+        G8B8R83plane444UnormKHR = 1000156006,
+        R10x6UnormPack16KHR = 1000156007,
+        R10x6g10x6Unorm2pack16KHR = 1000156008,
+        R10x6g10x6b10x6a10x6Unorm4pack16KHR = 1000156009,
+        G10x6b10x6g10x6r10x6422Unorm4pack16KHR = 1000156010,
+        B10x6g10x6r10x6g10x6422Unorm4pack16KHR = 1000156011,
+        G10x6B10x6R10x63plane420Unorm3pack16KHR = 1000156012,
+        G10x6B10x6r10x62plane420Unorm3pack16KHR = 1000156013,
+        G10x6B10x6R10x63plane422Unorm3pack16KHR = 1000156014,
+        G10x6B10x6r10x62plane422Unorm3pack16KHR = 1000156015,
+        G10x6B10x6R10x63plane444Unorm3pack16KHR = 1000156016,
+        R12x4UnormPack16KHR = 1000156017,
+        R12x4g12x4Unorm2pack16KHR = 1000156018,
+        R12x4g12x4b12x4a12x4Unorm4pack16KHR = 1000156019,
+        G12x4b12x4g12x4r12x4422Unorm4pack16KHR = 1000156020,
+        B12x4g12x4r12x4g12x4422Unorm4pack16KHR = 1000156021,
+        G12x4B12x4R12x43plane420Unorm3pack16KHR = 1000156022,
+        G12x4B12x4r12x42plane420Unorm3pack16KHR = 1000156023,
+        G12x4B12x4R12x43plane422Unorm3pack16KHR = 1000156024,
+        G12x4B12x4r12x42plane422Unorm3pack16KHR = 1000156025,
+        G12x4B12x4R12x43plane444Unorm3pack16KHR = 1000156026,
+        G16b16g16r16422UnormKHR = 1000156027,
+        B16g16r16g16422UnormKHR = 1000156028,
+        G16B16R163plane420UnormKHR = 1000156029,
+        G16B16r162plane420UnormKHR = 1000156030,
+        G16B16R163plane422UnormKHR = 1000156031,
+        G16B16r162plane422UnormKHR = 1000156032,
+        G16B16R163plane444UnormKHR = 1000156033,
     }
     public static partial class RawConstants
     {
@@ -1057,6 +1095,40 @@ namespace Vulkan
         public const VkFormat VK_FORMAT_PVRTC1_4BPP_SRGB_BLOCK_IMG = VkFormat.Pvrtc14bppSrgbBlockImg;
         public const VkFormat VK_FORMAT_PVRTC2_2BPP_SRGB_BLOCK_IMG = VkFormat.Pvrtc22bppSrgbBlockImg;
         public const VkFormat VK_FORMAT_PVRTC2_4BPP_SRGB_BLOCK_IMG = VkFormat.Pvrtc24bppSrgbBlockImg;
+        public const VkFormat VK_FORMAT_G8B8G8R8_422_UNORM_KHR = VkFormat.G8b8g8r8422UnormKHR;
+        public const VkFormat VK_FORMAT_B8G8R8G8_422_UNORM_KHR = VkFormat.B8g8r8g8422UnormKHR;
+        public const VkFormat VK_FORMAT_G8_B8_R8_3PLANE_420_UNORM_KHR = VkFormat.G8B8R83plane420UnormKHR;
+        public const VkFormat VK_FORMAT_G8_B8R8_2PLANE_420_UNORM_KHR = VkFormat.G8B8r82plane420UnormKHR;
+        public const VkFormat VK_FORMAT_G8_B8_R8_3PLANE_422_UNORM_KHR = VkFormat.G8B8R83plane422UnormKHR;
+        public const VkFormat VK_FORMAT_G8_B8R8_2PLANE_422_UNORM_KHR = VkFormat.G8B8r82plane422UnormKHR;
+        public const VkFormat VK_FORMAT_G8_B8_R8_3PLANE_444_UNORM_KHR = VkFormat.G8B8R83plane444UnormKHR;
+        public const VkFormat VK_FORMAT_R10X6_UNORM_PACK16_KHR = VkFormat.R10x6UnormPack16KHR;
+        public const VkFormat VK_FORMAT_R10X6G10X6_UNORM_2PACK16_KHR = VkFormat.R10x6g10x6Unorm2pack16KHR;
+        public const VkFormat VK_FORMAT_R10X6G10X6B10X6A10X6_UNORM_4PACK16_KHR = VkFormat.R10x6g10x6b10x6a10x6Unorm4pack16KHR;
+        public const VkFormat VK_FORMAT_G10X6B10X6G10X6R10X6_422_UNORM_4PACK16_KHR = VkFormat.G10x6b10x6g10x6r10x6422Unorm4pack16KHR;
+        public const VkFormat VK_FORMAT_B10X6G10X6R10X6G10X6_422_UNORM_4PACK16_KHR = VkFormat.B10x6g10x6r10x6g10x6422Unorm4pack16KHR;
+        public const VkFormat VK_FORMAT_G10X6_B10X6_R10X6_3PLANE_420_UNORM_3PACK16_KHR = VkFormat.G10x6B10x6R10x63plane420Unorm3pack16KHR;
+        public const VkFormat VK_FORMAT_G10X6_B10X6R10X6_2PLANE_420_UNORM_3PACK16_KHR = VkFormat.G10x6B10x6r10x62plane420Unorm3pack16KHR;
+        public const VkFormat VK_FORMAT_G10X6_B10X6_R10X6_3PLANE_422_UNORM_3PACK16_KHR = VkFormat.G10x6B10x6R10x63plane422Unorm3pack16KHR;
+        public const VkFormat VK_FORMAT_G10X6_B10X6R10X6_2PLANE_422_UNORM_3PACK16_KHR = VkFormat.G10x6B10x6r10x62plane422Unorm3pack16KHR;
+        public const VkFormat VK_FORMAT_G10X6_B10X6_R10X6_3PLANE_444_UNORM_3PACK16_KHR = VkFormat.G10x6B10x6R10x63plane444Unorm3pack16KHR;
+        public const VkFormat VK_FORMAT_R12X4_UNORM_PACK16_KHR = VkFormat.R12x4UnormPack16KHR;
+        public const VkFormat VK_FORMAT_R12X4G12X4_UNORM_2PACK16_KHR = VkFormat.R12x4g12x4Unorm2pack16KHR;
+        public const VkFormat VK_FORMAT_R12X4G12X4B12X4A12X4_UNORM_4PACK16_KHR = VkFormat.R12x4g12x4b12x4a12x4Unorm4pack16KHR;
+        public const VkFormat VK_FORMAT_G12X4B12X4G12X4R12X4_422_UNORM_4PACK16_KHR = VkFormat.G12x4b12x4g12x4r12x4422Unorm4pack16KHR;
+        public const VkFormat VK_FORMAT_B12X4G12X4R12X4G12X4_422_UNORM_4PACK16_KHR = VkFormat.B12x4g12x4r12x4g12x4422Unorm4pack16KHR;
+        public const VkFormat VK_FORMAT_G12X4_B12X4_R12X4_3PLANE_420_UNORM_3PACK16_KHR = VkFormat.G12x4B12x4R12x43plane420Unorm3pack16KHR;
+        public const VkFormat VK_FORMAT_G12X4_B12X4R12X4_2PLANE_420_UNORM_3PACK16_KHR = VkFormat.G12x4B12x4r12x42plane420Unorm3pack16KHR;
+        public const VkFormat VK_FORMAT_G12X4_B12X4_R12X4_3PLANE_422_UNORM_3PACK16_KHR = VkFormat.G12x4B12x4R12x43plane422Unorm3pack16KHR;
+        public const VkFormat VK_FORMAT_G12X4_B12X4R12X4_2PLANE_422_UNORM_3PACK16_KHR = VkFormat.G12x4B12x4r12x42plane422Unorm3pack16KHR;
+        public const VkFormat VK_FORMAT_G12X4_B12X4_R12X4_3PLANE_444_UNORM_3PACK16_KHR = VkFormat.G12x4B12x4R12x43plane444Unorm3pack16KHR;
+        public const VkFormat VK_FORMAT_G16B16G16R16_422_UNORM_KHR = VkFormat.G16b16g16r16422UnormKHR;
+        public const VkFormat VK_FORMAT_B16G16R16G16_422_UNORM_KHR = VkFormat.B16g16r16g16422UnormKHR;
+        public const VkFormat VK_FORMAT_G16_B16_R16_3PLANE_420_UNORM_KHR = VkFormat.G16B16R163plane420UnormKHR;
+        public const VkFormat VK_FORMAT_G16_B16R16_2PLANE_420_UNORM_KHR = VkFormat.G16B16r162plane420UnormKHR;
+        public const VkFormat VK_FORMAT_G16_B16_R16_3PLANE_422_UNORM_KHR = VkFormat.G16B16R163plane422UnormKHR;
+        public const VkFormat VK_FORMAT_G16_B16R16_2PLANE_422_UNORM_KHR = VkFormat.G16B16r162plane422UnormKHR;
+        public const VkFormat VK_FORMAT_G16_B16_R16_3PLANE_444_UNORM_KHR = VkFormat.G16B16R163plane444UnormKHR;
     }
 
     public enum VkStructureType
@@ -1150,13 +1222,13 @@ namespace Vulkan
         SparseImageFormatProperties2KHR = 1000059007,
         PhysicalDeviceSparseImageFormatInfo2KHR = 1000059008,
         MemoryAllocateInfoKHX = 1000060000,
-        BindBufferMemoryInfoKHX = 1000060001,
-        BindImageMemoryInfoKHX = 1000060002,
         DeviceGroupRenderPassBeginInfoKHX = 1000060003,
         DeviceGroupCommandBufferBeginInfoKHX = 1000060004,
         DeviceGroupSubmitInfoKHX = 1000060005,
         DeviceGroupBindSparseInfoKHX = 1000060006,
         AcquireNextImageInfoKHX = 1000060010,
+        BindBufferMemoryDeviceGroupInfoKHX = 1000060013,
+        BindImageMemoryDeviceGroupInfoKHX = 1000060014,
         DeviceGroupPresentCapabilitiesKHX = 1000060007,
         ImageSwapchainCreateInfoKHX = 1000060008,
         BindImageMemorySwapchainInfoKHX = 1000060009,
@@ -1222,6 +1294,10 @@ namespace Vulkan
         FenceGetWin32HandleInfoKHR = 1000114002,
         ImportFenceFdInfoKHR = 1000115000,
         FenceGetFdInfoKHR = 1000115001,
+        PhysicalDevicePointClippingPropertiesKHR = 1000117000,
+        RenderPassInputAttachmentAspectCreateInfoKHR = 1000117001,
+        ImageViewUsageCreateInfoKHR = 1000117002,
+        PipelineTessellationDomainOriginStateCreateInfoKHR = 1000117003,
         PhysicalDeviceSurfaceInfo2KHR = 1000119000,
         SurfaceCapabilities2KHR = 1000119001,
         SurfaceFormat2KHR = 1000119002,
@@ -1242,11 +1318,20 @@ namespace Vulkan
         ImageSparseMemoryRequirementsInfo2KHR = 1000146002,
         MemoryRequirements2KHR = 1000146003,
         SparseImageMemoryRequirements2KHR = 1000146004,
+        ImageFormatListCreateInfoKHR = 1000147000,
         PhysicalDeviceBlendOperationAdvancedFeaturesEXT = 1000148000,
         PhysicalDeviceBlendOperationAdvancedPropertiesEXT = 1000148001,
         PipelineColorBlendAdvancedStateCreateInfoEXT = 1000148002,
         PipelineCoverageToColorStateCreateInfoNV = 1000149000,
         PipelineCoverageModulationStateCreateInfoNV = 1000152000,
+        SamplerYcbcrConversionCreateInfoKHR = 1000156000,
+        SamplerYcbcrConversionInfoKHR = 1000156001,
+        BindImagePlaneMemoryInfoKHR = 1000156002,
+        ImagePlaneMemoryRequirementsInfoKHR = 1000156003,
+        PhysicalDeviceSamplerYcbcrConversionFeaturesKHR = 1000156004,
+        SamplerYcbcrConversionImageFormatPropertiesKHR = 1000156005,
+        BindBufferMemoryInfoKHR = 1000157000,
+        BindImageMemoryInfoKHR = 1000157001,
         ValidationCacheCreateInfoEXT = 1000160000,
         ShaderModuleValidationCacheCreateInfoEXT = 1000160001,
     }
@@ -1341,13 +1426,13 @@ namespace Vulkan
         public const VkStructureType VK_STRUCTURE_TYPE_SPARSE_IMAGE_FORMAT_PROPERTIES_2_KHR = VkStructureType.SparseImageFormatProperties2KHR;
         public const VkStructureType VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SPARSE_IMAGE_FORMAT_INFO_2_KHR = VkStructureType.PhysicalDeviceSparseImageFormatInfo2KHR;
         public const VkStructureType VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_FLAGS_INFO_KHX = VkStructureType.MemoryAllocateInfoKHX;
-        public const VkStructureType VK_STRUCTURE_TYPE_BIND_BUFFER_MEMORY_INFO_KHX = VkStructureType.BindBufferMemoryInfoKHX;
-        public const VkStructureType VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_INFO_KHX = VkStructureType.BindImageMemoryInfoKHX;
         public const VkStructureType VK_STRUCTURE_TYPE_DEVICE_GROUP_RENDER_PASS_BEGIN_INFO_KHX = VkStructureType.DeviceGroupRenderPassBeginInfoKHX;
         public const VkStructureType VK_STRUCTURE_TYPE_DEVICE_GROUP_COMMAND_BUFFER_BEGIN_INFO_KHX = VkStructureType.DeviceGroupCommandBufferBeginInfoKHX;
         public const VkStructureType VK_STRUCTURE_TYPE_DEVICE_GROUP_SUBMIT_INFO_KHX = VkStructureType.DeviceGroupSubmitInfoKHX;
         public const VkStructureType VK_STRUCTURE_TYPE_DEVICE_GROUP_BIND_SPARSE_INFO_KHX = VkStructureType.DeviceGroupBindSparseInfoKHX;
         public const VkStructureType VK_STRUCTURE_TYPE_ACQUIRE_NEXT_IMAGE_INFO_KHX = VkStructureType.AcquireNextImageInfoKHX;
+        public const VkStructureType VK_STRUCTURE_TYPE_BIND_BUFFER_MEMORY_DEVICE_GROUP_INFO_KHX = VkStructureType.BindBufferMemoryDeviceGroupInfoKHX;
+        public const VkStructureType VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_DEVICE_GROUP_INFO_KHX = VkStructureType.BindImageMemoryDeviceGroupInfoKHX;
         public const VkStructureType VK_STRUCTURE_TYPE_DEVICE_GROUP_PRESENT_CAPABILITIES_KHX = VkStructureType.DeviceGroupPresentCapabilitiesKHX;
         public const VkStructureType VK_STRUCTURE_TYPE_IMAGE_SWAPCHAIN_CREATE_INFO_KHX = VkStructureType.ImageSwapchainCreateInfoKHX;
         public const VkStructureType VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_SWAPCHAIN_INFO_KHX = VkStructureType.BindImageMemorySwapchainInfoKHX;
@@ -1413,6 +1498,10 @@ namespace Vulkan
         public const VkStructureType VK_STRUCTURE_TYPE_FENCE_GET_WIN32_HANDLE_INFO_KHR = VkStructureType.FenceGetWin32HandleInfoKHR;
         public const VkStructureType VK_STRUCTURE_TYPE_IMPORT_FENCE_FD_INFO_KHR = VkStructureType.ImportFenceFdInfoKHR;
         public const VkStructureType VK_STRUCTURE_TYPE_FENCE_GET_FD_INFO_KHR = VkStructureType.FenceGetFdInfoKHR;
+        public const VkStructureType VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_POINT_CLIPPING_PROPERTIES_KHR = VkStructureType.PhysicalDevicePointClippingPropertiesKHR;
+        public const VkStructureType VK_STRUCTURE_TYPE_RENDER_PASS_INPUT_ATTACHMENT_ASPECT_CREATE_INFO_KHR = VkStructureType.RenderPassInputAttachmentAspectCreateInfoKHR;
+        public const VkStructureType VK_STRUCTURE_TYPE_IMAGE_VIEW_USAGE_CREATE_INFO_KHR = VkStructureType.ImageViewUsageCreateInfoKHR;
+        public const VkStructureType VK_STRUCTURE_TYPE_PIPELINE_TESSELLATION_DOMAIN_ORIGIN_STATE_CREATE_INFO_KHR = VkStructureType.PipelineTessellationDomainOriginStateCreateInfoKHR;
         public const VkStructureType VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SURFACE_INFO_2_KHR = VkStructureType.PhysicalDeviceSurfaceInfo2KHR;
         public const VkStructureType VK_STRUCTURE_TYPE_SURFACE_CAPABILITIES_2_KHR = VkStructureType.SurfaceCapabilities2KHR;
         public const VkStructureType VK_STRUCTURE_TYPE_SURFACE_FORMAT_2_KHR = VkStructureType.SurfaceFormat2KHR;
@@ -1433,11 +1522,20 @@ namespace Vulkan
         public const VkStructureType VK_STRUCTURE_TYPE_IMAGE_SPARSE_MEMORY_REQUIREMENTS_INFO_2_KHR = VkStructureType.ImageSparseMemoryRequirementsInfo2KHR;
         public const VkStructureType VK_STRUCTURE_TYPE_MEMORY_REQUIREMENTS_2_KHR = VkStructureType.MemoryRequirements2KHR;
         public const VkStructureType VK_STRUCTURE_TYPE_SPARSE_IMAGE_MEMORY_REQUIREMENTS_2_KHR = VkStructureType.SparseImageMemoryRequirements2KHR;
+        public const VkStructureType VK_STRUCTURE_TYPE_IMAGE_FORMAT_LIST_CREATE_INFO_KHR = VkStructureType.ImageFormatListCreateInfoKHR;
         public const VkStructureType VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_BLEND_OPERATION_ADVANCED_FEATURES_EXT = VkStructureType.PhysicalDeviceBlendOperationAdvancedFeaturesEXT;
         public const VkStructureType VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_BLEND_OPERATION_ADVANCED_PROPERTIES_EXT = VkStructureType.PhysicalDeviceBlendOperationAdvancedPropertiesEXT;
         public const VkStructureType VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_ADVANCED_STATE_CREATE_INFO_EXT = VkStructureType.PipelineColorBlendAdvancedStateCreateInfoEXT;
         public const VkStructureType VK_STRUCTURE_TYPE_PIPELINE_COVERAGE_TO_COLOR_STATE_CREATE_INFO_NV = VkStructureType.PipelineCoverageToColorStateCreateInfoNV;
         public const VkStructureType VK_STRUCTURE_TYPE_PIPELINE_COVERAGE_MODULATION_STATE_CREATE_INFO_NV = VkStructureType.PipelineCoverageModulationStateCreateInfoNV;
+        public const VkStructureType VK_STRUCTURE_TYPE_SAMPLER_YCBCR_CONVERSION_CREATE_INFO_KHR = VkStructureType.SamplerYcbcrConversionCreateInfoKHR;
+        public const VkStructureType VK_STRUCTURE_TYPE_SAMPLER_YCBCR_CONVERSION_INFO_KHR = VkStructureType.SamplerYcbcrConversionInfoKHR;
+        public const VkStructureType VK_STRUCTURE_TYPE_BIND_IMAGE_PLANE_MEMORY_INFO_KHR = VkStructureType.BindImagePlaneMemoryInfoKHR;
+        public const VkStructureType VK_STRUCTURE_TYPE_IMAGE_PLANE_MEMORY_REQUIREMENTS_INFO_KHR = VkStructureType.ImagePlaneMemoryRequirementsInfoKHR;
+        public const VkStructureType VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SAMPLER_YCBCR_CONVERSION_FEATURES_KHR = VkStructureType.PhysicalDeviceSamplerYcbcrConversionFeaturesKHR;
+        public const VkStructureType VK_STRUCTURE_TYPE_SAMPLER_YCBCR_CONVERSION_IMAGE_FORMAT_PROPERTIES_KHR = VkStructureType.SamplerYcbcrConversionImageFormatPropertiesKHR;
+        public const VkStructureType VK_STRUCTURE_TYPE_BIND_BUFFER_MEMORY_INFO_KHR = VkStructureType.BindBufferMemoryInfoKHR;
+        public const VkStructureType VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_INFO_KHR = VkStructureType.BindImageMemoryInfoKHR;
         public const VkStructureType VK_STRUCTURE_TYPE_VALIDATION_CACHE_CREATE_INFO_EXT = VkStructureType.ValidationCacheCreateInfoEXT;
         public const VkStructureType VK_STRUCTURE_TYPE_SHADER_MODULE_VALIDATION_CACHE_CREATE_INFO_EXT = VkStructureType.ShaderModuleValidationCacheCreateInfoEXT;
     }
@@ -1657,6 +1755,7 @@ namespace Vulkan
         DescriptorUpdateTemplateKHR = 1000085000,
         ObjectTableNVX = 1000086000,
         IndirectCommandsLayoutNVX = 1000086001,
+        SamplerYcbcrConversionKHR = 1000156000,
         ValidationCacheEXT = 1000160000,
     }
     public static partial class RawConstants
@@ -1720,6 +1819,7 @@ namespace Vulkan
         public const VkObjectType VK_OBJECT_TYPE_DESCRIPTOR_UPDATE_TEMPLATE_KHR = VkObjectType.DescriptorUpdateTemplateKHR;
         public const VkObjectType VK_OBJECT_TYPE_OBJECT_TABLE_NVX = VkObjectType.ObjectTableNVX;
         public const VkObjectType VK_OBJECT_TYPE_INDIRECT_COMMANDS_LAYOUT_NVX = VkObjectType.IndirectCommandsLayoutNVX;
+        public const VkObjectType VK_OBJECT_TYPE_SAMPLER_YCBCR_CONVERSION_KHR = VkObjectType.SamplerYcbcrConversionKHR;
         public const VkObjectType VK_OBJECT_TYPE_VALIDATION_CACHE_EXT = VkObjectType.ValidationCacheEXT;
     }
 
@@ -2023,7 +2123,11 @@ namespace Vulkan
         CubeCompatible = 16,
         BindSfrKHX = 64,
         _2dArrayCompatibleKHR = 32,
+        BlockTexelViewCompatibleKHR = 128,
+        ExtendedUsageKHR = 256,
         SampleLocationsCompatibleDepthEXT = 4096,
+        DisjointKHR = 512,
+        AliasKHR = 1024,
     }
     public static partial class RawConstants
     {
@@ -2039,7 +2143,11 @@ namespace Vulkan
         public const VkImageCreateFlags VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT = VkImageCreateFlags.CubeCompatible;
         public const VkImageCreateFlags VK_IMAGE_CREATE_BIND_SFR_BIT_KHX = VkImageCreateFlags.BindSfrKHX;
         public const VkImageCreateFlags VK_IMAGE_CREATE_2D_ARRAY_COMPATIBLE_BIT_KHR = VkImageCreateFlags._2dArrayCompatibleKHR;
+        public const VkImageCreateFlags VK_IMAGE_CREATE_BLOCK_TEXEL_VIEW_COMPATIBLE_BIT_KHR = VkImageCreateFlags.BlockTexelViewCompatibleKHR;
+        public const VkImageCreateFlags VK_IMAGE_CREATE_EXTENDED_USAGE_BIT_KHR = VkImageCreateFlags.ExtendedUsageKHR;
         public const VkImageCreateFlags VK_IMAGE_CREATE_SAMPLE_LOCATIONS_COMPATIBLE_DEPTH_BIT_EXT = VkImageCreateFlags.SampleLocationsCompatibleDepthEXT;
+        public const VkImageCreateFlags VK_IMAGE_CREATE_DISJOINT_BIT_KHR = VkImageCreateFlags.DisjointKHR;
+        public const VkImageCreateFlags VK_IMAGE_CREATE_ALIAS_BIT_KHR = VkImageCreateFlags.AliasKHR;
     }
 
     [Flags]
@@ -2123,6 +2231,13 @@ namespace Vulkan
         TransferSrcKHR = 16384,
         TransferDstKHR = 32768,
         SampledImageFilterMinmaxEXT = 65536,
+        MidpointChromaSamplesKHR = 131072,
+        SampledImageYcbcrConversionLinearFilterKHR = 262144,
+        SampledImageYcbcrConversionSeparateReconstructionFilterKHR = 524288,
+        SampledImageYcbcrConversionChromaReconstructionExplicitKHR = 1048576,
+        SampledImageYcbcrConversionChromaReconstructionExplicitForceableKHR = 2097152,
+        DisjointKHR = 4194304,
+        CositedChromaSamplesKHR = 8388608,
     }
     public static partial class RawConstants
     {
@@ -2156,6 +2271,13 @@ namespace Vulkan
         public const VkFormatFeatureFlags VK_FORMAT_FEATURE_TRANSFER_SRC_BIT_KHR = VkFormatFeatureFlags.TransferSrcKHR;
         public const VkFormatFeatureFlags VK_FORMAT_FEATURE_TRANSFER_DST_BIT_KHR = VkFormatFeatureFlags.TransferDstKHR;
         public const VkFormatFeatureFlags VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_MINMAX_BIT_EXT = VkFormatFeatureFlags.SampledImageFilterMinmaxEXT;
+        public const VkFormatFeatureFlags VK_FORMAT_FEATURE_MIDPOINT_CHROMA_SAMPLES_BIT_KHR = VkFormatFeatureFlags.MidpointChromaSamplesKHR;
+        public const VkFormatFeatureFlags VK_FORMAT_FEATURE_SAMPLED_IMAGE_YCBCR_CONVERSION_LINEAR_FILTER_BIT_KHR = VkFormatFeatureFlags.SampledImageYcbcrConversionLinearFilterKHR;
+        public const VkFormatFeatureFlags VK_FORMAT_FEATURE_SAMPLED_IMAGE_YCBCR_CONVERSION_SEPARATE_RECONSTRUCTION_FILTER_BIT_KHR = VkFormatFeatureFlags.SampledImageYcbcrConversionSeparateReconstructionFilterKHR;
+        public const VkFormatFeatureFlags VK_FORMAT_FEATURE_SAMPLED_IMAGE_YCBCR_CONVERSION_CHROMA_RECONSTRUCTION_EXPLICIT_BIT_KHR = VkFormatFeatureFlags.SampledImageYcbcrConversionChromaReconstructionExplicitKHR;
+        public const VkFormatFeatureFlags VK_FORMAT_FEATURE_SAMPLED_IMAGE_YCBCR_CONVERSION_CHROMA_RECONSTRUCTION_EXPLICIT_FORCEABLE_BIT_KHR = VkFormatFeatureFlags.SampledImageYcbcrConversionChromaReconstructionExplicitForceableKHR;
+        public const VkFormatFeatureFlags VK_FORMAT_FEATURE_DISJOINT_BIT_KHR = VkFormatFeatureFlags.DisjointKHR;
+        public const VkFormatFeatureFlags VK_FORMAT_FEATURE_COSITED_CHROMA_SAMPLES_BIT_KHR = VkFormatFeatureFlags.CositedChromaSamplesKHR;
     }
 
     [Flags]
@@ -2274,6 +2396,9 @@ namespace Vulkan
         Depth = 2,
         Stencil = 4,
         Metadata = 8,
+        Plane0KHR = 16,
+        Plane1KHR = 32,
+        Plane2KHR = 64,
     }
     public static partial class RawConstants
     {
@@ -2281,6 +2406,9 @@ namespace Vulkan
         public const VkImageAspectFlags VK_IMAGE_ASPECT_DEPTH_BIT = VkImageAspectFlags.Depth;
         public const VkImageAspectFlags VK_IMAGE_ASPECT_STENCIL_BIT = VkImageAspectFlags.Stencil;
         public const VkImageAspectFlags VK_IMAGE_ASPECT_METADATA_BIT = VkImageAspectFlags.Metadata;
+        public const VkImageAspectFlags VK_IMAGE_ASPECT_PLANE_0_BIT_KHR = VkImageAspectFlags.Plane0KHR;
+        public const VkImageAspectFlags VK_IMAGE_ASPECT_PLANE_1_BIT_KHR = VkImageAspectFlags.Plane1KHR;
+        public const VkImageAspectFlags VK_IMAGE_ASPECT_PLANE_2_BIT_KHR = VkImageAspectFlags.Plane2KHR;
     }
 
     [Flags]
@@ -2713,6 +2841,7 @@ namespace Vulkan
         IndirectCommandsLayoutNVXEXT = 32,
         ValidationCacheEXT = 33,
         DescriptorUpdateTemplateKHREXT = 1000085000,
+        SamplerYcbcrConversionKHREXT = 1000156000,
     }
     public static partial class RawConstants
     {
@@ -2751,6 +2880,7 @@ namespace Vulkan
         public const VkDebugReportObjectTypeEXT VK_DEBUG_REPORT_OBJECT_TYPE_INDIRECT_COMMANDS_LAYOUT_NVX_EXT = VkDebugReportObjectTypeEXT.IndirectCommandsLayoutNVXEXT;
         public const VkDebugReportObjectTypeEXT VK_DEBUG_REPORT_OBJECT_TYPE_VALIDATION_CACHE_EXT = VkDebugReportObjectTypeEXT.ValidationCacheEXT;
         public const VkDebugReportObjectTypeEXT VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_UPDATE_TEMPLATE_KHR_EXT = VkDebugReportObjectTypeEXT.DescriptorUpdateTemplateKHREXT;
+        public const VkDebugReportObjectTypeEXT VK_DEBUG_REPORT_OBJECT_TYPE_SAMPLER_YCBCR_CONVERSION_KHR_EXT = VkDebugReportObjectTypeEXT.SamplerYcbcrConversionKHREXT;
     }
 
     public enum VkRasterizationOrderAMD
@@ -3173,6 +3303,17 @@ namespace Vulkan
         public const VkSubpassDescriptionFlags VK_SUBPASS_DESCRIPTION_PER_VIEW_POSITION_X_ONLY_BIT_NVX = VkSubpassDescriptionFlags.PerViewPositionXOnlyNVX;
     }
 
+    public enum VkPointClippingBehaviorKHR
+    {
+        AllClipPlanesKHR = 0,
+        UserClipPlanesOnlyKHR = 1,
+    }
+    public static partial class RawConstants
+    {
+        public const VkPointClippingBehaviorKHR VK_POINT_CLIPPING_BEHAVIOR_ALL_CLIP_PLANES_KHR = VkPointClippingBehaviorKHR.AllClipPlanesKHR;
+        public const VkPointClippingBehaviorKHR VK_POINT_CLIPPING_BEHAVIOR_USER_CLIP_PLANES_ONLY_KHR = VkPointClippingBehaviorKHR.UserClipPlanesOnlyKHR;
+    }
+
     public enum VkSamplerReductionModeEXT
     {
         WeightedAverageEXT = 0,
@@ -3184,6 +3325,68 @@ namespace Vulkan
         public const VkSamplerReductionModeEXT VK_SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE_EXT = VkSamplerReductionModeEXT.WeightedAverageEXT;
         public const VkSamplerReductionModeEXT VK_SAMPLER_REDUCTION_MODE_MIN_EXT = VkSamplerReductionModeEXT.MinEXT;
         public const VkSamplerReductionModeEXT VK_SAMPLER_REDUCTION_MODE_MAX_EXT = VkSamplerReductionModeEXT.MaxEXT;
+    }
+
+    public enum VkTessellationDomainOriginKHR
+    {
+        UpperLeftKHR = 0,
+        LowerLeftKHR = 1,
+    }
+    public static partial class RawConstants
+    {
+        public const VkTessellationDomainOriginKHR VK_TESSELLATION_DOMAIN_ORIGIN_UPPER_LEFT_KHR = VkTessellationDomainOriginKHR.UpperLeftKHR;
+        public const VkTessellationDomainOriginKHR VK_TESSELLATION_DOMAIN_ORIGIN_LOWER_LEFT_KHR = VkTessellationDomainOriginKHR.LowerLeftKHR;
+    }
+
+    public enum VkSamplerYcbcrModelConversionKHR
+    {
+        RgbIdentityKHR = 0,
+        ///<summary>just range expansion</summary>
+        YcbcrIdentityKHR = 1,
+        ///<summary>aka HD YUV</summary>
+        Ycbcr709KHR = 2,
+        ///<summary>aka SD YUV</summary>
+        Ycbcr601KHR = 3,
+        ///<summary>aka UHD YUV</summary>
+        Ycbcr2020KHR = 4,
+    }
+    public static partial class RawConstants
+    {
+        public const VkSamplerYcbcrModelConversionKHR VK_SAMPLER_YCBCR_MODEL_CONVERSION_RGB_IDENTITY_KHR = VkSamplerYcbcrModelConversionKHR.RgbIdentityKHR;
+        ///<summary>just range expansion</summary>
+        public const VkSamplerYcbcrModelConversionKHR VK_SAMPLER_YCBCR_MODEL_CONVERSION_YCBCR_IDENTITY_KHR = VkSamplerYcbcrModelConversionKHR.YcbcrIdentityKHR;
+        ///<summary>aka HD YUV</summary>
+        public const VkSamplerYcbcrModelConversionKHR VK_SAMPLER_YCBCR_MODEL_CONVERSION_YCBCR_709_KHR = VkSamplerYcbcrModelConversionKHR.Ycbcr709KHR;
+        ///<summary>aka SD YUV</summary>
+        public const VkSamplerYcbcrModelConversionKHR VK_SAMPLER_YCBCR_MODEL_CONVERSION_YCBCR_601_KHR = VkSamplerYcbcrModelConversionKHR.Ycbcr601KHR;
+        ///<summary>aka UHD YUV</summary>
+        public const VkSamplerYcbcrModelConversionKHR VK_SAMPLER_YCBCR_MODEL_CONVERSION_YCBCR_2020_KHR = VkSamplerYcbcrModelConversionKHR.Ycbcr2020KHR;
+    }
+
+    public enum VkSamplerYcbcrRangeKHR
+    {
+        ///<summary>Luma 0..1 maps to 0..255, chroma -0.5..0.5 to 1..255 (clamped)</summary>
+        ItuFullKHR = 0,
+        ///<summary>Luma 0..1 maps to 16..235, chroma -0.5..0.5 to 16..240</summary>
+        ItuNarrowKHR = 1,
+    }
+    public static partial class RawConstants
+    {
+        ///<summary>Luma 0..1 maps to 0..255, chroma -0.5..0.5 to 1..255 (clamped)</summary>
+        public const VkSamplerYcbcrRangeKHR VK_SAMPLER_YCBCR_RANGE_ITU_FULL_KHR = VkSamplerYcbcrRangeKHR.ItuFullKHR;
+        ///<summary>Luma 0..1 maps to 16..235, chroma -0.5..0.5 to 16..240</summary>
+        public const VkSamplerYcbcrRangeKHR VK_SAMPLER_YCBCR_RANGE_ITU_NARROW_KHR = VkSamplerYcbcrRangeKHR.ItuNarrowKHR;
+    }
+
+    public enum VkChromaLocationKHR
+    {
+        CositedEvenKHR = 0,
+        MidpointKHR = 1,
+    }
+    public static partial class RawConstants
+    {
+        public const VkChromaLocationKHR VK_CHROMA_LOCATION_COSITED_EVEN_KHR = VkChromaLocationKHR.CositedEvenKHR;
+        public const VkChromaLocationKHR VK_CHROMA_LOCATION_MIDPOINT_KHR = VkChromaLocationKHR.MidpointKHR;
     }
 
     public enum VkBlendOverlapEXT

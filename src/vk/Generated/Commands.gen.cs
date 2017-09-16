@@ -358,31 +358,31 @@ namespace Vulkan
             throw new NotImplementedException();
         }
 
-        private static IntPtr vkBindBufferMemory2KHX_ptr;
+        private static IntPtr vkBindBufferMemory2KHR_ptr;
         ///<remarks>Success codes:VK_SUCCESS. Error codes:VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY</remarks>
         [Generator.CalliRewrite]
-        public static unsafe VkResult vkBindBufferMemory2KHX(VkDevice device, uint bindInfoCount, VkBindBufferMemoryInfoKHX* pBindInfos)
+        public static unsafe VkResult vkBindBufferMemory2KHR(VkDevice device, uint bindInfoCount, VkBindBufferMemoryInfoKHR* pBindInfos)
         {
             throw new NotImplementedException();
         }
 
         ///<remarks>Success codes:VK_SUCCESS. Error codes:VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY</remarks>
         [Generator.CalliRewrite]
-        public static unsafe VkResult vkBindBufferMemory2KHX(VkDevice device, uint bindInfoCount, ref VkBindBufferMemoryInfoKHX pBindInfos)
+        public static unsafe VkResult vkBindBufferMemory2KHR(VkDevice device, uint bindInfoCount, ref VkBindBufferMemoryInfoKHR pBindInfos)
         {
             throw new NotImplementedException();
         }
 
         ///<remarks>Success codes:VK_SUCCESS. Error codes:VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY</remarks>
         [Generator.CalliRewrite]
-        public static unsafe VkResult vkBindBufferMemory2KHX(VkDevice device, uint bindInfoCount, IntPtr pBindInfos)
+        public static unsafe VkResult vkBindBufferMemory2KHR(VkDevice device, uint bindInfoCount, IntPtr pBindInfos)
         {
             throw new NotImplementedException();
         }
 
         ///<remarks>Success codes:VK_SUCCESS. Error codes:VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY</remarks>
         [Generator.CalliRewrite]
-        public static unsafe VkResult vkBindBufferMemory2KHX(VkDevice device, uint bindInfoCount, VkBindBufferMemoryInfoKHX[] pBindInfos)
+        public static unsafe VkResult vkBindBufferMemory2KHR(VkDevice device, uint bindInfoCount, VkBindBufferMemoryInfoKHR[] pBindInfos)
         {
             throw new NotImplementedException();
         }
@@ -395,31 +395,31 @@ namespace Vulkan
             throw new NotImplementedException();
         }
 
-        private static IntPtr vkBindImageMemory2KHX_ptr;
+        private static IntPtr vkBindImageMemory2KHR_ptr;
         ///<remarks>Success codes:VK_SUCCESS. Error codes:VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY</remarks>
         [Generator.CalliRewrite]
-        public static unsafe VkResult vkBindImageMemory2KHX(VkDevice device, uint bindInfoCount, VkBindImageMemoryInfoKHX* pBindInfos)
+        public static unsafe VkResult vkBindImageMemory2KHR(VkDevice device, uint bindInfoCount, VkBindImageMemoryInfoKHR* pBindInfos)
         {
             throw new NotImplementedException();
         }
 
         ///<remarks>Success codes:VK_SUCCESS. Error codes:VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY</remarks>
         [Generator.CalliRewrite]
-        public static unsafe VkResult vkBindImageMemory2KHX(VkDevice device, uint bindInfoCount, ref VkBindImageMemoryInfoKHX pBindInfos)
+        public static unsafe VkResult vkBindImageMemory2KHR(VkDevice device, uint bindInfoCount, ref VkBindImageMemoryInfoKHR pBindInfos)
         {
             throw new NotImplementedException();
         }
 
         ///<remarks>Success codes:VK_SUCCESS. Error codes:VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY</remarks>
         [Generator.CalliRewrite]
-        public static unsafe VkResult vkBindImageMemory2KHX(VkDevice device, uint bindInfoCount, IntPtr pBindInfos)
+        public static unsafe VkResult vkBindImageMemory2KHR(VkDevice device, uint bindInfoCount, IntPtr pBindInfos)
         {
             throw new NotImplementedException();
         }
 
         ///<remarks>Success codes:VK_SUCCESS. Error codes:VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY</remarks>
         [Generator.CalliRewrite]
-        public static unsafe VkResult vkBindImageMemory2KHX(VkDevice device, uint bindInfoCount, VkBindImageMemoryInfoKHX[] pBindInfos)
+        public static unsafe VkResult vkBindImageMemory2KHR(VkDevice device, uint bindInfoCount, VkBindImageMemoryInfoKHR[] pBindInfos)
         {
             throw new NotImplementedException();
         }
@@ -5689,6 +5689,133 @@ namespace Vulkan
             throw new NotImplementedException();
         }
 
+        private static IntPtr vkCreateSamplerYcbcrConversionKHR_ptr;
+        ///<remarks>Success codes:VK_SUCCESS. Error codes:VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY</remarks>
+        [Generator.CalliRewrite]
+        public static unsafe VkResult vkCreateSamplerYcbcrConversionKHR(VkDevice device, VkSamplerYcbcrConversionCreateInfoKHR* pCreateInfo, VkAllocationCallbacks* pAllocator, VkSamplerYcbcrConversionKHR* pYcbcrConversion)
+        {
+            throw new NotImplementedException();
+        }
+
+        ///<remarks>Success codes:VK_SUCCESS. Error codes:VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY</remarks>
+        [Generator.CalliRewrite]
+        public static unsafe VkResult vkCreateSamplerYcbcrConversionKHR(VkDevice device, VkSamplerYcbcrConversionCreateInfoKHR* pCreateInfo, VkAllocationCallbacks* pAllocator, out VkSamplerYcbcrConversionKHR pYcbcrConversion)
+        {
+            throw new NotImplementedException();
+        }
+
+        ///<remarks>Success codes:VK_SUCCESS. Error codes:VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY</remarks>
+        [Generator.CalliRewrite]
+        public static unsafe VkResult vkCreateSamplerYcbcrConversionKHR(VkDevice device, VkSamplerYcbcrConversionCreateInfoKHR* pCreateInfo, ref VkAllocationCallbacks pAllocator, VkSamplerYcbcrConversionKHR* pYcbcrConversion)
+        {
+            throw new NotImplementedException();
+        }
+
+        ///<remarks>Success codes:VK_SUCCESS. Error codes:VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY</remarks>
+        [Generator.CalliRewrite]
+        public static unsafe VkResult vkCreateSamplerYcbcrConversionKHR(VkDevice device, VkSamplerYcbcrConversionCreateInfoKHR* pCreateInfo, ref VkAllocationCallbacks pAllocator, out VkSamplerYcbcrConversionKHR pYcbcrConversion)
+        {
+            throw new NotImplementedException();
+        }
+
+        ///<remarks>Success codes:VK_SUCCESS. Error codes:VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY</remarks>
+        [Generator.CalliRewrite]
+        public static unsafe VkResult vkCreateSamplerYcbcrConversionKHR(VkDevice device, VkSamplerYcbcrConversionCreateInfoKHR* pCreateInfo, IntPtr pAllocator, VkSamplerYcbcrConversionKHR* pYcbcrConversion)
+        {
+            throw new NotImplementedException();
+        }
+
+        ///<remarks>Success codes:VK_SUCCESS. Error codes:VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY</remarks>
+        [Generator.CalliRewrite]
+        public static unsafe VkResult vkCreateSamplerYcbcrConversionKHR(VkDevice device, VkSamplerYcbcrConversionCreateInfoKHR* pCreateInfo, IntPtr pAllocator, out VkSamplerYcbcrConversionKHR pYcbcrConversion)
+        {
+            throw new NotImplementedException();
+        }
+
+        ///<remarks>Success codes:VK_SUCCESS. Error codes:VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY</remarks>
+        [Generator.CalliRewrite]
+        public static unsafe VkResult vkCreateSamplerYcbcrConversionKHR(VkDevice device, ref VkSamplerYcbcrConversionCreateInfoKHR pCreateInfo, VkAllocationCallbacks* pAllocator, VkSamplerYcbcrConversionKHR* pYcbcrConversion)
+        {
+            throw new NotImplementedException();
+        }
+
+        ///<remarks>Success codes:VK_SUCCESS. Error codes:VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY</remarks>
+        [Generator.CalliRewrite]
+        public static unsafe VkResult vkCreateSamplerYcbcrConversionKHR(VkDevice device, ref VkSamplerYcbcrConversionCreateInfoKHR pCreateInfo, VkAllocationCallbacks* pAllocator, out VkSamplerYcbcrConversionKHR pYcbcrConversion)
+        {
+            throw new NotImplementedException();
+        }
+
+        ///<remarks>Success codes:VK_SUCCESS. Error codes:VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY</remarks>
+        [Generator.CalliRewrite]
+        public static unsafe VkResult vkCreateSamplerYcbcrConversionKHR(VkDevice device, ref VkSamplerYcbcrConversionCreateInfoKHR pCreateInfo, ref VkAllocationCallbacks pAllocator, VkSamplerYcbcrConversionKHR* pYcbcrConversion)
+        {
+            throw new NotImplementedException();
+        }
+
+        ///<remarks>Success codes:VK_SUCCESS. Error codes:VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY</remarks>
+        [Generator.CalliRewrite]
+        public static unsafe VkResult vkCreateSamplerYcbcrConversionKHR(VkDevice device, ref VkSamplerYcbcrConversionCreateInfoKHR pCreateInfo, ref VkAllocationCallbacks pAllocator, out VkSamplerYcbcrConversionKHR pYcbcrConversion)
+        {
+            throw new NotImplementedException();
+        }
+
+        ///<remarks>Success codes:VK_SUCCESS. Error codes:VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY</remarks>
+        [Generator.CalliRewrite]
+        public static unsafe VkResult vkCreateSamplerYcbcrConversionKHR(VkDevice device, ref VkSamplerYcbcrConversionCreateInfoKHR pCreateInfo, IntPtr pAllocator, VkSamplerYcbcrConversionKHR* pYcbcrConversion)
+        {
+            throw new NotImplementedException();
+        }
+
+        ///<remarks>Success codes:VK_SUCCESS. Error codes:VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY</remarks>
+        [Generator.CalliRewrite]
+        public static unsafe VkResult vkCreateSamplerYcbcrConversionKHR(VkDevice device, ref VkSamplerYcbcrConversionCreateInfoKHR pCreateInfo, IntPtr pAllocator, out VkSamplerYcbcrConversionKHR pYcbcrConversion)
+        {
+            throw new NotImplementedException();
+        }
+
+        ///<remarks>Success codes:VK_SUCCESS. Error codes:VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY</remarks>
+        [Generator.CalliRewrite]
+        public static unsafe VkResult vkCreateSamplerYcbcrConversionKHR(VkDevice device, IntPtr pCreateInfo, VkAllocationCallbacks* pAllocator, VkSamplerYcbcrConversionKHR* pYcbcrConversion)
+        {
+            throw new NotImplementedException();
+        }
+
+        ///<remarks>Success codes:VK_SUCCESS. Error codes:VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY</remarks>
+        [Generator.CalliRewrite]
+        public static unsafe VkResult vkCreateSamplerYcbcrConversionKHR(VkDevice device, IntPtr pCreateInfo, VkAllocationCallbacks* pAllocator, out VkSamplerYcbcrConversionKHR pYcbcrConversion)
+        {
+            throw new NotImplementedException();
+        }
+
+        ///<remarks>Success codes:VK_SUCCESS. Error codes:VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY</remarks>
+        [Generator.CalliRewrite]
+        public static unsafe VkResult vkCreateSamplerYcbcrConversionKHR(VkDevice device, IntPtr pCreateInfo, ref VkAllocationCallbacks pAllocator, VkSamplerYcbcrConversionKHR* pYcbcrConversion)
+        {
+            throw new NotImplementedException();
+        }
+
+        ///<remarks>Success codes:VK_SUCCESS. Error codes:VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY</remarks>
+        [Generator.CalliRewrite]
+        public static unsafe VkResult vkCreateSamplerYcbcrConversionKHR(VkDevice device, IntPtr pCreateInfo, ref VkAllocationCallbacks pAllocator, out VkSamplerYcbcrConversionKHR pYcbcrConversion)
+        {
+            throw new NotImplementedException();
+        }
+
+        ///<remarks>Success codes:VK_SUCCESS. Error codes:VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY</remarks>
+        [Generator.CalliRewrite]
+        public static unsafe VkResult vkCreateSamplerYcbcrConversionKHR(VkDevice device, IntPtr pCreateInfo, IntPtr pAllocator, VkSamplerYcbcrConversionKHR* pYcbcrConversion)
+        {
+            throw new NotImplementedException();
+        }
+
+        ///<remarks>Success codes:VK_SUCCESS. Error codes:VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY</remarks>
+        [Generator.CalliRewrite]
+        public static unsafe VkResult vkCreateSamplerYcbcrConversionKHR(VkDevice device, IntPtr pCreateInfo, IntPtr pAllocator, out VkSamplerYcbcrConversionKHR pYcbcrConversion)
+        {
+            throw new NotImplementedException();
+        }
+
         private static IntPtr vkCreateSemaphore_ptr;
         ///<remarks>Success codes:VK_SUCCESS. Error codes:VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY</remarks>
         [Generator.CalliRewrite]
@@ -7466,6 +7593,25 @@ namespace Vulkan
 
         [Generator.CalliRewrite]
         public static unsafe void vkDestroySampler(VkDevice device, VkSampler sampler, IntPtr pAllocator)
+        {
+            throw new NotImplementedException();
+        }
+
+        private static IntPtr vkDestroySamplerYcbcrConversionKHR_ptr;
+        [Generator.CalliRewrite]
+        public static unsafe void vkDestroySamplerYcbcrConversionKHR(VkDevice device, VkSamplerYcbcrConversionKHR ycbcrConversion, VkAllocationCallbacks* pAllocator)
+        {
+            throw new NotImplementedException();
+        }
+
+        [Generator.CalliRewrite]
+        public static unsafe void vkDestroySamplerYcbcrConversionKHR(VkDevice device, VkSamplerYcbcrConversionKHR ycbcrConversion, ref VkAllocationCallbacks pAllocator)
+        {
+            throw new NotImplementedException();
+        }
+
+        [Generator.CalliRewrite]
+        public static unsafe void vkDestroySamplerYcbcrConversionKHR(VkDevice device, VkSamplerYcbcrConversionKHR ycbcrConversion, IntPtr pAllocator)
         {
             throw new NotImplementedException();
         }
@@ -11475,8 +11621,8 @@ namespace Vulkan
             vkGetPhysicalDeviceSurfaceCapabilities2EXT_ptr = s_nativeLib.LoadFunctionPointer("vkGetPhysicalDeviceSurfaceCapabilities2EXT");
             vkEnumeratePhysicalDeviceGroupsKHX_ptr = s_nativeLib.LoadFunctionPointer("vkEnumeratePhysicalDeviceGroupsKHX");
             vkGetDeviceGroupPeerMemoryFeaturesKHX_ptr = s_nativeLib.LoadFunctionPointer("vkGetDeviceGroupPeerMemoryFeaturesKHX");
-            vkBindBufferMemory2KHX_ptr = s_nativeLib.LoadFunctionPointer("vkBindBufferMemory2KHX");
-            vkBindImageMemory2KHX_ptr = s_nativeLib.LoadFunctionPointer("vkBindImageMemory2KHX");
+            vkBindBufferMemory2KHR_ptr = s_nativeLib.LoadFunctionPointer("vkBindBufferMemory2KHR");
+            vkBindImageMemory2KHR_ptr = s_nativeLib.LoadFunctionPointer("vkBindImageMemory2KHR");
             vkCmdSetDeviceMaskKHX_ptr = s_nativeLib.LoadFunctionPointer("vkCmdSetDeviceMaskKHX");
             vkGetDeviceGroupPresentCapabilitiesKHX_ptr = s_nativeLib.LoadFunctionPointer("vkGetDeviceGroupPresentCapabilitiesKHX");
             vkGetDeviceGroupSurfacePresentModesKHX_ptr = s_nativeLib.LoadFunctionPointer("vkGetDeviceGroupSurfacePresentModesKHX");
@@ -11502,6 +11648,8 @@ namespace Vulkan
             vkGetBufferMemoryRequirements2KHR_ptr = s_nativeLib.LoadFunctionPointer("vkGetBufferMemoryRequirements2KHR");
             vkGetImageMemoryRequirements2KHR_ptr = s_nativeLib.LoadFunctionPointer("vkGetImageMemoryRequirements2KHR");
             vkGetImageSparseMemoryRequirements2KHR_ptr = s_nativeLib.LoadFunctionPointer("vkGetImageSparseMemoryRequirements2KHR");
+            vkCreateSamplerYcbcrConversionKHR_ptr = s_nativeLib.LoadFunctionPointer("vkCreateSamplerYcbcrConversionKHR");
+            vkDestroySamplerYcbcrConversionKHR_ptr = s_nativeLib.LoadFunctionPointer("vkDestroySamplerYcbcrConversionKHR");
             vkCreateValidationCacheEXT_ptr = s_nativeLib.LoadFunctionPointer("vkCreateValidationCacheEXT");
             vkDestroyValidationCacheEXT_ptr = s_nativeLib.LoadFunctionPointer("vkDestroyValidationCacheEXT");
             vkGetValidationCacheDataEXT_ptr = s_nativeLib.LoadFunctionPointer("vkGetValidationCacheDataEXT");
