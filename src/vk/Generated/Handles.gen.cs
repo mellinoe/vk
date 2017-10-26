@@ -19,7 +19,7 @@ namespace Vulkan
         public bool Equals(VkInstance h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkInstance h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
-        private string DebuggerDisplay => string.Format("VkInstance [{0}]", Handle);
+        private string DebuggerDisplay => string.Format("VkInstance [0x{0}]", Handle.ToString("X"));
     }
 
     ///<summary>A dispatchable handle owned by a VkInstance.</summary>
@@ -37,7 +37,7 @@ namespace Vulkan
         public bool Equals(VkPhysicalDevice h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkPhysicalDevice h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
-        private string DebuggerDisplay => string.Format("VkPhysicalDevice [{0}]", Handle);
+        private string DebuggerDisplay => string.Format("VkPhysicalDevice [0x{0}]", Handle.ToString("X"));
     }
 
     ///<summary>A dispatchable handle owned by a VkPhysicalDevice.</summary>
@@ -55,7 +55,7 @@ namespace Vulkan
         public bool Equals(VkDevice h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkDevice h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
-        private string DebuggerDisplay => string.Format("VkDevice [{0}]", Handle);
+        private string DebuggerDisplay => string.Format("VkDevice [0x{0}]", Handle.ToString("X"));
     }
 
     ///<summary>A dispatchable handle owned by a VkDevice.</summary>
@@ -73,7 +73,7 @@ namespace Vulkan
         public bool Equals(VkQueue h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkQueue h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
-        private string DebuggerDisplay => string.Format("VkQueue [{0}]", Handle);
+        private string DebuggerDisplay => string.Format("VkQueue [0x{0}]", Handle.ToString("X"));
     }
 
     ///<summary>A dispatchable handle owned by a VkCommandPool.</summary>
@@ -91,7 +91,7 @@ namespace Vulkan
         public bool Equals(VkCommandBuffer h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkCommandBuffer h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
-        private string DebuggerDisplay => string.Format("VkCommandBuffer [{0}]", Handle);
+        private string DebuggerDisplay => string.Format("VkCommandBuffer [0x{0}]", Handle.ToString("X"));
     }
 
     ///<summary>A non-dispatchable handle owned by a VkDevice.</summary>
@@ -109,7 +109,7 @@ namespace Vulkan
         public bool Equals(VkDeviceMemory h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkDeviceMemory h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
-        private string DebuggerDisplay => string.Format("VkDeviceMemory [{0}]", Handle);
+        private string DebuggerDisplay => string.Format("VkDeviceMemory [0x{0}]", Handle.ToString("X"));
     }
 
     ///<summary>A non-dispatchable handle owned by a VkDevice.</summary>
@@ -127,7 +127,7 @@ namespace Vulkan
         public bool Equals(VkCommandPool h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkCommandPool h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
-        private string DebuggerDisplay => string.Format("VkCommandPool [{0}]", Handle);
+        private string DebuggerDisplay => string.Format("VkCommandPool [0x{0}]", Handle.ToString("X"));
     }
 
     ///<summary>A non-dispatchable handle owned by a VkDevice.</summary>
@@ -145,7 +145,7 @@ namespace Vulkan
         public bool Equals(VkBuffer h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkBuffer h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
-        private string DebuggerDisplay => string.Format("VkBuffer [{0}]", Handle);
+        private string DebuggerDisplay => string.Format("VkBuffer [0x{0}]", Handle.ToString("X"));
     }
 
     ///<summary>A non-dispatchable handle owned by a VkDevice.</summary>
@@ -163,7 +163,7 @@ namespace Vulkan
         public bool Equals(VkBufferView h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkBufferView h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
-        private string DebuggerDisplay => string.Format("VkBufferView [{0}]", Handle);
+        private string DebuggerDisplay => string.Format("VkBufferView [0x{0}]", Handle.ToString("X"));
     }
 
     ///<summary>A non-dispatchable handle owned by a VkDevice.</summary>
@@ -181,7 +181,7 @@ namespace Vulkan
         public bool Equals(VkImage h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkImage h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
-        private string DebuggerDisplay => string.Format("VkImage [{0}]", Handle);
+        private string DebuggerDisplay => string.Format("VkImage [0x{0}]", Handle.ToString("X"));
     }
 
     ///<summary>A non-dispatchable handle owned by a VkDevice.</summary>
@@ -199,7 +199,7 @@ namespace Vulkan
         public bool Equals(VkImageView h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkImageView h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
-        private string DebuggerDisplay => string.Format("VkImageView [{0}]", Handle);
+        private string DebuggerDisplay => string.Format("VkImageView [0x{0}]", Handle.ToString("X"));
     }
 
     ///<summary>A non-dispatchable handle owned by a VkDevice.</summary>
@@ -217,7 +217,7 @@ namespace Vulkan
         public bool Equals(VkShaderModule h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkShaderModule h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
-        private string DebuggerDisplay => string.Format("VkShaderModule [{0}]", Handle);
+        private string DebuggerDisplay => string.Format("VkShaderModule [0x{0}]", Handle.ToString("X"));
     }
 
     ///<summary>A non-dispatchable handle owned by a VkDevice.</summary>
@@ -235,7 +235,7 @@ namespace Vulkan
         public bool Equals(VkPipeline h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkPipeline h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
-        private string DebuggerDisplay => string.Format("VkPipeline [{0}]", Handle);
+        private string DebuggerDisplay => string.Format("VkPipeline [0x{0}]", Handle.ToString("X"));
     }
 
     ///<summary>A non-dispatchable handle owned by a VkDevice.</summary>
@@ -253,7 +253,7 @@ namespace Vulkan
         public bool Equals(VkPipelineLayout h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkPipelineLayout h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
-        private string DebuggerDisplay => string.Format("VkPipelineLayout [{0}]", Handle);
+        private string DebuggerDisplay => string.Format("VkPipelineLayout [0x{0}]", Handle.ToString("X"));
     }
 
     ///<summary>A non-dispatchable handle owned by a VkDevice.</summary>
@@ -271,7 +271,7 @@ namespace Vulkan
         public bool Equals(VkSampler h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkSampler h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
-        private string DebuggerDisplay => string.Format("VkSampler [{0}]", Handle);
+        private string DebuggerDisplay => string.Format("VkSampler [0x{0}]", Handle.ToString("X"));
     }
 
     ///<summary>A non-dispatchable handle owned by a VkDescriptorPool.</summary>
@@ -289,7 +289,7 @@ namespace Vulkan
         public bool Equals(VkDescriptorSet h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkDescriptorSet h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
-        private string DebuggerDisplay => string.Format("VkDescriptorSet [{0}]", Handle);
+        private string DebuggerDisplay => string.Format("VkDescriptorSet [0x{0}]", Handle.ToString("X"));
     }
 
     ///<summary>A non-dispatchable handle owned by a VkDevice.</summary>
@@ -307,7 +307,7 @@ namespace Vulkan
         public bool Equals(VkDescriptorSetLayout h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkDescriptorSetLayout h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
-        private string DebuggerDisplay => string.Format("VkDescriptorSetLayout [{0}]", Handle);
+        private string DebuggerDisplay => string.Format("VkDescriptorSetLayout [0x{0}]", Handle.ToString("X"));
     }
 
     ///<summary>A non-dispatchable handle owned by a VkDevice.</summary>
@@ -325,7 +325,7 @@ namespace Vulkan
         public bool Equals(VkDescriptorPool h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkDescriptorPool h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
-        private string DebuggerDisplay => string.Format("VkDescriptorPool [{0}]", Handle);
+        private string DebuggerDisplay => string.Format("VkDescriptorPool [0x{0}]", Handle.ToString("X"));
     }
 
     ///<summary>A non-dispatchable handle owned by a VkDevice.</summary>
@@ -343,7 +343,7 @@ namespace Vulkan
         public bool Equals(VkFence h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkFence h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
-        private string DebuggerDisplay => string.Format("VkFence [{0}]", Handle);
+        private string DebuggerDisplay => string.Format("VkFence [0x{0}]", Handle.ToString("X"));
     }
 
     ///<summary>A non-dispatchable handle owned by a VkDevice.</summary>
@@ -361,7 +361,7 @@ namespace Vulkan
         public bool Equals(VkSemaphore h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkSemaphore h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
-        private string DebuggerDisplay => string.Format("VkSemaphore [{0}]", Handle);
+        private string DebuggerDisplay => string.Format("VkSemaphore [0x{0}]", Handle.ToString("X"));
     }
 
     ///<summary>A non-dispatchable handle owned by a VkDevice.</summary>
@@ -379,7 +379,7 @@ namespace Vulkan
         public bool Equals(VkEvent h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkEvent h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
-        private string DebuggerDisplay => string.Format("VkEvent [{0}]", Handle);
+        private string DebuggerDisplay => string.Format("VkEvent [0x{0}]", Handle.ToString("X"));
     }
 
     ///<summary>A non-dispatchable handle owned by a VkDevice.</summary>
@@ -397,7 +397,7 @@ namespace Vulkan
         public bool Equals(VkQueryPool h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkQueryPool h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
-        private string DebuggerDisplay => string.Format("VkQueryPool [{0}]", Handle);
+        private string DebuggerDisplay => string.Format("VkQueryPool [0x{0}]", Handle.ToString("X"));
     }
 
     ///<summary>A non-dispatchable handle owned by a VkDevice.</summary>
@@ -415,7 +415,7 @@ namespace Vulkan
         public bool Equals(VkFramebuffer h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkFramebuffer h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
-        private string DebuggerDisplay => string.Format("VkFramebuffer [{0}]", Handle);
+        private string DebuggerDisplay => string.Format("VkFramebuffer [0x{0}]", Handle.ToString("X"));
     }
 
     ///<summary>A non-dispatchable handle owned by a VkDevice.</summary>
@@ -433,7 +433,7 @@ namespace Vulkan
         public bool Equals(VkRenderPass h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkRenderPass h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
-        private string DebuggerDisplay => string.Format("VkRenderPass [{0}]", Handle);
+        private string DebuggerDisplay => string.Format("VkRenderPass [0x{0}]", Handle.ToString("X"));
     }
 
     ///<summary>A non-dispatchable handle owned by a VkDevice.</summary>
@@ -451,7 +451,7 @@ namespace Vulkan
         public bool Equals(VkPipelineCache h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkPipelineCache h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
-        private string DebuggerDisplay => string.Format("VkPipelineCache [{0}]", Handle);
+        private string DebuggerDisplay => string.Format("VkPipelineCache [0x{0}]", Handle.ToString("X"));
     }
 
     ///<summary>A non-dispatchable handle owned by a VkDevice.</summary>
@@ -469,7 +469,7 @@ namespace Vulkan
         public bool Equals(VkObjectTableNVX h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkObjectTableNVX h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
-        private string DebuggerDisplay => string.Format("VkObjectTableNVX [{0}]", Handle);
+        private string DebuggerDisplay => string.Format("VkObjectTableNVX [0x{0}]", Handle.ToString("X"));
     }
 
     ///<summary>A non-dispatchable handle owned by a VkDevice.</summary>
@@ -487,7 +487,7 @@ namespace Vulkan
         public bool Equals(VkIndirectCommandsLayoutNVX h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkIndirectCommandsLayoutNVX h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
-        private string DebuggerDisplay => string.Format("VkIndirectCommandsLayoutNVX [{0}]", Handle);
+        private string DebuggerDisplay => string.Format("VkIndirectCommandsLayoutNVX [0x{0}]", Handle.ToString("X"));
     }
 
     ///<summary>A non-dispatchable handle owned by a VkDevice.</summary>
@@ -505,7 +505,7 @@ namespace Vulkan
         public bool Equals(VkDescriptorUpdateTemplateKHR h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkDescriptorUpdateTemplateKHR h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
-        private string DebuggerDisplay => string.Format("VkDescriptorUpdateTemplateKHR [{0}]", Handle);
+        private string DebuggerDisplay => string.Format("VkDescriptorUpdateTemplateKHR [0x{0}]", Handle.ToString("X"));
     }
 
     ///<summary>A non-dispatchable handle owned by a VkDevice.</summary>
@@ -523,7 +523,7 @@ namespace Vulkan
         public bool Equals(VkSamplerYcbcrConversionKHR h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkSamplerYcbcrConversionKHR h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
-        private string DebuggerDisplay => string.Format("VkSamplerYcbcrConversionKHR [{0}]", Handle);
+        private string DebuggerDisplay => string.Format("VkSamplerYcbcrConversionKHR [0x{0}]", Handle.ToString("X"));
     }
 
     ///<summary>A non-dispatchable handle owned by a VkDevice.</summary>
@@ -541,7 +541,7 @@ namespace Vulkan
         public bool Equals(VkValidationCacheEXT h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkValidationCacheEXT h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
-        private string DebuggerDisplay => string.Format("VkValidationCacheEXT [{0}]", Handle);
+        private string DebuggerDisplay => string.Format("VkValidationCacheEXT [0x{0}]", Handle.ToString("X"));
     }
 
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
@@ -558,7 +558,7 @@ namespace Vulkan
         public bool Equals(VkDisplayKHR h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkDisplayKHR h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
-        private string DebuggerDisplay => string.Format("VkDisplayKHR [{0}]", Handle);
+        private string DebuggerDisplay => string.Format("VkDisplayKHR [0x{0}]", Handle.ToString("X"));
     }
 
     ///<summary>A non-dispatchable handle owned by a VkPhysicalDevice,VkDisplayKHR.</summary>
@@ -576,7 +576,7 @@ namespace Vulkan
         public bool Equals(VkDisplayModeKHR h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkDisplayModeKHR h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
-        private string DebuggerDisplay => string.Format("VkDisplayModeKHR [{0}]", Handle);
+        private string DebuggerDisplay => string.Format("VkDisplayModeKHR [0x{0}]", Handle.ToString("X"));
     }
 
     ///<summary>A non-dispatchable handle owned by a VkInstance.</summary>
@@ -594,7 +594,7 @@ namespace Vulkan
         public bool Equals(VkSurfaceKHR h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkSurfaceKHR h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
-        private string DebuggerDisplay => string.Format("VkSurfaceKHR [{0}]", Handle);
+        private string DebuggerDisplay => string.Format("VkSurfaceKHR [0x{0}]", Handle.ToString("X"));
     }
 
     ///<summary>A non-dispatchable handle owned by a VkSurfaceKHR.</summary>
@@ -612,7 +612,7 @@ namespace Vulkan
         public bool Equals(VkSwapchainKHR h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkSwapchainKHR h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
-        private string DebuggerDisplay => string.Format("VkSwapchainKHR [{0}]", Handle);
+        private string DebuggerDisplay => string.Format("VkSwapchainKHR [0x{0}]", Handle.ToString("X"));
     }
 
     ///<summary>A non-dispatchable handle owned by a VkInstance.</summary>
@@ -630,6 +630,6 @@ namespace Vulkan
         public bool Equals(VkDebugReportCallbackEXT h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkDebugReportCallbackEXT h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
-        private string DebuggerDisplay => string.Format("VkDebugReportCallbackEXT [{0}]", Handle);
+        private string DebuggerDisplay => string.Format("VkDebugReportCallbackEXT [0x{0}]", Handle.ToString("X"));
     }
 }
