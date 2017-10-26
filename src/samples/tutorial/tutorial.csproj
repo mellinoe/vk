@@ -37,8 +37,8 @@
     <PackageReference Include="System.CommandLine" Version="0.1.0-e160908-1" />
     <PackageReference Include="System.Xml.XmlDocument" Version="4.3.0" />
     <PackageReference Include="OpenTK.NETCore" Version="1.1.2287.6424" />
-    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.3.0" />
-    <PackageReference Include="ImageSharp" Version="1.0.0-alpha7-00036" />
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.4.0" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-ci0027" />
   </ItemGroup>
   <Import Project="..\..\..\ext\veldrid.sdl2\src\Veldrid.Sdl2\Veldrid.Sdl2.Imports.msbuild" />
 </Project>

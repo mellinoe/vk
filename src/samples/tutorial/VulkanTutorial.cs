@@ -12,8 +12,8 @@ using static Vulkan.VulkanNative;
 using System.Linq;
 using System.IO;
 using System.Numerics;
-using ImageSharp;
-using ImageSharp.PixelFormats;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Advanced;
 
 namespace Vk.Samples
 {
@@ -642,7 +642,7 @@ namespace Vk.Samples
 
         private void CreateTextureImage()
         {
-            Image image;
+            Image<Rgba32> image;
             using (var fs = File.OpenRead(Path.Combine(AppContext.BaseDirectory, "Textures", "texture.jpg")))
             {
                 image = Image.Load(fs);
@@ -669,7 +669,7 @@ namespace Vk.Samples
 
             void* mappedPtr;
             vkMapMemory(_device, stagingImageMemory, 0, imageSize, 0, &mappedPtr);
-            fixed (void* pixelsPtr = image.Pixels)
+            fixed (void* pixelsPtr = &image.DangerousGetPinnableReferenceToPixelBuffer())
             {
                 if (rowPitch == (ulong)image.Width)
                 {
