@@ -46,12 +46,6 @@ namespace Vulkan
         public VkExtent2D extent;
     }
 
-    public unsafe partial struct VkRect3D
-    {
-        public VkOffset3D offset;
-        public VkExtent3D extent;
-    }
-
     public unsafe partial struct VkClearRect
     {
         public VkRect2D rect;
@@ -3813,7 +3807,7 @@ namespace Vulkan
         public uint attachmentInitialSampleLocationsCount;
         public VkAttachmentSampleLocationsEXT* pAttachmentInitialSampleLocations;
         public uint postSubpassSampleLocationsCount;
-        public VkSubpassSampleLocationsEXT* pSubpassSampleLocations;
+        public VkSubpassSampleLocationsEXT* pPostSubpassSampleLocations;
         public static VkRenderPassSampleLocationsBeginInfoEXT New()
         {
             VkRenderPassSampleLocationsBeginInfoEXT ret = new VkRenderPassSampleLocationsBeginInfoEXT();
@@ -3981,6 +3975,57 @@ namespace Vulkan
         {
             VkShaderModuleValidationCacheCreateInfoEXT ret = new VkShaderModuleValidationCacheCreateInfoEXT();
             ret.sType = VkStructureType.ShaderModuleValidationCacheCreateInfoEXT;
+            return ret;
+        }
+    }
+
+    public unsafe partial struct VkNativeBufferANDROID
+    {
+        public VkStructureType sType;
+        public void* pNext;
+        public void* handle;
+        public int stride;
+        public int format;
+        public int usage;
+        public static VkNativeBufferANDROID New()
+        {
+            VkNativeBufferANDROID ret = new VkNativeBufferANDROID();
+            ret.sType = VkStructureType.NativeBufferAndroid;
+            return ret;
+        }
+    }
+
+    public unsafe partial struct VkShaderResourceUsageAMD
+    {
+        public uint numUsedVgprs;
+        public uint numUsedSgprs;
+        public uint ldsSizePerLocalWorkGroup;
+        public UIntPtr ldsUsageSizeInBytes;
+        public UIntPtr scratchMemUsageInBytes;
+    }
+
+    public unsafe partial struct VkShaderStatisticsInfoAMD
+    {
+        public VkShaderStageFlags shaderStageMask;
+        public VkShaderResourceUsageAMD resourceUsage;
+        public uint numPhysicalVgprs;
+        public uint numPhysicalSgprs;
+        public uint numAvailableVgprs;
+        public uint numAvailableSgprs;
+        public uint computeWorkGroupSize_0;
+        public uint computeWorkGroupSize_1;
+        public uint computeWorkGroupSize_2;
+    }
+
+    public unsafe partial struct VkDeviceQueueGlobalPriorityCreateInfoEXT
+    {
+        public VkStructureType sType;
+        public void* pNext;
+        public VkQueueGlobalPriorityEXT globalPriority;
+        public static VkDeviceQueueGlobalPriorityCreateInfoEXT New()
+        {
+            VkDeviceQueueGlobalPriorityCreateInfoEXT ret = new VkDeviceQueueGlobalPriorityCreateInfoEXT();
+            ret.sType = VkStructureType.DeviceQueueGlobalPriorityCreateInfoEXT;
             return ret;
         }
     }

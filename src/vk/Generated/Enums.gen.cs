@@ -1195,6 +1195,7 @@ namespace Vulkan
         MirSurfaceCreateInfoKHR = 1000007000,
         AndroidSurfaceCreateInfoKHR = 1000008000,
         Win32SurfaceCreateInfoKHR = 1000009000,
+        NativeBufferAndroid = 1000010000,
         DebugReportCallbackCreateInfoEXT = 1000011000,
         PipelineRasterizationStateRasterizationOrderAMD = 1000018000,
         DebugMarkerObjectNameInfoEXT = 1000022000,
@@ -1334,6 +1335,7 @@ namespace Vulkan
         BindImageMemoryInfoKHR = 1000157001,
         ValidationCacheCreateInfoEXT = 1000160000,
         ShaderModuleValidationCacheCreateInfoEXT = 1000160001,
+        DeviceQueueGlobalPriorityCreateInfoEXT = 1000174000,
     }
     public static partial class RawConstants
     {
@@ -1399,6 +1401,7 @@ namespace Vulkan
         public const VkStructureType VK_STRUCTURE_TYPE_MIR_SURFACE_CREATE_INFO_KHR = VkStructureType.MirSurfaceCreateInfoKHR;
         public const VkStructureType VK_STRUCTURE_TYPE_ANDROID_SURFACE_CREATE_INFO_KHR = VkStructureType.AndroidSurfaceCreateInfoKHR;
         public const VkStructureType VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR = VkStructureType.Win32SurfaceCreateInfoKHR;
+        public const VkStructureType VK_STRUCTURE_TYPE_NATIVE_BUFFER_ANDROID = VkStructureType.NativeBufferAndroid;
         public const VkStructureType VK_STRUCTURE_TYPE_DEBUG_REPORT_CALLBACK_CREATE_INFO_EXT = VkStructureType.DebugReportCallbackCreateInfoEXT;
         public const VkStructureType VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_RASTERIZATION_ORDER_AMD = VkStructureType.PipelineRasterizationStateRasterizationOrderAMD;
         public const VkStructureType VK_STRUCTURE_TYPE_DEBUG_MARKER_OBJECT_NAME_INFO_EXT = VkStructureType.DebugMarkerObjectNameInfoEXT;
@@ -1538,6 +1541,7 @@ namespace Vulkan
         public const VkStructureType VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_INFO_KHR = VkStructureType.BindImageMemoryInfoKHR;
         public const VkStructureType VK_STRUCTURE_TYPE_VALIDATION_CACHE_CREATE_INFO_EXT = VkStructureType.ValidationCacheCreateInfoEXT;
         public const VkStructureType VK_STRUCTURE_TYPE_SHADER_MODULE_VALIDATION_CACHE_CREATE_INFO_EXT = VkStructureType.ShaderModuleValidationCacheCreateInfoEXT;
+        public const VkStructureType VK_STRUCTURE_TYPE_DEVICE_QUEUE_GLOBAL_PRIORITY_CREATE_INFO_EXT = VkStructureType.DeviceQueueGlobalPriorityCreateInfoEXT;
     }
 
     public enum VkSubpassContents
@@ -1598,6 +1602,7 @@ namespace Vulkan
         ErrorInvalidShaderNV = 1000012000,
         ErrorOutOfPoolMemoryKHR = 1000069000,
         ErrorInvalidExternalHandleKHR = 1000072003,
+        ErrorNotPermittedEXT = 1000174001,
     }
     public static partial class RawConstants
     {
@@ -1646,6 +1651,7 @@ namespace Vulkan
         public const VkResult VK_ERROR_INVALID_SHADER_NV = VkResult.ErrorInvalidShaderNV;
         public const VkResult VK_ERROR_OUT_OF_POOL_MEMORY_KHR = VkResult.ErrorOutOfPoolMemoryKHR;
         public const VkResult VK_ERROR_INVALID_EXTERNAL_HANDLE_KHR = VkResult.ErrorInvalidExternalHandleKHR;
+        public const VkResult VK_ERROR_NOT_PERMITTED_EXT = VkResult.ErrorNotPermittedEXT;
     }
 
     public enum VkDynamicState
@@ -3424,5 +3430,33 @@ namespace Vulkan
     public static partial class RawConstants
     {
         public const VkValidationCacheHeaderVersionEXT VK_VALIDATION_CACHE_HEADER_VERSION_ONE_EXT = VkValidationCacheHeaderVersionEXT.OneEXT;
+    }
+
+    public enum VkShaderInfoTypeAMD
+    {
+        StatisticsAMD = 0,
+        BinaryAMD = 1,
+        DisassemblyAMD = 2,
+    }
+    public static partial class RawConstants
+    {
+        public const VkShaderInfoTypeAMD VK_SHADER_INFO_TYPE_STATISTICS_AMD = VkShaderInfoTypeAMD.StatisticsAMD;
+        public const VkShaderInfoTypeAMD VK_SHADER_INFO_TYPE_BINARY_AMD = VkShaderInfoTypeAMD.BinaryAMD;
+        public const VkShaderInfoTypeAMD VK_SHADER_INFO_TYPE_DISASSEMBLY_AMD = VkShaderInfoTypeAMD.DisassemblyAMD;
+    }
+
+    public enum VkQueueGlobalPriorityEXT
+    {
+        Low = 128,
+        Medium = 256,
+        High = 512,
+        Realtime = 1024,
+    }
+    public static partial class RawConstants
+    {
+        public const VkQueueGlobalPriorityEXT VK_QUEUE_GLOBAL_PRIORITY_LOW = VkQueueGlobalPriorityEXT.Low;
+        public const VkQueueGlobalPriorityEXT VK_QUEUE_GLOBAL_PRIORITY_MEDIUM = VkQueueGlobalPriorityEXT.Medium;
+        public const VkQueueGlobalPriorityEXT VK_QUEUE_GLOBAL_PRIORITY_HIGH = VkQueueGlobalPriorityEXT.High;
+        public const VkQueueGlobalPriorityEXT VK_QUEUE_GLOBAL_PRIORITY_REALTIME = VkQueueGlobalPriorityEXT.Realtime;
     }
 }
