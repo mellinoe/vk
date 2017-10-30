@@ -98,14 +98,14 @@ namespace Vulkan
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkDeviceMemory : IEquatable<VkDeviceMemory>
     {
-        public readonly IntPtr Handle;
-        public VkDeviceMemory(IntPtr existingHandle) { Handle = existingHandle; }
-        public static VkDeviceMemory Null => new VkDeviceMemory(IntPtr.Zero);
-        public static implicit operator VkDeviceMemory(IntPtr handle) => new VkDeviceMemory(handle);
+        public readonly ulong Handle;
+        public VkDeviceMemory(ulong existingHandle) { Handle = existingHandle; }
+        public static VkDeviceMemory Null => new VkDeviceMemory(0);
+        public static implicit operator VkDeviceMemory(ulong handle) => new VkDeviceMemory(handle);
         public static bool operator ==(VkDeviceMemory left, VkDeviceMemory right) => left.Handle == right.Handle;
         public static bool operator !=(VkDeviceMemory left, VkDeviceMemory right) => left.Handle != right.Handle;
-        public static bool operator ==(VkDeviceMemory left, IntPtr right) => left.Handle == right;
-        public static bool operator !=(VkDeviceMemory left, IntPtr right) => left.Handle != right;
+        public static bool operator ==(VkDeviceMemory left, ulong right) => left.Handle == right;
+        public static bool operator !=(VkDeviceMemory left, ulong right) => left.Handle != right;
         public bool Equals(VkDeviceMemory h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkDeviceMemory h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
@@ -116,14 +116,14 @@ namespace Vulkan
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkCommandPool : IEquatable<VkCommandPool>
     {
-        public readonly IntPtr Handle;
-        public VkCommandPool(IntPtr existingHandle) { Handle = existingHandle; }
-        public static VkCommandPool Null => new VkCommandPool(IntPtr.Zero);
-        public static implicit operator VkCommandPool(IntPtr handle) => new VkCommandPool(handle);
+        public readonly ulong Handle;
+        public VkCommandPool(ulong existingHandle) { Handle = existingHandle; }
+        public static VkCommandPool Null => new VkCommandPool(0);
+        public static implicit operator VkCommandPool(ulong handle) => new VkCommandPool(handle);
         public static bool operator ==(VkCommandPool left, VkCommandPool right) => left.Handle == right.Handle;
         public static bool operator !=(VkCommandPool left, VkCommandPool right) => left.Handle != right.Handle;
-        public static bool operator ==(VkCommandPool left, IntPtr right) => left.Handle == right;
-        public static bool operator !=(VkCommandPool left, IntPtr right) => left.Handle != right;
+        public static bool operator ==(VkCommandPool left, ulong right) => left.Handle == right;
+        public static bool operator !=(VkCommandPool left, ulong right) => left.Handle != right;
         public bool Equals(VkCommandPool h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkCommandPool h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
@@ -134,14 +134,14 @@ namespace Vulkan
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkBuffer : IEquatable<VkBuffer>
     {
-        public readonly IntPtr Handle;
-        public VkBuffer(IntPtr existingHandle) { Handle = existingHandle; }
-        public static VkBuffer Null => new VkBuffer(IntPtr.Zero);
-        public static implicit operator VkBuffer(IntPtr handle) => new VkBuffer(handle);
+        public readonly ulong Handle;
+        public VkBuffer(ulong existingHandle) { Handle = existingHandle; }
+        public static VkBuffer Null => new VkBuffer(0);
+        public static implicit operator VkBuffer(ulong handle) => new VkBuffer(handle);
         public static bool operator ==(VkBuffer left, VkBuffer right) => left.Handle == right.Handle;
         public static bool operator !=(VkBuffer left, VkBuffer right) => left.Handle != right.Handle;
-        public static bool operator ==(VkBuffer left, IntPtr right) => left.Handle == right;
-        public static bool operator !=(VkBuffer left, IntPtr right) => left.Handle != right;
+        public static bool operator ==(VkBuffer left, ulong right) => left.Handle == right;
+        public static bool operator !=(VkBuffer left, ulong right) => left.Handle != right;
         public bool Equals(VkBuffer h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkBuffer h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
@@ -152,14 +152,14 @@ namespace Vulkan
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkBufferView : IEquatable<VkBufferView>
     {
-        public readonly IntPtr Handle;
-        public VkBufferView(IntPtr existingHandle) { Handle = existingHandle; }
-        public static VkBufferView Null => new VkBufferView(IntPtr.Zero);
-        public static implicit operator VkBufferView(IntPtr handle) => new VkBufferView(handle);
+        public readonly ulong Handle;
+        public VkBufferView(ulong existingHandle) { Handle = existingHandle; }
+        public static VkBufferView Null => new VkBufferView(0);
+        public static implicit operator VkBufferView(ulong handle) => new VkBufferView(handle);
         public static bool operator ==(VkBufferView left, VkBufferView right) => left.Handle == right.Handle;
         public static bool operator !=(VkBufferView left, VkBufferView right) => left.Handle != right.Handle;
-        public static bool operator ==(VkBufferView left, IntPtr right) => left.Handle == right;
-        public static bool operator !=(VkBufferView left, IntPtr right) => left.Handle != right;
+        public static bool operator ==(VkBufferView left, ulong right) => left.Handle == right;
+        public static bool operator !=(VkBufferView left, ulong right) => left.Handle != right;
         public bool Equals(VkBufferView h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkBufferView h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
@@ -170,14 +170,14 @@ namespace Vulkan
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkImage : IEquatable<VkImage>
     {
-        public readonly IntPtr Handle;
-        public VkImage(IntPtr existingHandle) { Handle = existingHandle; }
-        public static VkImage Null => new VkImage(IntPtr.Zero);
-        public static implicit operator VkImage(IntPtr handle) => new VkImage(handle);
+        public readonly ulong Handle;
+        public VkImage(ulong existingHandle) { Handle = existingHandle; }
+        public static VkImage Null => new VkImage(0);
+        public static implicit operator VkImage(ulong handle) => new VkImage(handle);
         public static bool operator ==(VkImage left, VkImage right) => left.Handle == right.Handle;
         public static bool operator !=(VkImage left, VkImage right) => left.Handle != right.Handle;
-        public static bool operator ==(VkImage left, IntPtr right) => left.Handle == right;
-        public static bool operator !=(VkImage left, IntPtr right) => left.Handle != right;
+        public static bool operator ==(VkImage left, ulong right) => left.Handle == right;
+        public static bool operator !=(VkImage left, ulong right) => left.Handle != right;
         public bool Equals(VkImage h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkImage h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
@@ -188,14 +188,14 @@ namespace Vulkan
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkImageView : IEquatable<VkImageView>
     {
-        public readonly IntPtr Handle;
-        public VkImageView(IntPtr existingHandle) { Handle = existingHandle; }
-        public static VkImageView Null => new VkImageView(IntPtr.Zero);
-        public static implicit operator VkImageView(IntPtr handle) => new VkImageView(handle);
+        public readonly ulong Handle;
+        public VkImageView(ulong existingHandle) { Handle = existingHandle; }
+        public static VkImageView Null => new VkImageView(0);
+        public static implicit operator VkImageView(ulong handle) => new VkImageView(handle);
         public static bool operator ==(VkImageView left, VkImageView right) => left.Handle == right.Handle;
         public static bool operator !=(VkImageView left, VkImageView right) => left.Handle != right.Handle;
-        public static bool operator ==(VkImageView left, IntPtr right) => left.Handle == right;
-        public static bool operator !=(VkImageView left, IntPtr right) => left.Handle != right;
+        public static bool operator ==(VkImageView left, ulong right) => left.Handle == right;
+        public static bool operator !=(VkImageView left, ulong right) => left.Handle != right;
         public bool Equals(VkImageView h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkImageView h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
@@ -206,14 +206,14 @@ namespace Vulkan
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkShaderModule : IEquatable<VkShaderModule>
     {
-        public readonly IntPtr Handle;
-        public VkShaderModule(IntPtr existingHandle) { Handle = existingHandle; }
-        public static VkShaderModule Null => new VkShaderModule(IntPtr.Zero);
-        public static implicit operator VkShaderModule(IntPtr handle) => new VkShaderModule(handle);
+        public readonly ulong Handle;
+        public VkShaderModule(ulong existingHandle) { Handle = existingHandle; }
+        public static VkShaderModule Null => new VkShaderModule(0);
+        public static implicit operator VkShaderModule(ulong handle) => new VkShaderModule(handle);
         public static bool operator ==(VkShaderModule left, VkShaderModule right) => left.Handle == right.Handle;
         public static bool operator !=(VkShaderModule left, VkShaderModule right) => left.Handle != right.Handle;
-        public static bool operator ==(VkShaderModule left, IntPtr right) => left.Handle == right;
-        public static bool operator !=(VkShaderModule left, IntPtr right) => left.Handle != right;
+        public static bool operator ==(VkShaderModule left, ulong right) => left.Handle == right;
+        public static bool operator !=(VkShaderModule left, ulong right) => left.Handle != right;
         public bool Equals(VkShaderModule h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkShaderModule h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
@@ -224,14 +224,14 @@ namespace Vulkan
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkPipeline : IEquatable<VkPipeline>
     {
-        public readonly IntPtr Handle;
-        public VkPipeline(IntPtr existingHandle) { Handle = existingHandle; }
-        public static VkPipeline Null => new VkPipeline(IntPtr.Zero);
-        public static implicit operator VkPipeline(IntPtr handle) => new VkPipeline(handle);
+        public readonly ulong Handle;
+        public VkPipeline(ulong existingHandle) { Handle = existingHandle; }
+        public static VkPipeline Null => new VkPipeline(0);
+        public static implicit operator VkPipeline(ulong handle) => new VkPipeline(handle);
         public static bool operator ==(VkPipeline left, VkPipeline right) => left.Handle == right.Handle;
         public static bool operator !=(VkPipeline left, VkPipeline right) => left.Handle != right.Handle;
-        public static bool operator ==(VkPipeline left, IntPtr right) => left.Handle == right;
-        public static bool operator !=(VkPipeline left, IntPtr right) => left.Handle != right;
+        public static bool operator ==(VkPipeline left, ulong right) => left.Handle == right;
+        public static bool operator !=(VkPipeline left, ulong right) => left.Handle != right;
         public bool Equals(VkPipeline h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkPipeline h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
@@ -242,14 +242,14 @@ namespace Vulkan
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkPipelineLayout : IEquatable<VkPipelineLayout>
     {
-        public readonly IntPtr Handle;
-        public VkPipelineLayout(IntPtr existingHandle) { Handle = existingHandle; }
-        public static VkPipelineLayout Null => new VkPipelineLayout(IntPtr.Zero);
-        public static implicit operator VkPipelineLayout(IntPtr handle) => new VkPipelineLayout(handle);
+        public readonly ulong Handle;
+        public VkPipelineLayout(ulong existingHandle) { Handle = existingHandle; }
+        public static VkPipelineLayout Null => new VkPipelineLayout(0);
+        public static implicit operator VkPipelineLayout(ulong handle) => new VkPipelineLayout(handle);
         public static bool operator ==(VkPipelineLayout left, VkPipelineLayout right) => left.Handle == right.Handle;
         public static bool operator !=(VkPipelineLayout left, VkPipelineLayout right) => left.Handle != right.Handle;
-        public static bool operator ==(VkPipelineLayout left, IntPtr right) => left.Handle == right;
-        public static bool operator !=(VkPipelineLayout left, IntPtr right) => left.Handle != right;
+        public static bool operator ==(VkPipelineLayout left, ulong right) => left.Handle == right;
+        public static bool operator !=(VkPipelineLayout left, ulong right) => left.Handle != right;
         public bool Equals(VkPipelineLayout h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkPipelineLayout h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
@@ -260,14 +260,14 @@ namespace Vulkan
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkSampler : IEquatable<VkSampler>
     {
-        public readonly IntPtr Handle;
-        public VkSampler(IntPtr existingHandle) { Handle = existingHandle; }
-        public static VkSampler Null => new VkSampler(IntPtr.Zero);
-        public static implicit operator VkSampler(IntPtr handle) => new VkSampler(handle);
+        public readonly ulong Handle;
+        public VkSampler(ulong existingHandle) { Handle = existingHandle; }
+        public static VkSampler Null => new VkSampler(0);
+        public static implicit operator VkSampler(ulong handle) => new VkSampler(handle);
         public static bool operator ==(VkSampler left, VkSampler right) => left.Handle == right.Handle;
         public static bool operator !=(VkSampler left, VkSampler right) => left.Handle != right.Handle;
-        public static bool operator ==(VkSampler left, IntPtr right) => left.Handle == right;
-        public static bool operator !=(VkSampler left, IntPtr right) => left.Handle != right;
+        public static bool operator ==(VkSampler left, ulong right) => left.Handle == right;
+        public static bool operator !=(VkSampler left, ulong right) => left.Handle != right;
         public bool Equals(VkSampler h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkSampler h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
@@ -278,14 +278,14 @@ namespace Vulkan
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkDescriptorSet : IEquatable<VkDescriptorSet>
     {
-        public readonly IntPtr Handle;
-        public VkDescriptorSet(IntPtr existingHandle) { Handle = existingHandle; }
-        public static VkDescriptorSet Null => new VkDescriptorSet(IntPtr.Zero);
-        public static implicit operator VkDescriptorSet(IntPtr handle) => new VkDescriptorSet(handle);
+        public readonly ulong Handle;
+        public VkDescriptorSet(ulong existingHandle) { Handle = existingHandle; }
+        public static VkDescriptorSet Null => new VkDescriptorSet(0);
+        public static implicit operator VkDescriptorSet(ulong handle) => new VkDescriptorSet(handle);
         public static bool operator ==(VkDescriptorSet left, VkDescriptorSet right) => left.Handle == right.Handle;
         public static bool operator !=(VkDescriptorSet left, VkDescriptorSet right) => left.Handle != right.Handle;
-        public static bool operator ==(VkDescriptorSet left, IntPtr right) => left.Handle == right;
-        public static bool operator !=(VkDescriptorSet left, IntPtr right) => left.Handle != right;
+        public static bool operator ==(VkDescriptorSet left, ulong right) => left.Handle == right;
+        public static bool operator !=(VkDescriptorSet left, ulong right) => left.Handle != right;
         public bool Equals(VkDescriptorSet h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkDescriptorSet h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
@@ -296,14 +296,14 @@ namespace Vulkan
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkDescriptorSetLayout : IEquatable<VkDescriptorSetLayout>
     {
-        public readonly IntPtr Handle;
-        public VkDescriptorSetLayout(IntPtr existingHandle) { Handle = existingHandle; }
-        public static VkDescriptorSetLayout Null => new VkDescriptorSetLayout(IntPtr.Zero);
-        public static implicit operator VkDescriptorSetLayout(IntPtr handle) => new VkDescriptorSetLayout(handle);
+        public readonly ulong Handle;
+        public VkDescriptorSetLayout(ulong existingHandle) { Handle = existingHandle; }
+        public static VkDescriptorSetLayout Null => new VkDescriptorSetLayout(0);
+        public static implicit operator VkDescriptorSetLayout(ulong handle) => new VkDescriptorSetLayout(handle);
         public static bool operator ==(VkDescriptorSetLayout left, VkDescriptorSetLayout right) => left.Handle == right.Handle;
         public static bool operator !=(VkDescriptorSetLayout left, VkDescriptorSetLayout right) => left.Handle != right.Handle;
-        public static bool operator ==(VkDescriptorSetLayout left, IntPtr right) => left.Handle == right;
-        public static bool operator !=(VkDescriptorSetLayout left, IntPtr right) => left.Handle != right;
+        public static bool operator ==(VkDescriptorSetLayout left, ulong right) => left.Handle == right;
+        public static bool operator !=(VkDescriptorSetLayout left, ulong right) => left.Handle != right;
         public bool Equals(VkDescriptorSetLayout h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkDescriptorSetLayout h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
@@ -314,14 +314,14 @@ namespace Vulkan
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkDescriptorPool : IEquatable<VkDescriptorPool>
     {
-        public readonly IntPtr Handle;
-        public VkDescriptorPool(IntPtr existingHandle) { Handle = existingHandle; }
-        public static VkDescriptorPool Null => new VkDescriptorPool(IntPtr.Zero);
-        public static implicit operator VkDescriptorPool(IntPtr handle) => new VkDescriptorPool(handle);
+        public readonly ulong Handle;
+        public VkDescriptorPool(ulong existingHandle) { Handle = existingHandle; }
+        public static VkDescriptorPool Null => new VkDescriptorPool(0);
+        public static implicit operator VkDescriptorPool(ulong handle) => new VkDescriptorPool(handle);
         public static bool operator ==(VkDescriptorPool left, VkDescriptorPool right) => left.Handle == right.Handle;
         public static bool operator !=(VkDescriptorPool left, VkDescriptorPool right) => left.Handle != right.Handle;
-        public static bool operator ==(VkDescriptorPool left, IntPtr right) => left.Handle == right;
-        public static bool operator !=(VkDescriptorPool left, IntPtr right) => left.Handle != right;
+        public static bool operator ==(VkDescriptorPool left, ulong right) => left.Handle == right;
+        public static bool operator !=(VkDescriptorPool left, ulong right) => left.Handle != right;
         public bool Equals(VkDescriptorPool h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkDescriptorPool h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
@@ -332,14 +332,14 @@ namespace Vulkan
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkFence : IEquatable<VkFence>
     {
-        public readonly IntPtr Handle;
-        public VkFence(IntPtr existingHandle) { Handle = existingHandle; }
-        public static VkFence Null => new VkFence(IntPtr.Zero);
-        public static implicit operator VkFence(IntPtr handle) => new VkFence(handle);
+        public readonly ulong Handle;
+        public VkFence(ulong existingHandle) { Handle = existingHandle; }
+        public static VkFence Null => new VkFence(0);
+        public static implicit operator VkFence(ulong handle) => new VkFence(handle);
         public static bool operator ==(VkFence left, VkFence right) => left.Handle == right.Handle;
         public static bool operator !=(VkFence left, VkFence right) => left.Handle != right.Handle;
-        public static bool operator ==(VkFence left, IntPtr right) => left.Handle == right;
-        public static bool operator !=(VkFence left, IntPtr right) => left.Handle != right;
+        public static bool operator ==(VkFence left, ulong right) => left.Handle == right;
+        public static bool operator !=(VkFence left, ulong right) => left.Handle != right;
         public bool Equals(VkFence h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkFence h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
@@ -350,14 +350,14 @@ namespace Vulkan
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkSemaphore : IEquatable<VkSemaphore>
     {
-        public readonly IntPtr Handle;
-        public VkSemaphore(IntPtr existingHandle) { Handle = existingHandle; }
-        public static VkSemaphore Null => new VkSemaphore(IntPtr.Zero);
-        public static implicit operator VkSemaphore(IntPtr handle) => new VkSemaphore(handle);
+        public readonly ulong Handle;
+        public VkSemaphore(ulong existingHandle) { Handle = existingHandle; }
+        public static VkSemaphore Null => new VkSemaphore(0);
+        public static implicit operator VkSemaphore(ulong handle) => new VkSemaphore(handle);
         public static bool operator ==(VkSemaphore left, VkSemaphore right) => left.Handle == right.Handle;
         public static bool operator !=(VkSemaphore left, VkSemaphore right) => left.Handle != right.Handle;
-        public static bool operator ==(VkSemaphore left, IntPtr right) => left.Handle == right;
-        public static bool operator !=(VkSemaphore left, IntPtr right) => left.Handle != right;
+        public static bool operator ==(VkSemaphore left, ulong right) => left.Handle == right;
+        public static bool operator !=(VkSemaphore left, ulong right) => left.Handle != right;
         public bool Equals(VkSemaphore h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkSemaphore h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
@@ -368,14 +368,14 @@ namespace Vulkan
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkEvent : IEquatable<VkEvent>
     {
-        public readonly IntPtr Handle;
-        public VkEvent(IntPtr existingHandle) { Handle = existingHandle; }
-        public static VkEvent Null => new VkEvent(IntPtr.Zero);
-        public static implicit operator VkEvent(IntPtr handle) => new VkEvent(handle);
+        public readonly ulong Handle;
+        public VkEvent(ulong existingHandle) { Handle = existingHandle; }
+        public static VkEvent Null => new VkEvent(0);
+        public static implicit operator VkEvent(ulong handle) => new VkEvent(handle);
         public static bool operator ==(VkEvent left, VkEvent right) => left.Handle == right.Handle;
         public static bool operator !=(VkEvent left, VkEvent right) => left.Handle != right.Handle;
-        public static bool operator ==(VkEvent left, IntPtr right) => left.Handle == right;
-        public static bool operator !=(VkEvent left, IntPtr right) => left.Handle != right;
+        public static bool operator ==(VkEvent left, ulong right) => left.Handle == right;
+        public static bool operator !=(VkEvent left, ulong right) => left.Handle != right;
         public bool Equals(VkEvent h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkEvent h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
@@ -386,14 +386,14 @@ namespace Vulkan
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkQueryPool : IEquatable<VkQueryPool>
     {
-        public readonly IntPtr Handle;
-        public VkQueryPool(IntPtr existingHandle) { Handle = existingHandle; }
-        public static VkQueryPool Null => new VkQueryPool(IntPtr.Zero);
-        public static implicit operator VkQueryPool(IntPtr handle) => new VkQueryPool(handle);
+        public readonly ulong Handle;
+        public VkQueryPool(ulong existingHandle) { Handle = existingHandle; }
+        public static VkQueryPool Null => new VkQueryPool(0);
+        public static implicit operator VkQueryPool(ulong handle) => new VkQueryPool(handle);
         public static bool operator ==(VkQueryPool left, VkQueryPool right) => left.Handle == right.Handle;
         public static bool operator !=(VkQueryPool left, VkQueryPool right) => left.Handle != right.Handle;
-        public static bool operator ==(VkQueryPool left, IntPtr right) => left.Handle == right;
-        public static bool operator !=(VkQueryPool left, IntPtr right) => left.Handle != right;
+        public static bool operator ==(VkQueryPool left, ulong right) => left.Handle == right;
+        public static bool operator !=(VkQueryPool left, ulong right) => left.Handle != right;
         public bool Equals(VkQueryPool h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkQueryPool h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
@@ -404,14 +404,14 @@ namespace Vulkan
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkFramebuffer : IEquatable<VkFramebuffer>
     {
-        public readonly IntPtr Handle;
-        public VkFramebuffer(IntPtr existingHandle) { Handle = existingHandle; }
-        public static VkFramebuffer Null => new VkFramebuffer(IntPtr.Zero);
-        public static implicit operator VkFramebuffer(IntPtr handle) => new VkFramebuffer(handle);
+        public readonly ulong Handle;
+        public VkFramebuffer(ulong existingHandle) { Handle = existingHandle; }
+        public static VkFramebuffer Null => new VkFramebuffer(0);
+        public static implicit operator VkFramebuffer(ulong handle) => new VkFramebuffer(handle);
         public static bool operator ==(VkFramebuffer left, VkFramebuffer right) => left.Handle == right.Handle;
         public static bool operator !=(VkFramebuffer left, VkFramebuffer right) => left.Handle != right.Handle;
-        public static bool operator ==(VkFramebuffer left, IntPtr right) => left.Handle == right;
-        public static bool operator !=(VkFramebuffer left, IntPtr right) => left.Handle != right;
+        public static bool operator ==(VkFramebuffer left, ulong right) => left.Handle == right;
+        public static bool operator !=(VkFramebuffer left, ulong right) => left.Handle != right;
         public bool Equals(VkFramebuffer h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkFramebuffer h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
@@ -422,14 +422,14 @@ namespace Vulkan
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkRenderPass : IEquatable<VkRenderPass>
     {
-        public readonly IntPtr Handle;
-        public VkRenderPass(IntPtr existingHandle) { Handle = existingHandle; }
-        public static VkRenderPass Null => new VkRenderPass(IntPtr.Zero);
-        public static implicit operator VkRenderPass(IntPtr handle) => new VkRenderPass(handle);
+        public readonly ulong Handle;
+        public VkRenderPass(ulong existingHandle) { Handle = existingHandle; }
+        public static VkRenderPass Null => new VkRenderPass(0);
+        public static implicit operator VkRenderPass(ulong handle) => new VkRenderPass(handle);
         public static bool operator ==(VkRenderPass left, VkRenderPass right) => left.Handle == right.Handle;
         public static bool operator !=(VkRenderPass left, VkRenderPass right) => left.Handle != right.Handle;
-        public static bool operator ==(VkRenderPass left, IntPtr right) => left.Handle == right;
-        public static bool operator !=(VkRenderPass left, IntPtr right) => left.Handle != right;
+        public static bool operator ==(VkRenderPass left, ulong right) => left.Handle == right;
+        public static bool operator !=(VkRenderPass left, ulong right) => left.Handle != right;
         public bool Equals(VkRenderPass h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkRenderPass h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
@@ -440,14 +440,14 @@ namespace Vulkan
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkPipelineCache : IEquatable<VkPipelineCache>
     {
-        public readonly IntPtr Handle;
-        public VkPipelineCache(IntPtr existingHandle) { Handle = existingHandle; }
-        public static VkPipelineCache Null => new VkPipelineCache(IntPtr.Zero);
-        public static implicit operator VkPipelineCache(IntPtr handle) => new VkPipelineCache(handle);
+        public readonly ulong Handle;
+        public VkPipelineCache(ulong existingHandle) { Handle = existingHandle; }
+        public static VkPipelineCache Null => new VkPipelineCache(0);
+        public static implicit operator VkPipelineCache(ulong handle) => new VkPipelineCache(handle);
         public static bool operator ==(VkPipelineCache left, VkPipelineCache right) => left.Handle == right.Handle;
         public static bool operator !=(VkPipelineCache left, VkPipelineCache right) => left.Handle != right.Handle;
-        public static bool operator ==(VkPipelineCache left, IntPtr right) => left.Handle == right;
-        public static bool operator !=(VkPipelineCache left, IntPtr right) => left.Handle != right;
+        public static bool operator ==(VkPipelineCache left, ulong right) => left.Handle == right;
+        public static bool operator !=(VkPipelineCache left, ulong right) => left.Handle != right;
         public bool Equals(VkPipelineCache h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkPipelineCache h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
@@ -458,14 +458,14 @@ namespace Vulkan
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkObjectTableNVX : IEquatable<VkObjectTableNVX>
     {
-        public readonly IntPtr Handle;
-        public VkObjectTableNVX(IntPtr existingHandle) { Handle = existingHandle; }
-        public static VkObjectTableNVX Null => new VkObjectTableNVX(IntPtr.Zero);
-        public static implicit operator VkObjectTableNVX(IntPtr handle) => new VkObjectTableNVX(handle);
+        public readonly ulong Handle;
+        public VkObjectTableNVX(ulong existingHandle) { Handle = existingHandle; }
+        public static VkObjectTableNVX Null => new VkObjectTableNVX(0);
+        public static implicit operator VkObjectTableNVX(ulong handle) => new VkObjectTableNVX(handle);
         public static bool operator ==(VkObjectTableNVX left, VkObjectTableNVX right) => left.Handle == right.Handle;
         public static bool operator !=(VkObjectTableNVX left, VkObjectTableNVX right) => left.Handle != right.Handle;
-        public static bool operator ==(VkObjectTableNVX left, IntPtr right) => left.Handle == right;
-        public static bool operator !=(VkObjectTableNVX left, IntPtr right) => left.Handle != right;
+        public static bool operator ==(VkObjectTableNVX left, ulong right) => left.Handle == right;
+        public static bool operator !=(VkObjectTableNVX left, ulong right) => left.Handle != right;
         public bool Equals(VkObjectTableNVX h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkObjectTableNVX h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
@@ -476,14 +476,14 @@ namespace Vulkan
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkIndirectCommandsLayoutNVX : IEquatable<VkIndirectCommandsLayoutNVX>
     {
-        public readonly IntPtr Handle;
-        public VkIndirectCommandsLayoutNVX(IntPtr existingHandle) { Handle = existingHandle; }
-        public static VkIndirectCommandsLayoutNVX Null => new VkIndirectCommandsLayoutNVX(IntPtr.Zero);
-        public static implicit operator VkIndirectCommandsLayoutNVX(IntPtr handle) => new VkIndirectCommandsLayoutNVX(handle);
+        public readonly ulong Handle;
+        public VkIndirectCommandsLayoutNVX(ulong existingHandle) { Handle = existingHandle; }
+        public static VkIndirectCommandsLayoutNVX Null => new VkIndirectCommandsLayoutNVX(0);
+        public static implicit operator VkIndirectCommandsLayoutNVX(ulong handle) => new VkIndirectCommandsLayoutNVX(handle);
         public static bool operator ==(VkIndirectCommandsLayoutNVX left, VkIndirectCommandsLayoutNVX right) => left.Handle == right.Handle;
         public static bool operator !=(VkIndirectCommandsLayoutNVX left, VkIndirectCommandsLayoutNVX right) => left.Handle != right.Handle;
-        public static bool operator ==(VkIndirectCommandsLayoutNVX left, IntPtr right) => left.Handle == right;
-        public static bool operator !=(VkIndirectCommandsLayoutNVX left, IntPtr right) => left.Handle != right;
+        public static bool operator ==(VkIndirectCommandsLayoutNVX left, ulong right) => left.Handle == right;
+        public static bool operator !=(VkIndirectCommandsLayoutNVX left, ulong right) => left.Handle != right;
         public bool Equals(VkIndirectCommandsLayoutNVX h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkIndirectCommandsLayoutNVX h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
@@ -494,14 +494,14 @@ namespace Vulkan
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkDescriptorUpdateTemplateKHR : IEquatable<VkDescriptorUpdateTemplateKHR>
     {
-        public readonly IntPtr Handle;
-        public VkDescriptorUpdateTemplateKHR(IntPtr existingHandle) { Handle = existingHandle; }
-        public static VkDescriptorUpdateTemplateKHR Null => new VkDescriptorUpdateTemplateKHR(IntPtr.Zero);
-        public static implicit operator VkDescriptorUpdateTemplateKHR(IntPtr handle) => new VkDescriptorUpdateTemplateKHR(handle);
+        public readonly ulong Handle;
+        public VkDescriptorUpdateTemplateKHR(ulong existingHandle) { Handle = existingHandle; }
+        public static VkDescriptorUpdateTemplateKHR Null => new VkDescriptorUpdateTemplateKHR(0);
+        public static implicit operator VkDescriptorUpdateTemplateKHR(ulong handle) => new VkDescriptorUpdateTemplateKHR(handle);
         public static bool operator ==(VkDescriptorUpdateTemplateKHR left, VkDescriptorUpdateTemplateKHR right) => left.Handle == right.Handle;
         public static bool operator !=(VkDescriptorUpdateTemplateKHR left, VkDescriptorUpdateTemplateKHR right) => left.Handle != right.Handle;
-        public static bool operator ==(VkDescriptorUpdateTemplateKHR left, IntPtr right) => left.Handle == right;
-        public static bool operator !=(VkDescriptorUpdateTemplateKHR left, IntPtr right) => left.Handle != right;
+        public static bool operator ==(VkDescriptorUpdateTemplateKHR left, ulong right) => left.Handle == right;
+        public static bool operator !=(VkDescriptorUpdateTemplateKHR left, ulong right) => left.Handle != right;
         public bool Equals(VkDescriptorUpdateTemplateKHR h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkDescriptorUpdateTemplateKHR h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
@@ -512,14 +512,14 @@ namespace Vulkan
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkSamplerYcbcrConversionKHR : IEquatable<VkSamplerYcbcrConversionKHR>
     {
-        public readonly IntPtr Handle;
-        public VkSamplerYcbcrConversionKHR(IntPtr existingHandle) { Handle = existingHandle; }
-        public static VkSamplerYcbcrConversionKHR Null => new VkSamplerYcbcrConversionKHR(IntPtr.Zero);
-        public static implicit operator VkSamplerYcbcrConversionKHR(IntPtr handle) => new VkSamplerYcbcrConversionKHR(handle);
+        public readonly ulong Handle;
+        public VkSamplerYcbcrConversionKHR(ulong existingHandle) { Handle = existingHandle; }
+        public static VkSamplerYcbcrConversionKHR Null => new VkSamplerYcbcrConversionKHR(0);
+        public static implicit operator VkSamplerYcbcrConversionKHR(ulong handle) => new VkSamplerYcbcrConversionKHR(handle);
         public static bool operator ==(VkSamplerYcbcrConversionKHR left, VkSamplerYcbcrConversionKHR right) => left.Handle == right.Handle;
         public static bool operator !=(VkSamplerYcbcrConversionKHR left, VkSamplerYcbcrConversionKHR right) => left.Handle != right.Handle;
-        public static bool operator ==(VkSamplerYcbcrConversionKHR left, IntPtr right) => left.Handle == right;
-        public static bool operator !=(VkSamplerYcbcrConversionKHR left, IntPtr right) => left.Handle != right;
+        public static bool operator ==(VkSamplerYcbcrConversionKHR left, ulong right) => left.Handle == right;
+        public static bool operator !=(VkSamplerYcbcrConversionKHR left, ulong right) => left.Handle != right;
         public bool Equals(VkSamplerYcbcrConversionKHR h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkSamplerYcbcrConversionKHR h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
@@ -530,14 +530,14 @@ namespace Vulkan
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkValidationCacheEXT : IEquatable<VkValidationCacheEXT>
     {
-        public readonly IntPtr Handle;
-        public VkValidationCacheEXT(IntPtr existingHandle) { Handle = existingHandle; }
-        public static VkValidationCacheEXT Null => new VkValidationCacheEXT(IntPtr.Zero);
-        public static implicit operator VkValidationCacheEXT(IntPtr handle) => new VkValidationCacheEXT(handle);
+        public readonly ulong Handle;
+        public VkValidationCacheEXT(ulong existingHandle) { Handle = existingHandle; }
+        public static VkValidationCacheEXT Null => new VkValidationCacheEXT(0);
+        public static implicit operator VkValidationCacheEXT(ulong handle) => new VkValidationCacheEXT(handle);
         public static bool operator ==(VkValidationCacheEXT left, VkValidationCacheEXT right) => left.Handle == right.Handle;
         public static bool operator !=(VkValidationCacheEXT left, VkValidationCacheEXT right) => left.Handle != right.Handle;
-        public static bool operator ==(VkValidationCacheEXT left, IntPtr right) => left.Handle == right;
-        public static bool operator !=(VkValidationCacheEXT left, IntPtr right) => left.Handle != right;
+        public static bool operator ==(VkValidationCacheEXT left, ulong right) => left.Handle == right;
+        public static bool operator !=(VkValidationCacheEXT left, ulong right) => left.Handle != right;
         public bool Equals(VkValidationCacheEXT h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkValidationCacheEXT h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
@@ -547,14 +547,14 @@ namespace Vulkan
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkDisplayKHR : IEquatable<VkDisplayKHR>
     {
-        public readonly IntPtr Handle;
-        public VkDisplayKHR(IntPtr existingHandle) { Handle = existingHandle; }
-        public static VkDisplayKHR Null => new VkDisplayKHR(IntPtr.Zero);
-        public static implicit operator VkDisplayKHR(IntPtr handle) => new VkDisplayKHR(handle);
+        public readonly ulong Handle;
+        public VkDisplayKHR(ulong existingHandle) { Handle = existingHandle; }
+        public static VkDisplayKHR Null => new VkDisplayKHR(0);
+        public static implicit operator VkDisplayKHR(ulong handle) => new VkDisplayKHR(handle);
         public static bool operator ==(VkDisplayKHR left, VkDisplayKHR right) => left.Handle == right.Handle;
         public static bool operator !=(VkDisplayKHR left, VkDisplayKHR right) => left.Handle != right.Handle;
-        public static bool operator ==(VkDisplayKHR left, IntPtr right) => left.Handle == right;
-        public static bool operator !=(VkDisplayKHR left, IntPtr right) => left.Handle != right;
+        public static bool operator ==(VkDisplayKHR left, ulong right) => left.Handle == right;
+        public static bool operator !=(VkDisplayKHR left, ulong right) => left.Handle != right;
         public bool Equals(VkDisplayKHR h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkDisplayKHR h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
@@ -565,14 +565,14 @@ namespace Vulkan
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkDisplayModeKHR : IEquatable<VkDisplayModeKHR>
     {
-        public readonly IntPtr Handle;
-        public VkDisplayModeKHR(IntPtr existingHandle) { Handle = existingHandle; }
-        public static VkDisplayModeKHR Null => new VkDisplayModeKHR(IntPtr.Zero);
-        public static implicit operator VkDisplayModeKHR(IntPtr handle) => new VkDisplayModeKHR(handle);
+        public readonly ulong Handle;
+        public VkDisplayModeKHR(ulong existingHandle) { Handle = existingHandle; }
+        public static VkDisplayModeKHR Null => new VkDisplayModeKHR(0);
+        public static implicit operator VkDisplayModeKHR(ulong handle) => new VkDisplayModeKHR(handle);
         public static bool operator ==(VkDisplayModeKHR left, VkDisplayModeKHR right) => left.Handle == right.Handle;
         public static bool operator !=(VkDisplayModeKHR left, VkDisplayModeKHR right) => left.Handle != right.Handle;
-        public static bool operator ==(VkDisplayModeKHR left, IntPtr right) => left.Handle == right;
-        public static bool operator !=(VkDisplayModeKHR left, IntPtr right) => left.Handle != right;
+        public static bool operator ==(VkDisplayModeKHR left, ulong right) => left.Handle == right;
+        public static bool operator !=(VkDisplayModeKHR left, ulong right) => left.Handle != right;
         public bool Equals(VkDisplayModeKHR h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkDisplayModeKHR h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
@@ -583,14 +583,14 @@ namespace Vulkan
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkSurfaceKHR : IEquatable<VkSurfaceKHR>
     {
-        public readonly IntPtr Handle;
-        public VkSurfaceKHR(IntPtr existingHandle) { Handle = existingHandle; }
-        public static VkSurfaceKHR Null => new VkSurfaceKHR(IntPtr.Zero);
-        public static implicit operator VkSurfaceKHR(IntPtr handle) => new VkSurfaceKHR(handle);
+        public readonly ulong Handle;
+        public VkSurfaceKHR(ulong existingHandle) { Handle = existingHandle; }
+        public static VkSurfaceKHR Null => new VkSurfaceKHR(0);
+        public static implicit operator VkSurfaceKHR(ulong handle) => new VkSurfaceKHR(handle);
         public static bool operator ==(VkSurfaceKHR left, VkSurfaceKHR right) => left.Handle == right.Handle;
         public static bool operator !=(VkSurfaceKHR left, VkSurfaceKHR right) => left.Handle != right.Handle;
-        public static bool operator ==(VkSurfaceKHR left, IntPtr right) => left.Handle == right;
-        public static bool operator !=(VkSurfaceKHR left, IntPtr right) => left.Handle != right;
+        public static bool operator ==(VkSurfaceKHR left, ulong right) => left.Handle == right;
+        public static bool operator !=(VkSurfaceKHR left, ulong right) => left.Handle != right;
         public bool Equals(VkSurfaceKHR h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkSurfaceKHR h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
@@ -601,14 +601,14 @@ namespace Vulkan
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkSwapchainKHR : IEquatable<VkSwapchainKHR>
     {
-        public readonly IntPtr Handle;
-        public VkSwapchainKHR(IntPtr existingHandle) { Handle = existingHandle; }
-        public static VkSwapchainKHR Null => new VkSwapchainKHR(IntPtr.Zero);
-        public static implicit operator VkSwapchainKHR(IntPtr handle) => new VkSwapchainKHR(handle);
+        public readonly ulong Handle;
+        public VkSwapchainKHR(ulong existingHandle) { Handle = existingHandle; }
+        public static VkSwapchainKHR Null => new VkSwapchainKHR(0);
+        public static implicit operator VkSwapchainKHR(ulong handle) => new VkSwapchainKHR(handle);
         public static bool operator ==(VkSwapchainKHR left, VkSwapchainKHR right) => left.Handle == right.Handle;
         public static bool operator !=(VkSwapchainKHR left, VkSwapchainKHR right) => left.Handle != right.Handle;
-        public static bool operator ==(VkSwapchainKHR left, IntPtr right) => left.Handle == right;
-        public static bool operator !=(VkSwapchainKHR left, IntPtr right) => left.Handle != right;
+        public static bool operator ==(VkSwapchainKHR left, ulong right) => left.Handle == right;
+        public static bool operator !=(VkSwapchainKHR left, ulong right) => left.Handle != right;
         public bool Equals(VkSwapchainKHR h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkSwapchainKHR h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();
@@ -619,14 +619,14 @@ namespace Vulkan
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public partial struct VkDebugReportCallbackEXT : IEquatable<VkDebugReportCallbackEXT>
     {
-        public readonly IntPtr Handle;
-        public VkDebugReportCallbackEXT(IntPtr existingHandle) { Handle = existingHandle; }
-        public static VkDebugReportCallbackEXT Null => new VkDebugReportCallbackEXT(IntPtr.Zero);
-        public static implicit operator VkDebugReportCallbackEXT(IntPtr handle) => new VkDebugReportCallbackEXT(handle);
+        public readonly ulong Handle;
+        public VkDebugReportCallbackEXT(ulong existingHandle) { Handle = existingHandle; }
+        public static VkDebugReportCallbackEXT Null => new VkDebugReportCallbackEXT(0);
+        public static implicit operator VkDebugReportCallbackEXT(ulong handle) => new VkDebugReportCallbackEXT(handle);
         public static bool operator ==(VkDebugReportCallbackEXT left, VkDebugReportCallbackEXT right) => left.Handle == right.Handle;
         public static bool operator !=(VkDebugReportCallbackEXT left, VkDebugReportCallbackEXT right) => left.Handle != right.Handle;
-        public static bool operator ==(VkDebugReportCallbackEXT left, IntPtr right) => left.Handle == right;
-        public static bool operator !=(VkDebugReportCallbackEXT left, IntPtr right) => left.Handle != right;
+        public static bool operator ==(VkDebugReportCallbackEXT left, ulong right) => left.Handle == right;
+        public static bool operator !=(VkDebugReportCallbackEXT left, ulong right) => left.Handle != right;
         public bool Equals(VkDebugReportCallbackEXT h) => Handle.Equals(h.Handle);
         public override bool Equals(object o) => o is VkDebugReportCallbackEXT h && Equals(h);
         public override int GetHashCode() => Handle.GetHashCode();

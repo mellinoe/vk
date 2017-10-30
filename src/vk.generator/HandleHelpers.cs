@@ -17,15 +17,18 @@ namespace Vk.Generator
             cw.WriteLine($"[DebuggerDisplay(\"{{DebuggerDisplay,nq}}\")]");
             using (cw.PushBlock($"public partial struct {handle.Name} : IEquatable<{handle.Name}>"))
             {
-                cw.WriteLine("public readonly IntPtr Handle;");
+                string handleType = handle.Dispatchable ? "IntPtr" : "ulong";
+                string nullValue = handle.Dispatchable ? "IntPtr.Zero" : "0";
 
-                cw.WriteLine($"public {handle.Name}(IntPtr existingHandle) {{ Handle = existingHandle; }}");
-                cw.WriteLine($"public static {handle.Name} Null => new {handle.Name}(IntPtr.Zero);");
-                cw.WriteLine($"public static implicit operator {handle.Name}(IntPtr handle) => new {handle.Name}(handle);");
+                cw.WriteLine($"public readonly {handleType} Handle;");
+
+                cw.WriteLine($"public {handle.Name}({handleType} existingHandle) {{ Handle = existingHandle; }}");
+                cw.WriteLine($"public static {handle.Name} Null => new {handle.Name}({nullValue});");
+                cw.WriteLine($"public static implicit operator {handle.Name}({handleType} handle) => new {handle.Name}(handle);");
                 cw.WriteLine($"public static bool operator ==({handle.Name} left, {handle.Name} right) => left.Handle == right.Handle;");
                 cw.WriteLine($"public static bool operator !=({handle.Name} left, {handle.Name} right) => left.Handle != right.Handle;");
-                cw.WriteLine($"public static bool operator ==({handle.Name} left, IntPtr right) => left.Handle == right;");
-                cw.WriteLine($"public static bool operator !=({handle.Name} left, IntPtr right) => left.Handle != right;");
+                cw.WriteLine($"public static bool operator ==({handle.Name} left, {handleType} right) => left.Handle == right;");
+                cw.WriteLine($"public static bool operator !=({handle.Name} left, {handleType} right) => left.Handle != right;");
                 cw.WriteLine($"public bool Equals({handle.Name} h) => Handle.Equals(h.Handle);");
                 cw.WriteLine($"public override bool Equals(object o) => o is {handle.Name} h && Equals(h);");
                 cw.WriteLine($"public override int GetHashCode() => Handle.GetHashCode();");
