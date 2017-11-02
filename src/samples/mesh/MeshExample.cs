@@ -96,7 +96,7 @@ namespace Vk.Samples
             // Clean up used Vulkan resources 
             // Note : Inherited destructor cleans up resources stored in base class
             vkDestroyPipeline(device, pipelines_solid, null);
-            if (pipelines_wireframe != NullHandle)
+            if (pipelines_wireframe != 0)
             {
                 vkDestroyPipeline(device, pipelines_wireframe, null);
             }
@@ -615,7 +615,7 @@ namespace Vk.Samples
             submitInfo.pCommandBuffers = (VkCommandBuffer*)drawCmdBuffers.GetAddress(currentBuffer);
 
             // Submit to Queue
-            Util.CheckResult(vkQueueSubmit(queue, 1, ref submitInfo, NullHandle));
+            Util.CheckResult(vkQueueSubmit(queue, 1, ref submitInfo, VkFence.Null));
 
             submitFrame();
         }

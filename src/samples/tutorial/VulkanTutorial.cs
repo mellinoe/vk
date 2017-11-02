@@ -436,7 +436,7 @@ namespace Vk.Samples
             sci.oldSwapchain = oldSwapchain;
 
             vkCreateSwapchainKHR(_device, ref sci, null, out _swapchain);
-            if (oldSwapchain != NullHandle)
+            if (oldSwapchain != 0)
             {
                 vkDestroySwapchainKHR(_device, oldSwapchain, null);
             }

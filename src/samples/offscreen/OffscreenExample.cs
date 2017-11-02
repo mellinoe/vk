@@ -342,7 +342,7 @@ namespace Vk.Samples
             {
                 offscreenPass.commandBuffer = createCommandBuffer(VK_COMMAND_BUFFER_LEVEL_PRIMARY, false);
             }
-            if (offscreenPass.semaphore == NullHandle)
+            if (offscreenPass.semaphore == 0)
             {
                 // Create a semaphore used to synchronize offscreen rendering and usage
                 VkSemaphoreCreateInfo semaphoreCreateInfo = Initializers.semaphoreCreateInfo();
@@ -946,7 +946,7 @@ namespace Vk.Samples
             var offscreenCommandBuffer = offscreenPass.commandBuffer;
             submitInfo.commandBufferCount = 1;
             submitInfo.pCommandBuffers = &offscreenCommandBuffer;
-            Util.CheckResult(vkQueueSubmit(queue, 1, ref submitInfo, NullHandle));
+            Util.CheckResult(vkQueueSubmit(queue, 1, ref submitInfo, VkFence.Null));
 
             // Scene rendering
 
@@ -957,7 +957,7 @@ namespace Vk.Samples
 
             // Submit work
             submitInfo.pCommandBuffers = (VkCommandBuffer*)drawCmdBuffers.GetAddress(currentBuffer);
-            Util.CheckResult(vkQueueSubmit(queue, 1, ref submitInfo, NullHandle));
+            Util.CheckResult(vkQueueSubmit(queue, 1, ref submitInfo, VkFence.Null));
 
             submitFrame();
         }

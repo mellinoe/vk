@@ -411,7 +411,7 @@ namespace Vk.Samples
 
             submitInfo.commandBufferCount = 1;
             submitInfo.pCommandBuffers = (VkCommandBuffer*)drawCmdBuffers.GetAddress(currentBuffer);
-            Util.CheckResult(vkQueueSubmit(queue, 1, ref submitInfo, NullHandle));
+            Util.CheckResult(vkQueueSubmit(queue, 1, ref submitInfo, VkFence.Null));
 
             submitFrame();
         }

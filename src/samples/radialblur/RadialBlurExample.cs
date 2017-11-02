@@ -335,7 +335,7 @@ namespace Vk.Samples
             {
                 offscreenPass.commandBuffer = createCommandBuffer(VK_COMMAND_BUFFER_LEVEL_PRIMARY, false);
             }
-            if (offscreenPass.semaphore == NullHandle)
+            if (offscreenPass.semaphore == 0)
             {
                 VkSemaphoreCreateInfo semaphoreCreateInfo = Initializers.semaphoreCreateInfo();
                 Util.CheckResult(vkCreateSemaphore(device, &semaphoreCreateInfo, null, out offscreenPass.semaphore));
@@ -794,7 +794,7 @@ namespace Vk.Samples
             submitInfo.commandBufferCount = 1;
             var commandBuffer = offscreenPass.commandBuffer;
             submitInfo.pCommandBuffers = &commandBuffer;
-            Util.CheckResult(vkQueueSubmit(queue, 1, ref submitInfo, NullHandle));
+            Util.CheckResult(vkQueueSubmit(queue, 1, ref submitInfo, VkFence.Null));
 
             // Scene rendering
 
@@ -806,7 +806,7 @@ namespace Vk.Samples
 
             // Submit work
             submitInfo.pCommandBuffers = (VkCommandBuffer*)drawCmdBuffers.GetAddress(currentBuffer);
-            Util.CheckResult(vkQueueSubmit(queue, 1, ref submitInfo, NullHandle));
+            Util.CheckResult(vkQueueSubmit(queue, 1, ref submitInfo, VkFence.Null));
 
             submitFrame();
         }

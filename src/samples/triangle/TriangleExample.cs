@@ -931,7 +931,7 @@ namespace Vk.Samples
             fixed (byte* mainBytesPtr = mainBytes)
             {
                 shaderStages[0].pName = mainBytesPtr;
-                Debug.Assert(shaderStages[0].module != NullHandle);
+                Debug.Assert(shaderStages[0].module != 0);
 
                 // Fragment shader
                 shaderStages[1].sType = VkStructureType.PipelineShaderStageCreateInfo;
@@ -941,7 +941,7 @@ namespace Vk.Samples
                 shaderStages[1].module = LoadSPIRVShader(Path.Combine(AppContext.BaseDirectory, "Shaders/triangle.frag.spv"));
                 // Main entry point for the shader
                 shaderStages[1].pName = mainBytesPtr;
-                Debug.Assert(shaderStages[1].module != NullHandle);
+                Debug.Assert(shaderStages[1].module != 0);
             }
 
             fixed (VkPipelineShaderStageCreateInfo* ssPtr = shaderStages)

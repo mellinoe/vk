@@ -590,7 +590,7 @@ namespace Vk.Samples
             submitInfo.pCommandBuffers = (VkCommandBuffer*)drawCmdBuffers.GetAddress(currentBuffer);
 
             // Submit to queue
-            Util.CheckResult(vkQueueSubmit(queue, 1, ref submitInfo, NullHandle));
+            Util.CheckResult(vkQueueSubmit(queue, 1, ref submitInfo, VkFence.Null));
 
             submitFrame();
         }
