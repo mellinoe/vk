@@ -131,7 +131,7 @@ namespace Vk.Samples
             Debug.Assert(device.Handle != null);
             vkDestroyBuffer(device, vertices.buffer, null);
             vkFreeMemory(device, vertices.memory, null);
-            if (indices.buffer.Handle != NullHandle)
+            if (indices.buffer.Handle != 0)
             {
                 vkDestroyBuffer(device, indices.buffer, null);
                 vkFreeMemory(device, indices.memory, null);

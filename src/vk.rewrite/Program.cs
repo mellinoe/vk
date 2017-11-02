@@ -107,14 +107,23 @@ namespace Vk.Rewrite
             for (int i = 0; i < method.Parameters.Count; i++)
             {
                 EmitLoadArgument(il, i, method.Parameters);
-                if (method.Parameters[i].ParameterType.FullName == "System.String")
+                TypeReference parameterType = method.Parameters[i].ParameterType;
+                if (parameterType.FullName == "System.String")
                 {
-                    var variableDef = new VariableDefinition(s_stringHandleRef);
+                    VariableDefinition variableDef = new VariableDefinition(s_stringHandleRef);
                     method.Body.Variables.Add(variableDef);
                     il.Emit(OpCodes.Call, s_stringToHGlobalUtf8Ref);
                     il.Emit(OpCodes.Stloc, variableDef);
                     il.Emit(OpCodes.Ldloc, variableDef);
                     stringParams.Add(variableDef);
+                }
+                else if (parameterType.IsByReference)
+                {
+                    VariableDefinition byRefVariable = new VariableDefinition(new PinnedType(parameterType));
+                    method.Body.Variables.Add(byRefVariable);
+                    il.Emit(OpCodes.Stloc, byRefVariable);
+                    il.Emit(OpCodes.Ldloc, byRefVariable);
+                    il.Emit(OpCodes.Conv_I);
                 }
             }
 
@@ -132,7 +141,18 @@ namespace Vk.Rewrite
             };
             foreach (ParameterDefinition pd in method.Parameters)
             {
-                callSite.Parameters.Add(pd);
+                TypeReference parameterType;
+                if (pd.ParameterType.IsByReference)
+                {
+                    parameterType = new PointerType(pd.ParameterType.GetElementType());
+                }
+                else
+                {
+                    parameterType = pd.ParameterType;
+                }
+                ParameterDefinition calliPD = new ParameterDefinition(pd.Name, pd.Attributes, parameterType);
+
+                callSite.Parameters.Add(calliPD);
             }
             il.Emit(OpCodes.Calli, callSite);
 

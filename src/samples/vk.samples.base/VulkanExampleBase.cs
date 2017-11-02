@@ -763,7 +763,7 @@ namespace Vk.Samples
             shaderStage.stage = stage;
             shaderStage.module = Tools.loadShader(fileName, device, stage);
             shaderStage.pName = Strings.main; // todo : make param
-            Debug.Assert(shaderStage.module.Handle != NullHandle);
+            Debug.Assert(shaderStage.module.Handle != 0);
             shaderModules.Add(shaderStage.module);
             return shaderStage;
         }
@@ -799,7 +799,7 @@ namespace Vk.Samples
             submitInfo.commandBufferCount = 1;
             submitInfo.pCommandBuffers = &commandBuffer;
 
-            Util.CheckResult(vkQueueSubmit(queue, 1, &submitInfo, NullHandle));
+            Util.CheckResult(vkQueueSubmit(queue, 1, &submitInfo, VkFence.Null));
             Util.CheckResult(vkQueueWaitIdle(queue));
 
             if (free)

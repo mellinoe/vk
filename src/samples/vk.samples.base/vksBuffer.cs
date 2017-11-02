@@ -152,11 +152,11 @@ namespace Vk.Samples
         */
         public void destroy()
         {
-            if (buffer.Handle != IntPtr.Zero)
+            if (buffer.Handle != 0)
             {
                 vkDestroyBuffer(device, buffer, null);
             }
-            if (memory.Handle != IntPtr.Zero)
+            if (memory.Handle != 0)
             {
                 vkFreeMemory(device, memory, null);
             }

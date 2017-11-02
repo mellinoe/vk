@@ -323,7 +323,7 @@ namespace Vk.Samples
 
                 // If an existing swap chain is re-created, destroy the old swap chain
                 // This also cleans up all the presentable Images
-                if (oldSwapchain.Handle != NullHandle)
+                if (oldSwapchain.Handle != 0)
                 {
                     for (uint i = 0; i < ImageCount; i++)
                     {
@@ -415,7 +415,7 @@ namespace Vk.Samples
             presentInfo.pSwapchains = &sc;
             presentInfo.pImageIndices = &imageIndex;
             // Check if a wait semaphore has been specified to wait for before presenting the image
-            if (waitSemaphore.Handle != NullHandle)
+            if (waitSemaphore.Handle != 0)
             {
                 presentInfo.pWaitSemaphores = &waitSemaphore;
                 presentInfo.waitSemaphoreCount = 1;
