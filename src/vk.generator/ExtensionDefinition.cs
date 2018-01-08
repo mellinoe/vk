@@ -54,7 +54,7 @@ namespace Vk.Generator
                         {
                             int offset = int.Parse(offsetString);
                             int direction = 1;
-                            if (enumXE.Attribute("dir")?.Value == "-1")
+                            if (enumXE.Attribute("dir")?.Value == "-")
                             {
                                 direction = -1;
                             }

@@ -1593,16 +1593,16 @@ namespace Vulkan
         ErrorFormatNotSupported = -11,
         ///<summary>A requested pool allocation has failed due to fragmentation of the pool's memory</summary>
         ErrorFragmentedPool = -12,
-        ErrorSurfaceLostKHR = 1000000000,
-        ErrorNativeWindowInUseKHR = 1000000001,
+        ErrorSurfaceLostKHR = -1000000000,
+        ErrorNativeWindowInUseKHR = -1000000001,
         SuboptimalKHR = 1000001003,
-        ErrorOutOfDateKHR = 1000001004,
-        ErrorIncompatibleDisplayKHR = 1000003001,
-        ErrorValidationFailedEXT = 1000011001,
-        ErrorInvalidShaderNV = 1000012000,
-        ErrorOutOfPoolMemoryKHR = 1000069000,
-        ErrorInvalidExternalHandleKHR = 1000072003,
-        ErrorNotPermittedEXT = 1000174001,
+        ErrorOutOfDateKHR = -1000001004,
+        ErrorIncompatibleDisplayKHR = -1000003001,
+        ErrorValidationFailedEXT = -1000011001,
+        ErrorInvalidShaderNV = -1000012000,
+        ErrorOutOfPoolMemoryKHR = -1000069000,
+        ErrorInvalidExternalHandleKHR = -1000072003,
+        ErrorNotPermittedEXT = -1000174001,
     }
     public static partial class RawConstants
     {
