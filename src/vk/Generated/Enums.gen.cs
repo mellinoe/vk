@@ -1285,6 +1285,8 @@ namespace Vulkan
         PipelineViewportSwizzleStateCreateInfoNV = 1000098000,
         PhysicalDeviceDiscardRectanglePropertiesEXT = 1000099000,
         PipelineDiscardRectangleStateCreateInfoEXT = 1000099001,
+        PhysicalDeviceConservativeRasterizationPropertiesEXT = 1000101000,
+        PipelineRasterizationConservativeStateCreateInfoEXT = 1000101001,
         HdrMetadataEXT = 1000105000,
         SharedPresentSurfaceCapabilitiesKHR = 1000111000,
         PhysicalDeviceExternalFenceInfoKHR = 1000112000,
@@ -1336,6 +1338,9 @@ namespace Vulkan
         ValidationCacheCreateInfoEXT = 1000160000,
         ShaderModuleValidationCacheCreateInfoEXT = 1000160001,
         DeviceQueueGlobalPriorityCreateInfoEXT = 1000174000,
+        ImportMemoryHostPointerInfoEXT = 1000178000,
+        MemoryHostPointerPropertiesEXT = 1000178001,
+        PhysicalDeviceExternalMemoryHostPropertiesEXT = 1000178002,
     }
     public static partial class RawConstants
     {
@@ -1491,6 +1496,8 @@ namespace Vulkan
         public const VkStructureType VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_SWIZZLE_STATE_CREATE_INFO_NV = VkStructureType.PipelineViewportSwizzleStateCreateInfoNV;
         public const VkStructureType VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DISCARD_RECTANGLE_PROPERTIES_EXT = VkStructureType.PhysicalDeviceDiscardRectanglePropertiesEXT;
         public const VkStructureType VK_STRUCTURE_TYPE_PIPELINE_DISCARD_RECTANGLE_STATE_CREATE_INFO_EXT = VkStructureType.PipelineDiscardRectangleStateCreateInfoEXT;
+        public const VkStructureType VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_CONSERVATIVE_RASTERIZATION_PROPERTIES_EXT = VkStructureType.PhysicalDeviceConservativeRasterizationPropertiesEXT;
+        public const VkStructureType VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_CONSERVATIVE_STATE_CREATE_INFO_EXT = VkStructureType.PipelineRasterizationConservativeStateCreateInfoEXT;
         public const VkStructureType VK_STRUCTURE_TYPE_HDR_METADATA_EXT = VkStructureType.HdrMetadataEXT;
         public const VkStructureType VK_STRUCTURE_TYPE_SHARED_PRESENT_SURFACE_CAPABILITIES_KHR = VkStructureType.SharedPresentSurfaceCapabilitiesKHR;
         public const VkStructureType VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTERNAL_FENCE_INFO_KHR = VkStructureType.PhysicalDeviceExternalFenceInfoKHR;
@@ -1542,6 +1549,9 @@ namespace Vulkan
         public const VkStructureType VK_STRUCTURE_TYPE_VALIDATION_CACHE_CREATE_INFO_EXT = VkStructureType.ValidationCacheCreateInfoEXT;
         public const VkStructureType VK_STRUCTURE_TYPE_SHADER_MODULE_VALIDATION_CACHE_CREATE_INFO_EXT = VkStructureType.ShaderModuleValidationCacheCreateInfoEXT;
         public const VkStructureType VK_STRUCTURE_TYPE_DEVICE_QUEUE_GLOBAL_PRIORITY_CREATE_INFO_EXT = VkStructureType.DeviceQueueGlobalPriorityCreateInfoEXT;
+        public const VkStructureType VK_STRUCTURE_TYPE_IMPORT_MEMORY_HOST_POINTER_INFO_EXT = VkStructureType.ImportMemoryHostPointerInfoEXT;
+        public const VkStructureType VK_STRUCTURE_TYPE_MEMORY_HOST_POINTER_PROPERTIES_EXT = VkStructureType.MemoryHostPointerPropertiesEXT;
+        public const VkStructureType VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTERNAL_MEMORY_HOST_PROPERTIES_EXT = VkStructureType.PhysicalDeviceExternalMemoryHostPropertiesEXT;
     }
 
     public enum VkSubpassContents
@@ -3035,6 +3045,9 @@ namespace Vulkan
         D3d11TextureKmtKHR = 16,
         D3d12HeapKHR = 32,
         D3d12ResourceKHR = 64,
+        DmaBufEXT = 512,
+        HostAllocationEXT = 128,
+        HostMappedForeignMemoryEXT = 256,
     }
     public static partial class RawConstants
     {
@@ -3045,6 +3058,9 @@ namespace Vulkan
         public const VkExternalMemoryHandleTypeFlagsKHR VK_EXTERNAL_MEMORY_HANDLE_TYPE_D3D11_TEXTURE_KMT_BIT_KHR = VkExternalMemoryHandleTypeFlagsKHR.D3d11TextureKmtKHR;
         public const VkExternalMemoryHandleTypeFlagsKHR VK_EXTERNAL_MEMORY_HANDLE_TYPE_D3D12_HEAP_BIT_KHR = VkExternalMemoryHandleTypeFlagsKHR.D3d12HeapKHR;
         public const VkExternalMemoryHandleTypeFlagsKHR VK_EXTERNAL_MEMORY_HANDLE_TYPE_D3D12_RESOURCE_BIT_KHR = VkExternalMemoryHandleTypeFlagsKHR.D3d12ResourceKHR;
+        public const VkExternalMemoryHandleTypeFlagsKHR VK_EXTERNAL_MEMORY_HANDLE_TYPE_DMA_BUF_BIT_EXT = VkExternalMemoryHandleTypeFlagsKHR.DmaBufEXT;
+        public const VkExternalMemoryHandleTypeFlagsKHR VK_EXTERNAL_MEMORY_HANDLE_TYPE_HOST_ALLOCATION_BIT_EXT = VkExternalMemoryHandleTypeFlagsKHR.HostAllocationEXT;
+        public const VkExternalMemoryHandleTypeFlagsKHR VK_EXTERNAL_MEMORY_HANDLE_TYPE_HOST_MAPPED_FOREIGN_MEMORY_BIT_EXT = VkExternalMemoryHandleTypeFlagsKHR.HostMappedForeignMemoryEXT;
     }
 
     [Flags]
@@ -3447,16 +3463,29 @@ namespace Vulkan
 
     public enum VkQueueGlobalPriorityEXT
     {
-        Low = 128,
-        Medium = 256,
-        High = 512,
-        Realtime = 1024,
+        LowEXT = 128,
+        MediumEXT = 256,
+        HighEXT = 512,
+        RealtimeEXT = 1024,
     }
     public static partial class RawConstants
     {
-        public const VkQueueGlobalPriorityEXT VK_QUEUE_GLOBAL_PRIORITY_LOW = VkQueueGlobalPriorityEXT.Low;
-        public const VkQueueGlobalPriorityEXT VK_QUEUE_GLOBAL_PRIORITY_MEDIUM = VkQueueGlobalPriorityEXT.Medium;
-        public const VkQueueGlobalPriorityEXT VK_QUEUE_GLOBAL_PRIORITY_HIGH = VkQueueGlobalPriorityEXT.High;
-        public const VkQueueGlobalPriorityEXT VK_QUEUE_GLOBAL_PRIORITY_REALTIME = VkQueueGlobalPriorityEXT.Realtime;
+        public const VkQueueGlobalPriorityEXT VK_QUEUE_GLOBAL_PRIORITY_LOW_EXT = VkQueueGlobalPriorityEXT.LowEXT;
+        public const VkQueueGlobalPriorityEXT VK_QUEUE_GLOBAL_PRIORITY_MEDIUM_EXT = VkQueueGlobalPriorityEXT.MediumEXT;
+        public const VkQueueGlobalPriorityEXT VK_QUEUE_GLOBAL_PRIORITY_HIGH_EXT = VkQueueGlobalPriorityEXT.HighEXT;
+        public const VkQueueGlobalPriorityEXT VK_QUEUE_GLOBAL_PRIORITY_REALTIME_EXT = VkQueueGlobalPriorityEXT.RealtimeEXT;
+    }
+
+    public enum VkConservativeRasterizationModeEXT
+    {
+        DisabledEXT = 0,
+        OverestimateEXT = 1,
+        UnderestimateEXT = 2,
+    }
+    public static partial class RawConstants
+    {
+        public const VkConservativeRasterizationModeEXT VK_CONSERVATIVE_RASTERIZATION_MODE_DISABLED_EXT = VkConservativeRasterizationModeEXT.DisabledEXT;
+        public const VkConservativeRasterizationModeEXT VK_CONSERVATIVE_RASTERIZATION_MODE_OVERESTIMATE_EXT = VkConservativeRasterizationModeEXT.OverestimateEXT;
+        public const VkConservativeRasterizationModeEXT VK_CONSERVATIVE_RASTERIZATION_MODE_UNDERESTIMATE_EXT = VkConservativeRasterizationModeEXT.UnderestimateEXT;
     }
 }
