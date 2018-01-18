@@ -4029,4 +4029,80 @@ namespace Vulkan
             return ret;
         }
     }
+
+    public unsafe partial struct VkImportMemoryHostPointerInfoEXT
+    {
+        public VkStructureType sType;
+        public void* pNext;
+        public VkExternalMemoryHandleTypeFlagsKHR handleType;
+        public void* pHostPointer;
+        public static VkImportMemoryHostPointerInfoEXT New()
+        {
+            VkImportMemoryHostPointerInfoEXT ret = new VkImportMemoryHostPointerInfoEXT();
+            ret.sType = VkStructureType.ImportMemoryHostPointerInfoEXT;
+            return ret;
+        }
+    }
+
+    public unsafe partial struct VkMemoryHostPointerPropertiesEXT
+    {
+        public VkStructureType sType;
+        public void* pNext;
+        public uint memoryTypeBits;
+        public static VkMemoryHostPointerPropertiesEXT New()
+        {
+            VkMemoryHostPointerPropertiesEXT ret = new VkMemoryHostPointerPropertiesEXT();
+            ret.sType = VkStructureType.MemoryHostPointerPropertiesEXT;
+            return ret;
+        }
+    }
+
+    public unsafe partial struct VkPhysicalDeviceExternalMemoryHostPropertiesEXT
+    {
+        public VkStructureType sType;
+        public void* pNext;
+        public ulong minImportedHostPointerAlignment;
+        public static VkPhysicalDeviceExternalMemoryHostPropertiesEXT New()
+        {
+            VkPhysicalDeviceExternalMemoryHostPropertiesEXT ret = new VkPhysicalDeviceExternalMemoryHostPropertiesEXT();
+            ret.sType = VkStructureType.PhysicalDeviceExternalMemoryHostPropertiesEXT;
+            return ret;
+        }
+    }
+
+    public unsafe partial struct VkPhysicalDeviceConservativeRasterizationPropertiesEXT
+    {
+        public VkStructureType sType;
+        public void* pNext;
+        public float primitiveOverestimationSize;
+        public float maxExtraPrimitiveOverestimationSize;
+        public float extraPrimitiveOverestimationSizeGranularity;
+        public VkBool32 primitiveUnderestimation;
+        public VkBool32 conservativePointAndLineRasterization;
+        public VkBool32 degenerateTrianglesRasterized;
+        public VkBool32 degenerateLinesRasterized;
+        public VkBool32 fullyCoveredFragmentShaderInputVariable;
+        public VkBool32 conservativeRasterizationPostDepthCoverage;
+        public static VkPhysicalDeviceConservativeRasterizationPropertiesEXT New()
+        {
+            VkPhysicalDeviceConservativeRasterizationPropertiesEXT ret = new VkPhysicalDeviceConservativeRasterizationPropertiesEXT();
+            ret.sType = VkStructureType.PhysicalDeviceConservativeRasterizationPropertiesEXT;
+            return ret;
+        }
+    }
+
+    public unsafe partial struct VkPipelineRasterizationConservativeStateCreateInfoEXT
+    {
+        public VkStructureType sType;
+        public void* pNext;
+        public uint flags;
+        public VkConservativeRasterizationModeEXT conservativeRasterizationMode;
+        public float extraPrimitiveOverestimationSize;
+        public static VkPipelineRasterizationConservativeStateCreateInfoEXT New()
+        {
+            VkPipelineRasterizationConservativeStateCreateInfoEXT ret = new VkPipelineRasterizationConservativeStateCreateInfoEXT();
+            ret.sType = VkStructureType.PipelineRasterizationConservativeStateCreateInfoEXT;
+            return ret;
+        }
+    }
 }
