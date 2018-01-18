@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netstandard1.4</TargetFramework>
+    <TargetFrameworks>net40;net45;netstandard1.4</TargetFrameworks>
     <OutputType>Library</OutputType>
     <AssemblyName>vk</AssemblyName>
     <AssemblyVersion>1.0.15</AssemblyVersion>
@@ -24,15 +24,15 @@
   </PropertyGroup>
   <ItemGroup>
   </ItemGroup>
-  <Target Name="AutoGenerateBindings" BeforeTargets="CoreCompile">
+  <Target Name="AutoGenerateBindings" BeforeTargets="CoreCompile" Condition=" '$(TargetFramework)' == 'net40' ">
     <PropertyGroup>
-      <VkGeneratorExecutable>$(BinDir)/$(Configuration)/vk.generator/netcoreapp1.1/vk.generator.dll</VkGeneratorExecutable>
+      <VkGeneratorExecutable>$(BinDir)/$(Configuration)/vk.generator/netcoreapp2.0/vk.generator.dll</VkGeneratorExecutable>
     </PropertyGroup>
     <Message Text="Generating bindings." />
     <Exec Command="dotnet $(VkGeneratorExecutable) --out $(MSBuildThisFileDirectory)Generated" />
   </Target>
   <PropertyGroup>
-    <VkRewriteExecutable>$(BinDir)/$(Configuration)/vk.rewrite/netcoreapp1.1/vk.rewrite.dll</VkRewriteExecutable>
+    <VkRewriteExecutable>$(BinDir)/$(Configuration)/vk.rewrite/netcoreapp2.0/vk.rewrite.dll</VkRewriteExecutable>
   </PropertyGroup>
   <Target Name="RewriteCalliStubs" AfterTargets="Build" Condition="'$(DisableCalli)' != 'true'">
     <Message Text="Rewriting calli stubs." />

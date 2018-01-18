@@ -22,11 +22,11 @@ namespace Vulkan
 
         private static string GetVulkanName()
         {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            if (PlatformConfiguration.IsWindows)
             {
                 return "vulkan-1.dll";
             }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            else if (PlatformConfiguration.IsUnix)
             {
                 return "libvulkan.so.1";
             }
@@ -81,17 +81,17 @@ namespace Vulkan
 
         public static NativeLibrary Load(string libraryName)
         {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            if (PlatformConfiguration.IsWindows)
             {
                 return new WindowsNativeLibrary(libraryName);
             }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            else if (PlatformConfiguration.IsUnix)
             {
                 return new LinuxNativeLibrary(libraryName);
             }
             else
             {
-                throw new PlatformNotSupportedException("Cannot load native libraries on this platform: " + RuntimeInformation.OSDescription);
+                throw new PlatformNotSupportedException("Cannot load native libraries on this platform as not supported");
             }
         }
 
@@ -130,7 +130,7 @@ namespace Vulkan
                 IntPtr handle = Libdl.dlopen(libraryName, Libdl.RTLD_NOW);
                 if (handle == IntPtr.Zero && !Path.IsPathRooted(libraryName))
                 {
-                    string localPath = Path.Combine(AppContext.BaseDirectory, libraryName);
+                    string localPath = Path.Combine(PlatformConfiguration.DefaultAppDirectory, libraryName);
                     handle = Libdl.dlopen(localPath, Libdl.RTLD_NOW);
                 }
 
