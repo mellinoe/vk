@@ -1,21 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk" DefaultTargets="Build;Publish">
   <PropertyGroup>
-    <TargetFramework>netcoreapp1.1</TargetFramework>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
     <OutputType>Exe</OutputType>
     <AssemblyName>vk.rewrite</AssemblyName>
     <RootNamespace>Vk.Generator.Rewrite</RootNamespace>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
-    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
-    <PackageReference Include="Microsoft.NETCore.App" Version="1.1.0" />
-    <PackageReference Include="Microsoft.NETCore.DotNetHostPolicy" Version="1.1.0" />
-    <PackageReference Include="Microsoft.NETCore.Runtime.CoreCLR" Version="1.1.0" />
     <PackageReference Include="System.CommandLine" Version="0.1.0-e160908-1" />
-    <PackageReference Include="System.Xml.XmlDocument" Version="4.3.0" />
-    <PackageReference Include="Mono.Cecil" Version="0.10.0-beta2" />
+    <PackageReference Include="Mono.Cecil" Version="0.10.0-beta7" />
   </ItemGroup>
 </Project>

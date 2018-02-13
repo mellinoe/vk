@@ -26,13 +26,13 @@
   </ItemGroup>
   <Target Name="AutoGenerateBindings" BeforeTargets="CoreCompile">
     <PropertyGroup>
-      <VkGeneratorExecutable>$(BinDir)/$(Configuration)/vk.generator/netcoreapp1.1/vk.generator.dll</VkGeneratorExecutable>
+      <VkGeneratorExecutable>$(BinDir)/$(Configuration)/vk.generator/netcoreapp2.0/vk.generator.dll</VkGeneratorExecutable>
     </PropertyGroup>
     <Message Text="Generating bindings." />
     <Exec Command="dotnet $(VkGeneratorExecutable) --out $(MSBuildThisFileDirectory)Generated" />
   </Target>
   <PropertyGroup>
-    <VkRewriteExecutable>$(BinDir)/$(Configuration)/vk.rewrite/netcoreapp1.1/vk.rewrite.dll</VkRewriteExecutable>
+    <VkRewriteExecutable>$(BinDir)/$(Configuration)/vk.rewrite/netcoreapp2.0/vk.rewrite.dll</VkRewriteExecutable>
   </PropertyGroup>
   <Target Name="RewriteCalliStubs" AfterTargets="Build" Condition="'$(DisableCalli)' != 'true'">
     <Message Text="Rewriting calli stubs." />
