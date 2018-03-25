@@ -5,16 +5,16 @@ namespace Vulkan
 {
     internal static class Libdl
     {
-        [DllImport("libdl.so")]
+        [DllImport("libdl")]
         public static extern IntPtr dlopen(string fileName, int flags);
 
-        [DllImport("libdl.so")]
+        [DllImport("libdl")]
         public static extern IntPtr dlsym(IntPtr handle, string name);
 
-        [DllImport("libdl.so")]
+        [DllImport("libdl")]
         public static extern int dlclose(IntPtr handle);
 
-        [DllImport("libdl.so")]
+        [DllImport("libdl")]
         public static extern string dlerror();
 
         public const int RTLD_NOW = 0x002;

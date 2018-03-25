@@ -30,6 +30,10 @@ namespace Vulkan
             {
                 return "libvulkan.so.1";
             }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                return "libvulkan.dylib";
+            }
             else
             {
                 throw new PlatformNotSupportedException();
@@ -85,9 +89,10 @@ namespace Vulkan
             {
                 return new WindowsNativeLibrary(libraryName);
             }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux)
+                || RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
-                return new LinuxNativeLibrary(libraryName);
+                return new UnixNativeLibrary(libraryName);
             }
             else
             {
@@ -118,9 +123,9 @@ namespace Vulkan
             }
         }
 
-        private class LinuxNativeLibrary : NativeLibrary
+        private class UnixNativeLibrary : NativeLibrary
         {
-            public LinuxNativeLibrary(string libraryName) : base(libraryName)
+            public UnixNativeLibrary(string libraryName) : base(libraryName)
             {
             }
 
