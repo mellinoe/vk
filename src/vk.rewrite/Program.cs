@@ -146,6 +146,10 @@ namespace Vk.Rewrite
                 {
                     parameterType = new PointerType(pd.ParameterType.GetElementType());
                 }
+                if (pd.ParameterType.FullName == "System.String")
+                {
+                    parameterType = s_stringHandleRef;
+                }
                 else
                 {
                     parameterType = pd.ParameterType;
