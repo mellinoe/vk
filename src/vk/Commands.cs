@@ -28,7 +28,20 @@ namespace Vulkan
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
-                return "libvulkan.so.1";
+                if (RuntimeInformation.OSDescription.Contains("Unix"))
+                {
+                    // Android
+                    return "libvulkan.so";
+                }
+                else
+                {
+                    // Desktop Linux
+                    return "libvulkan.so.1";
+                }
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                return "libvulkan.dylib";
             }
             else
             {
