@@ -902,13 +902,13 @@ namespace Vk.Samples
             vertexInputAttributs[0].binding = 0;
             vertexInputAttributs[0].location = 0;
             // Position attribute is three 32 bit signed (SFLOAT) floats (R32 G32 B32)
-            vertexInputAttributs[0].format = VkFormat.R32g32b32a32Sfloat;
+            vertexInputAttributs[0].format = VkFormat.R32g32b32Sfloat;
             vertexInputAttributs[0].offset = 0;
             // Attribute location 1: Color
             vertexInputAttributs[1].binding = 0;
             vertexInputAttributs[1].location = 1;
             // Color attribute is three 32 bit signed (SFLOAT) floats (R32 G32 B32)
-            vertexInputAttributs[1].format = VkFormat.R32g32b32a32Sfloat;
+            vertexInputAttributs[1].format = VkFormat.R32g32b32Sfloat;
             vertexInputAttributs[1].offset = 12;
 
             // Vertex input state used for Pipeline creation
