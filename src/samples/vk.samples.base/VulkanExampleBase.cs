@@ -645,6 +645,12 @@ namespace Vk.Samples
 
                 NativeWindow.GetInputSnapshot();
 
+                if (!NativeWindow.Exists)
+                {
+                    // Exit early if the window was closed this frame.
+                    break;
+                }
+
                 render();
                 frameCounter++;
                 var tEnd = DateTime.Now;
