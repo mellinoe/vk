@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netstandard1.4</TargetFramework>
+    <TargetFramework>netstandard1.3</TargetFramework>
     <OutputType>Library</OutputType>
     <AssemblyName>vk</AssemblyName>
     <AssemblyVersion>1.0.15</AssemblyVersion>
