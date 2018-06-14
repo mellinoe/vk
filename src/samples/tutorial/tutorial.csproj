@@ -28,6 +28,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="../../vk/vk.csproj" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-ci0027" />
+    <PackageReference Include="Veldrid.Sdl2" Version="4.3.3" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-beta0003" />
   </ItemGroup>
 </Project>

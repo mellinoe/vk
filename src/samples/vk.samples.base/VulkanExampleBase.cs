@@ -101,6 +101,8 @@ namespace Vk.Samples
         protected uint currentBuffer;
         protected NativeList<VkShaderModule> shaderModules = new NativeList<VkShaderModule>();
 
+        protected InputSnapshot snapshot;
+
         public void InitVulkan()
         {
             VkResult err;
@@ -293,7 +295,7 @@ namespace Vk.Samples
         {
             if (e.Down)
             {
-                //mousePos = new Vector2(e.MouseState.X, e.MouseState.Y);
+                mousePos = new Vector2(snapshot.MousePosition.X, snapshot.MousePosition.Y);
             }
         }
 
@@ -642,7 +644,7 @@ namespace Vk.Samples
                     viewChanged();
                 }
 
-                InputSnapshot snapshot = NativeWindow.PumpEvents();
+                snapshot = NativeWindow.PumpEvents();
 
                 if (!NativeWindow.Exists)
                 {

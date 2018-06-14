@@ -3,17 +3,18 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Runtime.CompilerServices;
-using Veldrid.Collections;
-using Veldrid.Sdl2;
 using Vulkan;
 
-using static Veldrid.Sdl2.Sdl2Native;
 using static Vulkan.VulkanNative;
 using System.Linq;
 using System.IO;
 using System.Numerics;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Advanced;
+using Veldrid.Sdl2;
+using SixLabors.ImageSharp.PixelFormats;
+using Veldrid.Collections;
+using static Veldrid.Sdl2.Sdl2Native;
 
 namespace Vk.Samples
 {
@@ -115,7 +116,7 @@ namespace Vk.Samples
         {
             while (_window.Exists)
             {
-                _window.GetInputSnapshot();
+                _window.PumpEvents();
                 UpdateUniformBuffer();
                 DrawFrame();
             }
@@ -343,14 +344,14 @@ namespace Vk.Samples
                     Win32WindowInfo win32Info = Unsafe.Read<Win32WindowInfo>(&sysWmInfo.info);
                     VkWin32SurfaceCreateInfoKHR wsci = VkWin32SurfaceCreateInfoKHR.New();
                     wsci.hinstance = win32Info.hinstance;
-                    wsci.hwnd = win32Info.window;
+                    wsci.hwnd = win32Info.Sdl2Window;
                     vkCreateWin32SurfaceKHR(_instance, ref wsci, null, out _surface);
                     break;
                 case SysWMType.X11:
                     X11WindowInfo x11Info = Unsafe.Read<X11WindowInfo>(&sysWmInfo.info);
                     VkXlibSurfaceCreateInfoKHR xsci = VkXlibSurfaceCreateInfoKHR.New();
                     xsci.dpy = (Vulkan.Xlib.Display*)x11Info.display;
-                    xsci.window = new Vulkan.Xlib.Window { Value = x11Info.window };
+                    xsci.window = new Vulkan.Xlib.Window { Value = x11Info.Sdl2Window };
                     vkCreateXlibSurfaceKHR(_instance, ref xsci, null, out _surface);
                     break;
                 default:
