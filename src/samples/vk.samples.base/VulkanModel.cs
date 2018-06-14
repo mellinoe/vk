@@ -18,7 +18,6 @@ using System.Numerics;
 using Vulkan;
 using System.Collections.Generic;
 using static Vulkan.VulkanNative;
-using Veldrid.Collections;
 
 namespace Vk.Samples
 {

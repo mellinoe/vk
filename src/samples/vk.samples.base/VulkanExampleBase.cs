@@ -11,7 +11,6 @@
 * This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
 */
 
-using OpenTK.Graphics;
 using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
@@ -21,7 +20,7 @@ using Vulkan;
 using static Vulkan.VulkanNative;
 using System.Numerics;
 using System.IO;
-using Veldrid.Collections;
+using Veldrid;
 using Veldrid.Sdl2;
 
 namespace Vk.Samples
@@ -290,11 +289,11 @@ namespace Vk.Samples
             keyPressed(e.Key);
         }
 
-        private void OnMouseDown(MouseButtonEvent e)
+        private void OnMouseDown(MouseEvent e)
         {
             if (e.Down)
             {
-                mousePos = new Vector2(e.MouseState.X, e.MouseState.Y);
+                //mousePos = new Vector2(e.MouseState.X, e.MouseState.Y);
             }
         }
 
@@ -643,7 +642,7 @@ namespace Vk.Samples
                     viewChanged();
                 }
 
-                NativeWindow.GetInputSnapshot();
+                InputSnapshot snapshot = NativeWindow.PumpEvents();
 
                 if (!NativeWindow.Exists)
                 {

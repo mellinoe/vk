@@ -14,7 +14,6 @@
 using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using Veldrid.Collections;
 using Vulkan;
 using Veldrid.Sdl2;
 using static Vulkan.VulkanNative;
@@ -62,7 +61,7 @@ namespace Vk.Samples
                 VkWin32SurfaceCreateInfoKHR surfaceCreateInfo = VkWin32SurfaceCreateInfoKHR.New();
                 var processHandle = Process.GetCurrentProcess().SafeHandle.DangerousGetHandle();
                 surfaceCreateInfo.hinstance = processHandle;
-                surfaceCreateInfo.hwnd = win32Info.window;
+                surfaceCreateInfo.hwnd = win32Info.Sdl2Window;
                 VkSurfaceKHR surface;
                 err = vkCreateWin32SurfaceKHR(Instance, &surfaceCreateInfo, null, &surface);
                 Surface = surface;
@@ -72,7 +71,7 @@ namespace Vk.Samples
                 X11WindowInfo x11Info = Unsafe.Read<X11WindowInfo>(&sysWmInfo.info);
                 VkXlibSurfaceCreateInfoKHR surfaceCreateInfo = VkXlibSurfaceCreateInfoKHR.New();
                 surfaceCreateInfo.dpy = (Vulkan.Xlib.Display*)x11Info.display;
-                surfaceCreateInfo.window = new Vulkan.Xlib.Window { Value = x11Info.window };
+                surfaceCreateInfo.window = new Vulkan.Xlib.Window { Value = x11Info.Sdl2Window };
                 VkSurfaceKHR surface;
                 err = vkCreateXlibSurfaceKHR(Instance, &surfaceCreateInfo, null, out surface);
                 Surface = surface;
