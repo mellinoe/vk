@@ -1,32 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk" DefaultTargets="Build;Publish">
   <PropertyGroup>
-    <TargetFramework>netcoreapp1.1</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>vk.samples.base</AssemblyName>
     <RootNamespace>Vk.Samples</RootNamespace>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="..\..\..\ext\assimp-net\libs\Assimp\Assimp64.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\..\ext\veldrid.sdl2\deps\sdl2\win7-x64\SDL2.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="../../vk/vk.csproj" />
-    <ProjectReference Include="../../../ext/assimp-net/AssimpNet/AssimpNet.csproj" />
-    <ProjectReference Include="../../../ext/veldrid.sdl2/src/Veldrid.Sdl2/Veldrid.Sdl2.csproj" />
-    <ProjectReference Include="..\..\..\ext\veldrid.collections\src\Veldrid.Collections\Veldrid.Collections.csproj" />
-    <PackageReference Include="Microsoft.NETCore.App" Version="1.1.0" />
-    <PackageReference Include="Microsoft.NETCore.DotNetHostPolicy" Version="1.1.0" />
-    <PackageReference Include="Microsoft.NETCore.Runtime.CoreCLR" Version="1.1.0" />
-    <PackageReference Include="System.CommandLine" Version="0.1.0-e160908-1" />
-    <PackageReference Include="System.Xml.XmlDocument" Version="4.3.0" />
-    <PackageReference Include="OpenTK.NETCore" Version="1.1.2287.6424" />
-    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.3.0" />
-    <PackageReference Include="System.Drawing.Primitives" Version="4.3.0" />
+    <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.5.0" />
+    <PackageReference Include="AssimpNet-netstandard" Version="3.3.1" />
+    <PackageReference Include="Veldrid.Sdl2" Version="4.3.3" />
   </ItemGroup>
 </Project>

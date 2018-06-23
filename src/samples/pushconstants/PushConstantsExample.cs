@@ -14,7 +14,6 @@
 using System;
 using System.Numerics;
 using System.Runtime.CompilerServices;
-using Veldrid.Collections;
 using Vulkan;
 using System.Diagnostics;
 using static Vulkan.VulkanNative;

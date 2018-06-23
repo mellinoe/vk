@@ -12,7 +12,6 @@
 */
 
 using System;
-using Veldrid.Collections;
 using Vulkan;
 using static Vulkan.VulkanNative;
 

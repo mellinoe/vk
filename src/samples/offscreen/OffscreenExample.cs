@@ -14,7 +14,6 @@
 using System;
 using System.Numerics;
 using System.Runtime.CompilerServices;
-using Veldrid.Collections;
 using Vulkan;
 using static Vulkan.VulkanNative;
 using static Vulkan.RawConstants;
@@ -22,6 +21,7 @@ using System.Runtime.InteropServices;
 using System.Diagnostics;
 using System.IO;
 using Veldrid.Sdl2;
+using Veldrid;
 
 namespace Vk.Samples
 {

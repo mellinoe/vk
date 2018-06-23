@@ -14,11 +14,11 @@
 using Vulkan;
 using static Vulkan.VulkanNative;
 using static Vulkan.RawConstants;
-using Veldrid.Collections;
 using System.Numerics;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using Veldrid.Sdl2;
+using Veldrid;
 
 namespace Vk.Samples
 {
