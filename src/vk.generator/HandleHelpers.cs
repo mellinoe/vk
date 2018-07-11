@@ -29,7 +29,7 @@ namespace Vk.Generator
                 cw.WriteLine($"public static bool operator !=({handle.Name} left, {handle.Name} right) => left.Handle != right.Handle;");
                 cw.WriteLine($"public static bool operator ==({handle.Name} left, {handleType} right) => left.Handle == right;");
                 cw.WriteLine($"public static bool operator !=({handle.Name} left, {handleType} right) => left.Handle != right;");
-                cw.WriteLine($"public bool Equals({handle.Name} h) => Handle.Equals(h.Handle);");
+                cw.WriteLine($"public bool Equals({handle.Name} h) => Handle == h.Handle;");
                 cw.WriteLine($"public override bool Equals(object o) => o is {handle.Name} h && Equals(h);");
                 cw.WriteLine($"public override int GetHashCode() => Handle.GetHashCode();");
                 cw.WriteLine($"private string DebuggerDisplay => string.Format(\"{handle.Name} [0x{{0}}]\", Handle.ToString(\"X\"));");
