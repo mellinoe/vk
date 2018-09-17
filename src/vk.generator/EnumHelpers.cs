@@ -18,6 +18,7 @@ namespace Vk.Generator
         {
             {  "VK_STENCIL_FRONT_AND_BACK", "FrontAndBack" },
             // VkStructureType
+            {  "VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_FLAGS_INFO", "MemoryAllocateFlagsInfo" },
 
             // VkSampleCountFlagBits
             {  "VK_SAMPLE_COUNT_1_BIT", "Count1" },

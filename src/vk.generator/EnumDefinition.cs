@@ -37,7 +37,9 @@ namespace Vk.Generator
             }
 
             string name = xe.Attribute("name").Value;
-            EnumValue[] values = xe.Elements("enum").Select(valuesx => EnumValue.CreateFromXml(valuesx, type == EnumType.Bitmask)).ToArray();
+            EnumValue[] values = xe.Elements("enum")
+                .Where(valuesx => valuesx.Attribute("alias") == null)
+                .Select(valuesx => EnumValue.CreateFromXml(valuesx, type == EnumType.Bitmask)).ToArray();
             return new EnumDefinition(name, type, values);
         }
 
@@ -57,13 +59,20 @@ namespace Vk.Generator
     public class EnumValue
     {
         public string Name { get; }
-        public int ValueOrBitPosition { get; }
+        public string ValueOrBitPosition { get; }
         public string Comment { get; }
 
         public EnumValue(string name, int value, string comment)
         {
             Name = name;
-            ValueOrBitPosition = value;
+            ValueOrBitPosition = value.ToString();
+            Comment = comment;
+        }
+
+        public EnumValue(string name, string alias, string comment)
+        {
+            Name = name;
+            ValueOrBitPosition = alias;
             Comment = comment;
         }
 
