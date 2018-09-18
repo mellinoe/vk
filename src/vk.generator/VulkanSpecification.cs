@@ -128,7 +128,7 @@ namespace Vk.Generator
 
                     if (prev != null)
                     {
-                        if (prev.ValueOrBitPosition != enumEx.Value)
+                        if (prev.ValueOrBitPosition != value)
                         {
                             throw new InvalidOperationException("The same enum cannot have different values");
                         }

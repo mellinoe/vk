@@ -59,20 +59,13 @@ namespace Vk.Generator
     public class EnumValue
     {
         public string Name { get; }
-        public string ValueOrBitPosition { get; }
+        public int ValueOrBitPosition { get; }
         public string Comment { get; }
 
         public EnumValue(string name, int value, string comment)
         {
             Name = name;
-            ValueOrBitPosition = value.ToString();
-            Comment = comment;
-        }
-
-        public EnumValue(string name, string alias, string comment)
-        {
-            Name = name;
-            ValueOrBitPosition = alias;
+            ValueOrBitPosition = value;
             Comment = comment;
         }
 
