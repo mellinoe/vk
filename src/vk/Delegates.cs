@@ -57,6 +57,6 @@ namespace Vulkan
 
     public unsafe delegate VkResult PFN_vkDestroyDebugUtilsMessengerEXT(
         VkInstance instance,
-        VkDebugUtilsMessengerEXT* pMessenger,
+        VkDebugUtilsMessengerEXT messenger,
         VkAllocationCallbacks* pAllocator);
 }
