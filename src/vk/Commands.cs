@@ -144,8 +144,12 @@ namespace Vulkan
                 IntPtr handle = Libdl.dlopen(libraryName, Libdl.RTLD_NOW);
                 if (handle == IntPtr.Zero && !Path.IsPathRooted(libraryName))
                 {
-                    string localPath = Path.Combine(AppContext.BaseDirectory, libraryName);
-                    handle = Libdl.dlopen(localPath, Libdl.RTLD_NOW);
+                    string baseDir = AppContext.BaseDirectory;
+                    if (!string.IsNullOrWhiteSpace(baseDir))
+                    {
+                        string localPath = Path.Combine(baseDir, libraryName);
+                        handle = Libdl.dlopen(localPath, Libdl.RTLD_NOW);
+                    }
                 }
 
                 return handle;
