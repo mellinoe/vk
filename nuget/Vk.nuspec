@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>Vk</id>
+    <version>2.0.0</version>
+    <authors>Eric Mellinoe</authors>
+    <owners>Eric Mellinoe</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="expression">MIT</license>
+    <licenseUrl>https://licenses.nuget.org/MIT</licenseUrl>
+    <iconUrl>https://raw.githubusercontent.com/xamarin/Xamarin.Forms/master/Assets/xamarin_128x128.png</iconUrl>
+    <description>Veldrid.View</description>
+    <copyright>� Eric Mellinoe. All rights reserved.</copyright>
+    <tags>velvrid vk</tags>
+    <dependencies>
+      <group targetFramework=".NETStandard1.4">
+      </group>      
+      <group targetFramework="UAP10.0">
+      </group>
+    </dependencies>
+  </metadata>
+</package>
