@@ -117,6 +117,14 @@ namespace Vk.Rewrite
                     il.Emit(OpCodes.Ldloc, variableDef);
                     stringParams.Add(variableDef);
                 }
+                else if (parameterType.IsArray)
+                {
+                    VariableDefinition arrayVar = new VariableDefinition(new PinnedType(new PointerType(parameterType.GetElementType())));
+                    method.Body.Variables.Add(arrayVar);
+                    il.Emit(OpCodes.Stloc, arrayVar);
+                    il.Emit(OpCodes.Ldloc, arrayVar);
+                    il.Emit(OpCodes.Conv_I);
+                }
                 else if (parameterType.IsByReference)
                 {
                     VariableDefinition byRefVariable = new VariableDefinition(new PinnedType(parameterType));
@@ -142,7 +150,7 @@ namespace Vk.Rewrite
             foreach (ParameterDefinition pd in method.Parameters)
             {
                 TypeReference parameterType;
-                if (pd.ParameterType.IsByReference)
+                if (pd.ParameterType.IsByReference || pd.ParameterType.IsArray)
                 {
                     parameterType = new PointerType(pd.ParameterType.GetElementType());
                 }
