@@ -39,6 +39,12 @@ namespace Vulkan
                     return "libvulkan.so.1";
                 }
             }
+#if NET5_0_OR_GREATER
+            else if (OperatingSystem.IsAndroid())
+            {
+                return "libvulkan.so";
+            }
+#endif
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
                 return "libvulkan.dylib";
