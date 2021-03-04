@@ -105,7 +105,11 @@ namespace Vulkan
                 return new WindowsNativeLibrary(libraryName);
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux)
-                || RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                || RuntimeInformation.IsOSPlatform(OSPlatform.OSX)
+                #if NET5_0
+                || OperatingSystem.IsAndroid()
+                #endif
+                )
             {
                 return new UnixNativeLibrary(libraryName);
             }
