@@ -34,7 +34,7 @@
   <PropertyGroup>
     <VkRewriteExecutable>$(BinDir)/$(Configuration)/vk.rewrite/netcoreapp2.0/vk.rewrite.dll</VkRewriteExecutable>
   </PropertyGroup>
-  <Target Name="RewriteCalliStubs" AfterTargets="Build" Condition="'$(DisableCalli)' != 'true'">
+  <Target Name="RewriteCalliStubs" AfterTargets="PostBuildEvent" Condition="'$(DisableCalli)' != 'true'">
     <Message Text="Rewriting calli stubs." />
     <Exec Command="dotnet $(VkRewriteExecutable) --vkdll $(TargetPath)" />
   </Target>
