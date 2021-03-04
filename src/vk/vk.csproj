@@ -3,7 +3,7 @@
     <TargetFrameworks>net5;netstandard1.4</TargetFrameworks>
     <OutputType>Library</OutputType>
     <AssemblyName>vk</AssemblyName>
-    <AssemblyVersion>1.0.22</AssemblyVersion>
+    <AssemblyVersion>1.0.24</AssemblyVersion>
     <RootNamespace>Vulkan</RootNamespace>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <ProjectGuid>{D8573039-9FE1-4554-A659-4E77CFBA83C1}</ProjectGuid>
@@ -34,7 +34,7 @@
   <PropertyGroup>
     <VkRewriteExecutable>$(BinDir)/$(Configuration)/vk.rewrite/netcoreapp2.0/vk.rewrite.dll</VkRewriteExecutable>
   </PropertyGroup>
-  <Target Name="RewriteCalliStubs" AfterTargets="Build" Condition="'$(DisableCalli)' != 'true'">
+  <Target Name="RewriteCalliStubs" AfterTargets="PostBuildEvent" Condition="'$(DisableCalli)' != 'true'">
     <Message Text="Rewriting calli stubs." />
     <Exec Command="dotnet $(VkRewriteExecutable) --vkdll $(TargetPath)" />
   </Target>

@@ -39,7 +39,7 @@ namespace Vulkan
                     return "libvulkan.so.1";
                 }
             }
-#if NET5_0_OR_GREATER
+#if NET5_0
             else if (OperatingSystem.IsAndroid())
             {
                 return "libvulkan.so";
