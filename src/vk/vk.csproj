@@ -3,7 +3,7 @@
     <TargetFrameworks>net5;netstandard1.4</TargetFrameworks>
     <OutputType>Library</OutputType>
     <AssemblyName>vk</AssemblyName>
-    <AssemblyVersion>1.0.24</AssemblyVersion>
+    <AssemblyVersion>1.0.25</AssemblyVersion>
     <RootNamespace>Vulkan</RootNamespace>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <ProjectGuid>{D8573039-9FE1-4554-A659-4E77CFBA83C1}</ProjectGuid>
