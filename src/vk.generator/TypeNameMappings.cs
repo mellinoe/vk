@@ -18,6 +18,7 @@ namespace Vk.Generator
             { "DWORD", "uint" },
 
             { "ANativeWindow", "Android.ANativeWindow" },
+            { "AHardwareBuffer", "Android.AHardwareBuffer" },
 
             { "MirConnection", "Mir.MirConnection" },
             { "MirSurface", "Mir.MirSurface" },

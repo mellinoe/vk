@@ -30,11 +30,9 @@ namespace Vk.Generator
             CommandNames = commandNames;
         }
 
-        public static ExtensionDefinition CreateFromXml(XElement xe)
+        public static ExtensionDefinition CreateFromXml(XElement xe, int number)
         {
             string name = xe.GetNameAttribute();
-            string numberString = xe.Attribute("number").Value;
-            int number = int.Parse(numberString);
             string type = xe.GetTypeAttributeOrNull();
             List<ExtensionConstant> extensionConstants = new List<ExtensionConstant>();
             List<EnumExtensionValue> enumExtensions = new List<EnumExtensionValue>();
@@ -42,7 +40,7 @@ namespace Vk.Generator
 
             foreach (var require in xe.Elements("require"))
             {
-                foreach (var enumXE in require.Elements("enum"))
+                foreach (var enumXE in require.Elements("enum").Where(typex => typex.Attribute("alias") == null))
                 {
                     string enumName = enumXE.GetNameAttribute();
                     string extends = enumXE.Attribute("extends")?.Value;
@@ -59,7 +57,14 @@ namespace Vk.Generator
                                 direction = -1;
                             }
 
-                            int value = direction * (1000000000 + (number - 1) * 1000 + offset);
+                            string extNumberStr = enumXE.Attribute("extnumber")?.Value;
+                            int extNumber = number;
+                            if (!string.IsNullOrEmpty(extNumberStr))
+                            {
+                                extNumber = int.Parse(extNumberStr);
+                            }
+
+                            int value = direction * (1000000000 + (extNumber - 1) * 1000 + offset);
                             valueString = value.ToString();
                         }
                         else

@@ -42,4 +42,21 @@ namespace Vulkan
         byte* pLayerPrefix,
         byte* pMessage,
         void* pUserData);
+
+    public unsafe delegate VkBool32 PFN_vkDebugUtilsMessengerCallbackEXT(
+        VkDebugUtilsMessageSeverityFlagsEXT messageSeverity,
+        VkDebugUtilsMessageTypeFlagsEXT messageType,
+        VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
+        void* pUserData);
+
+    public unsafe delegate VkResult PFN_vkCreateDebugUtilsMessengerEXT(
+        VkInstance instance,
+        VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo,
+        VkAllocationCallbacks* pAllocator,
+        VkDebugUtilsMessengerEXT* pMessenger);
+
+    public unsafe delegate VkResult PFN_vkDestroyDebugUtilsMessengerEXT(
+        VkInstance instance,
+        VkDebugUtilsMessengerEXT messenger,
+        VkAllocationCallbacks* pAllocator);
 }

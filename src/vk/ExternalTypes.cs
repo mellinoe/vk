@@ -39,6 +39,7 @@ namespace Vulkan
     namespace Android
     {
         public struct ANativeWindow { }
+        public struct AHardwareBuffer { }
     }
 
     // Linux

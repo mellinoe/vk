@@ -37,7 +37,9 @@ namespace Vk.Generator
             }
 
             string name = xe.Attribute("name").Value;
-            EnumValue[] values = xe.Elements("enum").Select(valuesx => EnumValue.CreateFromXml(valuesx, type == EnumType.Bitmask)).ToArray();
+            EnumValue[] values = xe.Elements("enum")
+                .Where(valuesx => valuesx.Attribute("alias") == null)
+                .Select(valuesx => EnumValue.CreateFromXml(valuesx, type == EnumType.Bitmask)).ToArray();
             return new EnumDefinition(name, type, values);
         }
 
