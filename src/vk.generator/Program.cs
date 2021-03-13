@@ -10,10 +10,12 @@ namespace Vk.Generator
         public static int Main(string[] args)
         {
             string outputPath = AppContext.BaseDirectory;
+            bool uwp = false;
 
             ArgumentSyntax.Parse(args, s =>
             {
                 s.DefineOption("o|out", ref outputPath, "The folder into which code is generated. Defaults to the application directory.");
+                s.DefineOption("uwp", ref uwp, "UWP.");
             });
 
             Configuration.CodeOutputPath = outputPath;
@@ -60,7 +62,7 @@ namespace Vk.Generator
                     }
                 }
 
-                CodeGenerator.GenerateCodeFiles(vs, tnm, Configuration.CodeOutputPath);
+                CodeGenerator.GenerateCodeFiles(vs, tnm, Configuration.CodeOutputPath, uwp);
             }
 
             return 0;

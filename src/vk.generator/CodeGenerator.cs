@@ -8,16 +8,16 @@ namespace Vk.Generator
 {
     public class CodeGenerator
     {
-        public static void GenerateCodeFiles(VulkanSpecification spec, TypeNameMappings tnm, string path)
+        public static void GenerateCodeFiles(VulkanSpecification spec, TypeNameMappings tnm, string path, bool uwp)
         {
             if (!Directory.Exists(path))
             {
 
             }
-            GenerateAllTypes(spec, tnm, path);
+            GenerateAllTypes(spec, tnm, path, uwp);
         }
 
-        private static void GenerateAllTypes(VulkanSpecification spec, TypeNameMappings tnm, string path)
+        private static void GenerateAllTypes(VulkanSpecification spec, TypeNameMappings tnm, string path, bool uwp)
         {
             using (StreamWriter sw = File.CreateText(Path.Combine(path, "Structures.gen.cs")))
             {
@@ -55,7 +55,7 @@ namespace Vk.Generator
                 }
             }
 
-            CommandDefinition[] allVariants = spec.Commands.SelectMany(cd => VariantGenerator.GenerateVariants(cd)).ToArray();
+            CommandDefinition[] allVariants = spec.Commands.SelectMany(cd => VariantGenerator.GenerateVariants(cd, uwp)).ToArray();
             CommandDefinition[] allCommandsWithVariants = spec.Commands.Concat(allVariants).OrderBy(cd => cd.Name).ToArray();
 
             using (StreamWriter commandWriter = File.CreateText(Path.Combine(path, "Commands.gen.cs")))

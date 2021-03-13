@@ -1,7 +1,8 @@
 {
   "profiles": {
     "vk.generator": {
-      "commandName": "Project"
+      "commandName": "Project",
+      "commandLineArgs": "--uwp"
     }
   }
 }

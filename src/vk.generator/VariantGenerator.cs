@@ -6,14 +6,14 @@ namespace Vk.Generator
 {
     public static class VariantGenerator
     {
-        public static CommandDefinition[] GenerateVariants(CommandDefinition cd)
+        public static CommandDefinition[] GenerateVariants(CommandDefinition cd, bool uwp)
         {
             ParameterDefinition[] parameters = cd.Parameters;
             List<ParameterDefinition>[] parameterPossibilities = new List<ParameterDefinition>[parameters.Length];
             for (int i = 0; i < parameters.Length; i++)
             {
                 parameterPossibilities[i] = new List<ParameterDefinition>() { parameters[i] };
-                parameterPossibilities[i].AddRange(GenerateVariantParameters(cd, parameters[i]));
+                parameterPossibilities[i].AddRange(GenerateVariantParameters(cd, parameters[i], uwp));
             }
 
             ParameterDefinition[][] definitions = parameterPossibilities.Select(l => l.ToArray()).ToArray();
@@ -47,7 +47,7 @@ namespace Vk.Generator
             }
         }
 
-        private static IEnumerable<ParameterDefinition> GenerateVariantParameters(CommandDefinition cd, ParameterDefinition pd)
+        private static IEnumerable<ParameterDefinition> GenerateVariantParameters(CommandDefinition cd, ParameterDefinition pd, bool uwp)
         {
             if (CanHaveVariant(pd))
             {
@@ -63,7 +63,7 @@ namespace Vk.Generator
                 {
                     yield return RefVariant(pd);
                     yield return IntPtrVariant(pd);
-                    if (pd.Name.EndsWith("Infos"))
+                    if (pd.Name.EndsWith("Infos") && !uwp)
                     {
                         yield return ArrayVariant(pd, 1);
                     }

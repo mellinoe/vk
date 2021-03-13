@@ -1,15 +1,17 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <TargetFrameworks>net5;netstandard1.4</TargetFrameworks>
+    <TargetFramework>netstandard1.4</TargetFramework>
     <OutputType>Library</OutputType>
     <AssemblyName>vk</AssemblyName>
-    <AssemblyVersion>1.0.25</AssemblyVersion>
+    <AssemblyVersion>1.0.22</AssemblyVersion>
     <RootNamespace>Vulkan</RootNamespace>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <ProjectGuid>{D8573039-9FE1-4554-A659-4E77CFBA83C1}</ProjectGuid>
     <GeneratedCodeFolder>$(MSBuildThisFileDirectory)Generated</GeneratedCodeFolder>
     <DisableCalli>false</DisableCalli>
     <DefineConstants>$(DefineConstants);CALLI_STUBS</DefineConstants>
+    <UWP>--uwp</UWP>
 
     <!-- Package Info -->
     <PackageId>Vk</PackageId>
@@ -22,8 +24,31 @@
     <ProjectUrl>https://github.com/mellinoe/vk</ProjectUrl>
     <RepositoryUrl>https://github.com/mellinoe/vk</RepositoryUrl>
   </PropertyGroup>
+
   <ItemGroup>
+    <Compile Include="..\vk\BindingsHelpers.cs" Link="BindingsHelpers.cs" />
+    <Compile Include="..\vk\CalliRewriteAttribute.cs" Link="CalliRewriteAttribute.cs" />
+    <Compile Include="..\vk\Commands.cs" Link="Commands.cs" />
+    <Compile Include="..\vk\Constants.cs" Link="Constants.cs" />
+    <Compile Include="..\vk\Delegates.cs" Link="Delegates.cs" />
+    <Compile Include="..\vk\ExternalTypes.cs" Link="ExternalTypes.cs" />
+    <Compile Include="..\vk\FunctionPointer.cs" Link="FunctionPointer.cs" />
+    <Compile Include="..\vk\Kernel32.cs" Link="Kernel32.cs" />
+    <Compile Include="..\vk\Libdl.cs" Link="Libdl.cs" />
+    <Compile Include="..\vk\VkBool32.cs" Link="VkBool32.cs" />
+    <Compile Include="..\vk\VkClearColorValue.cs" Link="VkClearColorValue.cs" />
+    <Compile Include="..\vk\VkClearDepthStencilValue.cs" Link="VkClearDepthStencilValue.cs" />
+    <Compile Include="..\vk\VkExtent2D.cs" Link="VkExtent2D.cs" />
+    <Compile Include="..\vk\VkImageMemoryBarrier.cs" Link="VkImageMemoryBarrier.cs" />
+    <Compile Include="..\vk\VkImageSubresourceRange.cs" Link="VkImageSubresourceRange.cs" />
+    <Compile Include="..\vk\VkOffset2D.cs" Link="VkOffset2D.cs" />
+    <Compile Include="..\vk\VkRect2D.cs" Link="VkRect2D.cs" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Generated\" />
+  </ItemGroup>
+
   <Target Name="AutoGenerateBindings" BeforeTargets="CoreCompile">
     <PropertyGroup>
       <VkGeneratorExecutable>$(BinDir)/$(Configuration)/vk.generator/netcoreapp2.0/vk.generator.dll</VkGeneratorExecutable>
@@ -34,8 +59,9 @@
   <PropertyGroup>
     <VkRewriteExecutable>$(BinDir)/$(Configuration)/vk.rewrite/netcoreapp2.0/vk.rewrite.dll</VkRewriteExecutable>
   </PropertyGroup>
-  <Target Name="RewriteCalliStubs" AfterTargets="PostBuildEvent" Condition="'$(DisableCalli)' != 'true'">
+  <Target Name="RewriteCalliStubs" AfterTargets="Build" Condition="'$(DisableCalli)' != 'true'">
     <Message Text="Rewriting calli stubs." />
     <Exec Command="dotnet $(VkRewriteExecutable) --vkdll $(TargetPath)" />
   </Target>
+
 </Project>

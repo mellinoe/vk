@@ -251,3 +251,4 @@ Session.vim
 
 # VS Code
 .vscode
+/nuget/lib
