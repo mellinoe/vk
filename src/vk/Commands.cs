@@ -104,7 +104,8 @@ namespace Vulkan
             {
                 return new WindowsNativeLibrary(libraryName);
             }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux)
+            else if ((RuntimeInformation.IsOSPlatform(OSPlatform.Linux)
+                && RuntimeInformation.OSDescription.Contains("Unix"))
                 || RuntimeInformation.IsOSPlatform(OSPlatform.OSX)
                 #if NET5_0
                 || OperatingSystem.IsAndroid()
@@ -112,6 +113,10 @@ namespace Vulkan
                 )
             {
                 return new UnixNativeLibrary(libraryName);
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                return new LinuxNativeLibrary(libraryName);
             }
             else
             {
@@ -151,7 +156,7 @@ namespace Vulkan
             protected override IntPtr LoadLibrary(string libraryName)
             {
                 Libdl.dlerror();
-                IntPtr handle = Libdl.dlopen(libraryName, Libdl.RTLD_NOW);
+                IntPtr handle = Libc.dlopen(libraryName, Libdl.RTLD_NOW);
                 if (handle == IntPtr.Zero && !Path.IsPathRooted(libraryName))
                 {
                     string baseDir = AppContext.BaseDirectory;
@@ -173,6 +178,40 @@ namespace Vulkan
             protected override IntPtr LoadFunction(string functionName)
             {
                 return Libdl.dlsym(NativeHandle, functionName);
+            }
+        }
+
+        private class LinuxNativeLibrary : NativeLibrary
+        {
+            public LinuxNativeLibrary(string libraryName) : base(libraryName)
+            {
+            }
+
+            protected override IntPtr LoadLibrary(string libraryName)
+            {
+                Libc.dlerror();
+                IntPtr handle = Libc.dlopen(libraryName, Libc.RTLD_NOW);
+                if (handle == IntPtr.Zero && !Path.IsPathRooted(libraryName))
+                {
+                    string baseDir = AppContext.BaseDirectory;
+                    if (!string.IsNullOrWhiteSpace(baseDir))
+                    {
+                        string localPath = Path.Combine(baseDir, libraryName);
+                        handle = Libc.dlopen(localPath, Libc.RTLD_NOW);
+                    }
+                }
+
+                return handle;
+            }
+
+            protected override void FreeLibrary(IntPtr libraryHandle)
+            {
+                Libc.dlclose(libraryHandle);
+            }
+
+            protected override IntPtr LoadFunction(string functionName)
+            {
+                return Libc.dlsym(NativeHandle, functionName);
             }
         }
     }
