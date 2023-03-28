@@ -7,10 +7,10 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="AssimpNet" Version="4.1.0" />
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.0" />
+    <PackageReference Include="Veldrid.SDL2" Version="4.9.0" />
     <ProjectReference Include="../../vk/vk.csproj" />
     <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
-    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.5.0" />
-    <PackageReference Include="AssimpNet-netstandard" Version="3.3.1" />
-    <PackageReference Include="Veldrid.Sdl2" Version="4.3.3" />
   </ItemGroup>
 </Project>
