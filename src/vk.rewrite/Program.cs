@@ -6,6 +6,7 @@ using Mono.Collections.Generic;
 using System.IO;
 using System.Collections.Generic;
 using System.Text;
+using System.CommandLine;
 
 namespace Vk.Rewrite
 {
@@ -18,19 +19,36 @@ namespace Vk.Rewrite
 
         public static int Main(string[] args)
         {
-            string vkDllPath = null;
-            string outputPath = null;
+            var vkDllPathOption = new Option<String>(
+                name: "--vkdll",
+                description: "The location of vk.dll to rewrite.",
+                getDefaultValue: () => null);
+
+            var outputPathOption = new Option<String>(
+                name: "--out",
+                description: "The output location of the rewritten DLL. If not specified, the DLL is rewritten in-place.",
+                getDefaultValue: () => null);
+
+            var rootCommand = new RootCommand("Vk Rewriter");
+            
+            rootCommand.AddOption(vkDllPathOption);
+            rootCommand.AddOption(outputPathOption);
+
+            rootCommand.SetHandler((vkDllPath, outputPath) => {
+                _main(vkDllPath,outputPath);
+            },vkDllPathOption , outputPathOption);
+
+
+            return rootCommand.Invoke(args);
+        }
+
+        public static int _main(string vkDllPath, string outputPath)
+        {
             bool copiedToTemp = false;
-            var s = System.CommandLine.ArgumentSyntax.Parse(args, syntax =>
-            {
-                syntax.DefineOption("vkdll", ref vkDllPath, "The location of vk.dll to rewrite.");
-                syntax.DefineOption("out", ref outputPath, "The output location of the rewritten DLL. If not specified, the DLL is rewritten in-place.");
-            });
 
             if (vkDllPath == null)
             {
                 Console.WriteLine("Error: a path for --vkdll is required.");
-                Console.WriteLine(s.GetHelpText());
                 return -1;
             }
             if (outputPath == null)
